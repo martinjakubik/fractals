@@ -79,6 +79,7 @@ const createCanvas = function () {
     oCanvas.style.marginBottom = sMarginVertical ;
 
     return oCanvas;
+
 };
 
 const main = function () {
