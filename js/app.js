@@ -59,7 +59,7 @@ const draw = function (oCanvas) {
 
 }
 
-const main = function () {
+const createCanvas = function () {
 
     const oCanvas = document.createElement('canvas');
     document.body.appendChild(oCanvas);
@@ -72,12 +72,18 @@ const main = function () {
     const nMarginSide = Math.floor(( nParentWidth - oCanvas.width ) / 2 ) ;
     const sMarginSide = nMarginSide + "px" ;
     const sMarginVertical = VERTICAL_MARGIN + "px" ;
-  
+
     oCanvas.style.marginLeft = sMarginSide ;
     oCanvas.style.marginRight = sMarginSide ;
     oCanvas.style.marginTop = sMarginVertical ;
     oCanvas.style.marginBottom = sMarginVertical ;
 
+    return oCanvas;
+};
+
+const main = function () {
+
+    const oCanvas = createCanvas();
     draw(oCanvas);
 
 };
