@@ -91,7 +91,7 @@ const createSlider = function (sId, sMin, sMax, nValue, sLabel) {
     oInput.name = sName;
     oInput.min = sMin;
     oInput.max = sMax;
-    oInput.value = nMaxIterations;
+    oInput.value = nValue;
     
     const oLabel = document.createElement('label');
     oLabel.for = sId;
@@ -106,9 +106,15 @@ const createSlider = function (sId, sMin, sMax, nValue, sLabel) {
 
 const createControls = function () {
 
-    const oSlider = createSlider('maxIterations', '0', '100', nMaxIterations, 'Max Iterations');
-    oSlider.onchange = () => {
-        nMaxIterations = oSlider.value;
+    const oMaxIterationSlider = createSlider('maxIterations', '0', '100', nMaxIterations, 'Max Iterations');
+    oMaxIterationSlider.onchange = () => {
+        nMaxIterations = oMaxIterationSlider.value;
+        draw();
+    };
+
+    const oHueSlider = createSlider('hue', '0', '100', nHue, 'Hue');
+    oHueSlider.onchange = () => {
+        nHue = oHueSlider.value;
         draw();
     };
 
