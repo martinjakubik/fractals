@@ -112,7 +112,7 @@ const createControls = function () {
         draw();
     };
 
-    const oHueSlider = createSlider('hue', '0', '100', nHue, 'Hue');
+    const oHueSlider = createSlider('hue', '0', '359', nHue, 'Hue');
     oHueSlider.onchange = () => {
         nHue = oHueSlider.value;
         draw();
