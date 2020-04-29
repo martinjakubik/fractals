@@ -50,7 +50,7 @@ const draw = function () {
                 oContext.fillStyle = '#000';
                 oContext.fillRect(x, y, 1, 1);
             } else {
-                oContext.fillStyle = `hsl(0, 100%, ${nDegreeInSet}%)`;
+                oContext.fillStyle = `hsl(${nHue}, 100%, ${nDegreeInSet}%)`;
                 oContext.fillRect(x, y, 1, 1);
             }
         }
@@ -81,29 +81,41 @@ const createCanvas = function () {
 
 };
 
-const createControls = function () {
+const createSlider = function (sId, sMin, sMax, nValue, sLabel) {
+
+    const sName = sId;
 
     const oInput = document.createElement('input');
     oInput.type = 'range';
-    oInput.id = 'maxIterations';
-    oInput.name = 'maxIterations';
-    oInput.min = '1';
-    oInput.max = '100';
+    oInput.id = sId;
+    oInput.name = sName;
+    oInput.min = sMin;
+    oInput.max = sMax;
     oInput.value = nMaxIterations;
-    oInput.onchange = () => {
-        nMaxIterations = oInput.value;
-        draw();
-    };
-
+    
     const oLabel = document.createElement('label');
-    oLabel.for = 'maxIterations';
-    oLabel.innerText = 'Max Iterations';
+    oLabel.for = sId;
+    oLabel.innerText = sLabel;
+
     document.body.appendChild(oLabel);
     document.body.appendChild(oInput);
+
+    return oInput;
+
+};
+
+const createControls = function () {
+
+    const oSlider = createSlider('maxIterations', '0', '100', nMaxIterations, 'Max Iterations');
+    oSlider.onchange = () => {
+        nMaxIterations = oSlider.value;
+        draw();
+    };
 
 };
 
 let nMaxIterations = 4;
+let nHue = 0;
 const oCanvas = createCanvas();
 
 const main = function () {
