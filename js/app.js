@@ -3,7 +3,6 @@ const CANVAS_HEIGHT = 600;
 const VERTICAL_MARGIN = 36;
 
 const SMALL_VALUE = 5;
-const MAX_ITERATIONS = 100;
 const MAGNIFICATION_FACTOR = 200;
 const HORIZONTAL_PAN = 4;
 const VERTICAL_PAN = 1.5;
@@ -14,7 +13,7 @@ const degreeInMandelbrotSet = function (x, y) {
     let iImaginaryComponent = y;
 
     let j = 0;
-    for (j = 0; j < MAX_ITERATIONS; j++) {
+    for (j = 0; j < nMaxIterations; j++) {
 
         let iTempRealComponent = iRealComponent * iRealComponent - iImaginaryComponent * iImaginaryComponent + x;
         let iTempImaginaryComponent = 2 * iRealComponent * iImaginaryComponent + y;
@@ -23,7 +22,7 @@ const degreeInMandelbrotSet = function (x, y) {
         iImaginaryComponent = iTempImaginaryComponent;
 
         if (iRealComponent * iImaginaryComponent > SMALL_VALUE) {
-            return j / MAX_ITERATIONS * 100;
+            return j / nMaxIterations * 100;
         }
 
     }
@@ -32,7 +31,7 @@ const degreeInMandelbrotSet = function (x, y) {
 
 };
 
-const draw = function (oCanvas) {
+const draw = function () {
 
     const oContext = oCanvas.getContext('2d');
 
@@ -82,10 +81,35 @@ const createCanvas = function () {
 
 };
 
+const createControls = function () {
+
+    const oInput = document.createElement('input');
+    oInput.type = 'range';
+    oInput.id = 'maxIterations';
+    oInput.name = 'maxIterations';
+    oInput.min = '1';
+    oInput.max = '100';
+    oInput.value = nMaxIterations;
+    oInput.onchange = () => {
+        nMaxIterations = oInput.value;
+        draw();
+    };
+
+    const oLabel = document.createElement('label');
+    oLabel.for = 'maxIterations';
+    oLabel.innerText = 'Max Iterations';
+    document.body.appendChild(oLabel);
+    document.body.appendChild(oInput);
+
+};
+
+let nMaxIterations = 4;
+const oCanvas = createCanvas();
+
 const main = function () {
 
-    const oCanvas = createCanvas();
-    draw(oCanvas);
+    createControls();
+    draw();
 
 };
 
