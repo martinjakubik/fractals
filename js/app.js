@@ -1,5 +1,6 @@
 const CANVAS_WIDTH = 1520;
 const CANVAS_HEIGHT = 600;
+const VERTICAL_MARGIN = 36;
 
 const SMALL_VALUE = 5;
 const MAX_ITERATIONS = 100;
@@ -61,9 +62,21 @@ const draw = function (oCanvas) {
 const main = function () {
 
     const oCanvas = document.createElement('canvas');
-    oCanvas.width = CANVAS_WIDTH;
-    oCanvas.height = CANVAS_HEIGHT;
     document.body.appendChild(oCanvas);
+
+    const nParentWidth = oCanvas.parentNode.clientWidth ;
+
+    oCanvas.width = nParentWidth;
+    oCanvas.height = CANVAS_HEIGHT;
+
+    const nMarginSide = Math.floor(( nParentWidth - oCanvas.width ) / 2 ) ;
+    const sMarginSide = nMarginSide + "px" ;
+    const sMarginVertical = VERTICAL_MARGIN + "px" ;
+  
+    oCanvas.style.marginLeft = sMarginSide ;
+    oCanvas.style.marginRight = sMarginSide ;
+    oCanvas.style.marginTop = sMarginVertical ;
+    oCanvas.style.marginBottom = sMarginVertical ;
 
     draw(oCanvas);
 
