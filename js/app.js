@@ -36,8 +36,10 @@ const draw = function () {
     let y = 0;
     for (x = 0; x < oCanvas.width; x++) {
         for (y = 0; y < oCanvas.height; y++) {
+
             const iTransformedX = x / nZoom - nHorizontalPan;
             const iTransformedY = y / nZoom - nVerticalPan;
+
             const nDegreeInSet = degreeInMandelbrotSet(iTransformedX, iTransformedY);
             if (nDegreeInSet == 0) {
                 oContext.fillStyle = '#000';
@@ -74,7 +76,7 @@ const createCanvas = function () {
 
 };
 
-const createSlider = function (sId, sMin, sMax, nValue, sLabel) {
+const createSlider = function (sId, sMin, sMax, nValue, sLabel, nStep) {
 
     const sName = sId;
 
@@ -85,6 +87,9 @@ const createSlider = function (sId, sMin, sMax, nValue, sLabel) {
     oInput.min = sMin;
     oInput.max = sMax;
     oInput.value = nValue;
+    if (nStep) {
+        oInput.step = nStep;
+    }
     
     const oLabel = document.createElement('label');
     oLabel.for = sId;
@@ -111,19 +116,19 @@ const createControls = function () {
         draw();
     };
 
-    const oZoomSlider = createSlider('zoom', '180', '1000', nZoom, 'Zoom');
+    const oZoomSlider = createSlider('zoom', '180', '10000', nZoom, 'Zoom');
     oZoomSlider.onchange = () => {
         nZoom = oZoomSlider.value;
         draw();
     };
 
-    const oHorizontalPanSlider = createSlider('horizontalPan', '1', '5', nHorizontalPan, 'Pan X');
+    const oHorizontalPanSlider = createSlider('horizontalPan', '1', '5', nHorizontalPan, 'Pan X', 0.1);
     oHorizontalPanSlider.onchange = () => {
         nHorizontalPan = oHorizontalPanSlider.value;
         draw();
     };
 
-    const oVerticalPanSlider = createSlider('verticalPan', '1', '5', nVerticalPan, 'Pan Y');
+    const oVerticalPanSlider = createSlider('verticalPan', '1', '5', nVerticalPan, 'Pan Y', 0.1);
     oVerticalPanSlider.onchange = () => {
         nVerticalPan = oVerticalPanSlider.value;
         draw();
