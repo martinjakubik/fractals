@@ -3,9 +3,6 @@ const CANVAS_HEIGHT = 600;
 const VERTICAL_MARGIN = 36;
 
 const SMALL_VALUE = 5;
-const MAGNIFICATION_FACTOR = 200;
-const HORIZONTAL_PAN = 4;
-const VERTICAL_PAN = 1.5;
 
 const degreeInMandelbrotSet = function (x, y) {
 
@@ -35,16 +32,12 @@ const draw = function () {
 
     const oContext = oCanvas.getContext('2d');
 
-    const iMagnification = MAGNIFICATION_FACTOR;
-    const iHorizontalPan = HORIZONTAL_PAN;
-    const iVerticalPan = VERTICAL_PAN;
-
     let x = 0;
     let y = 0;
     for (x = 0; x < oCanvas.width; x++) {
         for (y = 0; y < oCanvas.height; y++) {
-            const iTransformedX = x / iMagnification - iHorizontalPan;
-            const iTransformedY = y / iMagnification - iVerticalPan;
+            const iTransformedX = x / nZoom - nHorizontalPan;
+            const iTransformedY = y / nZoom - nVerticalPan;
             const nDegreeInSet = degreeInMandelbrotSet(iTransformedX, iTransformedY);
             if (nDegreeInSet == 0) {
                 oContext.fillStyle = '#000';
@@ -118,10 +111,32 @@ const createControls = function () {
         draw();
     };
 
+    const oZoomSlider = createSlider('zoom', '180', '1000', nZoom, 'Zoom');
+    oZoomSlider.onchange = () => {
+        nZoom = oZoomSlider.value;
+        draw();
+    };
+
+    const oHorizontalPanSlider = createSlider('horizontalPan', '1', '5', nHorizontalPan, 'Pan X');
+    oHorizontalPanSlider.onchange = () => {
+        nHorizontalPan = oHorizontalPanSlider.value;
+        draw();
+    };
+
+    const oVerticalPanSlider = createSlider('verticalPan', '1', '5', nVerticalPan, 'Pan Y');
+    oVerticalPanSlider.onchange = () => {
+        nVerticalPan = oVerticalPanSlider.value;
+        draw();
+    };
+
 };
 
 let nMaxIterations = 4;
 let nHue = 0;
+let nZoom = 200;
+let nHorizontalPan = 4;
+let nVerticalPan = 0.5;
+
 const oCanvas = createCanvas();
 
 const main = function () {
