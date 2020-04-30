@@ -10,7 +10,7 @@ const degreeInMandelbrotSet = function (x, y) {
     let iImaginaryComponent = y;
 
     let j = 0;
-    for (j = 0; j < nMaxIterations; j++) {
+    for (j = 0; j < nPrecision; j++) {
 
         let iTempRealComponent = iRealComponent * iRealComponent - iImaginaryComponent * iImaginaryComponent + x;
         let iTempImaginaryComponent = 2 * iRealComponent * iImaginaryComponent + y;
@@ -19,7 +19,7 @@ const degreeInMandelbrotSet = function (x, y) {
         iImaginaryComponent = iTempImaginaryComponent;
 
         if (iRealComponent * iImaginaryComponent > SMALL_VALUE) {
-            return j / nMaxIterations * 100;
+            return j / nPrecision * 100;
         }
 
     }
@@ -99,9 +99,9 @@ const createSlider = function (sId, sMin, sMax, nValue, sLabel) {
 
 const createControls = function () {
 
-    const oMaxIterationSlider = createSlider('maxIterations', '0', '100', nMaxIterations, 'Max Iterations');
+    const oMaxIterationSlider = createSlider('precision', '0', '100', nPrecision, 'Precision');
     oMaxIterationSlider.onchange = () => {
-        nMaxIterations = oMaxIterationSlider.value;
+        nPrecision = oMaxIterationSlider.value;
         draw();
     };
 
@@ -131,7 +131,7 @@ const createControls = function () {
 
 };
 
-let nMaxIterations = 4;
+let nPrecision = 4;
 let nHue = 0;
 let nZoom = 200;
 let nHorizontalPan = 4;
