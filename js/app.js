@@ -96,7 +96,7 @@ const updateControlState = function () {
 const onTapCanvas = function (oEvent) {
 
     const x = oEvent.x;
-    const y = oEvent.y;
+    const y = oEvent.y - VERTICAL_MARGIN;
 
     updateControlState();
 
