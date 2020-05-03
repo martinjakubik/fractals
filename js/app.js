@@ -240,6 +240,11 @@ const oPage = createPage();
 const oGraphicCanvas = createGraphicCanvas(oPage);
 const oControlCanvas = createControlCanvas(oPage);
 
+let oZoomPoint = {
+    x: oPage.style.width / 2,
+    y: oPage.style.height / 2
+}
+
 const main = function () {
 
     createControls();
