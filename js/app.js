@@ -153,7 +153,6 @@ const onTapCanvas = function (oEvent) {
     
     if (sControlState === CONTROL_STATE.VIEW) {
         hideZoomControl();
-        console.log(`is tap in zoom button: ${bIsTapInZoomInButton}`);
     } else if (sControlState === CONTROL_STATE.CHOOSE_ZOOM) {
         showZoomButtons(nZoomToX, nZoomToY);
         oZoomPoint = {
