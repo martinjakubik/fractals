@@ -60,7 +60,7 @@ const draw = function () {
 
 const showZoomControl = function (x, y) {
 
-    const nZoomRadius = 50;
+    const nZoomButtonRadius = 50;
 
     const oContext = oControlCanvas.getContext('2d');
     oContext.strokeStyle = STROKE_NORMAL;
@@ -68,60 +68,60 @@ const showZoomControl = function (x, y) {
 
     // draws circle
     oContext.beginPath();
-    oContext.arc(x, y, nZoomRadius, 0, Math.PI * 2);
+    oContext.arc(x, y, nZoomButtonRadius, 0, Math.PI * 2);
     oContext.stroke();
 
-    // draws plus sign
+    // draws zoom in button
     oContext.lineWidth = 3;
     oContext.beginPath();
-    oContext.arc(x, y, nZoomRadius / 4, 0, Math.PI * 2);
+    oContext.arc(x, y, nZoomButtonRadius / 4, 0, Math.PI * 2);
     oContext.stroke();
 
     oContext.beginPath();
-    oContext.moveTo(x, y - nZoomRadius / 6);
-    oContext.lineTo(x, y + nZoomRadius / 6);
+    oContext.moveTo(x, y - nZoomButtonRadius / 6);
+    oContext.lineTo(x, y + nZoomButtonRadius / 6);
     oContext.stroke();
-    oContext.moveTo(x - nZoomRadius / 6, y);
-    oContext.lineTo(x + nZoomRadius / 6, y);
-    oContext.stroke();
-
-    // draws minus signs
-    const nMinusControlDistance = 120;
-    const x1 = x - nMinusControlDistance;
-    const x2 = x + nMinusControlDistance;
-    const y1 = y - nMinusControlDistance;
-    const y2 = y + nMinusControlDistance;
-    oContext.beginPath();
-    oContext.arc(x1, y, nZoomRadius / 4, 0, Math.PI * 2);
-    oContext.stroke();
-    oContext.beginPath();
-    oContext.arc(x2, y, nZoomRadius / 4, 0, Math.PI * 2);
-    oContext.stroke();
-    oContext.beginPath();
-    oContext.arc(x, y1, nZoomRadius / 4, 0, Math.PI * 2);
-    oContext.stroke();
-    oContext.beginPath();
-    oContext.arc(x, y2, nZoomRadius / 4, 0, Math.PI * 2);
+    oContext.moveTo(x - nZoomButtonRadius / 6, y);
+    oContext.lineTo(x + nZoomButtonRadius / 6, y);
     oContext.stroke();
 
+    // draws zoom out buttons
+    const nZoomOutButtonDistance = 120;
+    const x1 = x - nZoomOutButtonDistance;
+    const x2 = x + nZoomOutButtonDistance;
+    const y1 = y - nZoomOutButtonDistance;
+    const y2 = y + nZoomOutButtonDistance;
     oContext.beginPath();
-    oContext.moveTo(x1 - nZoomRadius / 6, y);
-    oContext.lineTo(x1 + nZoomRadius / 6, y);
+    oContext.arc(x1, y, nZoomButtonRadius / 4, 0, Math.PI * 2);
+    oContext.stroke();
+    oContext.beginPath();
+    oContext.arc(x2, y, nZoomButtonRadius / 4, 0, Math.PI * 2);
+    oContext.stroke();
+    oContext.beginPath();
+    oContext.arc(x, y1, nZoomButtonRadius / 4, 0, Math.PI * 2);
+    oContext.stroke();
+    oContext.beginPath();
+    oContext.arc(x, y2, nZoomButtonRadius / 4, 0, Math.PI * 2);
     oContext.stroke();
 
     oContext.beginPath();
-    oContext.moveTo(x2 - nZoomRadius / 6, y);
-    oContext.lineTo(x2 + nZoomRadius / 6, y);
+    oContext.moveTo(x1 - nZoomButtonRadius / 6, y);
+    oContext.lineTo(x1 + nZoomButtonRadius / 6, y);
     oContext.stroke();
 
     oContext.beginPath();
-    oContext.moveTo(x - nZoomRadius / 6, y1);
-    oContext.lineTo(x + nZoomRadius / 6, y1);
+    oContext.moveTo(x2 - nZoomButtonRadius / 6, y);
+    oContext.lineTo(x2 + nZoomButtonRadius / 6, y);
     oContext.stroke();
 
     oContext.beginPath();
-    oContext.moveTo(x - nZoomRadius / 6, y2);
-    oContext.lineTo(x + nZoomRadius / 6, y2);
+    oContext.moveTo(x - nZoomButtonRadius / 6, y1);
+    oContext.lineTo(x + nZoomButtonRadius / 6, y1);
+    oContext.stroke();
+
+    oContext.beginPath();
+    oContext.moveTo(x - nZoomButtonRadius / 6, y2);
+    oContext.lineTo(x + nZoomButtonRadius / 6, y2);
     oContext.stroke();
 
 };
