@@ -65,10 +65,26 @@ const showZoomControl = function (x, y) {
     const oContext = oControlCanvas.getContext('2d');
     oContext.strokeStyle = STROKE_NORMAL;
     oContext.lineWidth = 5;
+    
+    // draws circle
     oContext.beginPath();
     oContext.arc(x, y, nZoomRadius, 0, Math.PI * 2);
     oContext.stroke();
-
+    
+    // draws plus sign
+    oContext.lineWidth = 3;
+    oContext.beginPath();
+    oContext.arc(x, y, nZoomRadius / 4, 0, Math.PI * 2);
+    oContext.stroke();
+    
+    oContext.beginPath();
+    oContext.moveTo(x, y - nZoomRadius / 6);
+    oContext.lineTo(x, y + nZoomRadius / 6);
+    oContext.stroke();
+    oContext.moveTo(x - nZoomRadius / 6, y);
+    oContext.lineTo(x + nZoomRadius / 6, y);
+    oContext.stroke();
+    
 };
 
 const hideZoomControl = function () {
@@ -95,15 +111,19 @@ const updateControlState = function () {
 
 const onTapCanvas = function (oEvent) {
 
-    const x = oEvent.x;
-    const y = oEvent.y - VERTICAL_MARGIN;
+    const zoomToX = oEvent.x;
+    const zoomToY = oEvent.y - VERTICAL_MARGIN;
 
     updateControlState();
 
     if (sControlState === CONTROL_STATE.VIEW) {
-        hideZoomControl(x, y);
+        hideZoomControl();
     } else if (sControlState === CONTROL_STATE.CHOOSE_ZOOM) {
-        showZoomControl(x, y);
+        showZoomControl(zoomToX, zoomToY);
+        oZoomPoint = {
+            x: zoomToX,
+            y: zoomToY
+        }
     }
 
 };
