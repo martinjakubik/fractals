@@ -33,7 +33,7 @@ const degreeInMandelbrotSet = function (x, y) {
 
 };
 
-const draw = function () {
+const drawMandelbrotSet = function () {
 
     const oContext = oGraphicCanvas.getContext('2d');
 
@@ -222,31 +222,31 @@ const createControls = function () {
     const oMaxIterationSlider = createSlider('precision', '0', '100', nPrecision, 'Precision');
     oMaxIterationSlider.onchange = () => {
         nPrecision = oMaxIterationSlider.value;
-        draw();
+        drawMandelbrotSet();
     };
 
     const oHueSlider = createSlider('hue', '0', '359', nHue, 'Hue');
     oHueSlider.onchange = () => {
         nHue = oHueSlider.value;
-        draw();
+        drawMandelbrotSet();
     };
 
     const oZoomSlider = createSlider('zoom', '180', '10000', nZoom, 'Zoom');
     oZoomSlider.onchange = () => {
         nZoom = oZoomSlider.value;
-        draw();
+        drawMandelbrotSet();
     };
 
     const oHorizontalPanSlider = createSlider('horizontalPan', '1', '5', nHorizontalPan, 'Pan X', 0.1);
     oHorizontalPanSlider.onchange = () => {
         nHorizontalPan = oHorizontalPanSlider.value;
-        draw();
+        drawMandelbrotSet();
     };
 
     const oVerticalPanSlider = createSlider('verticalPan', '1', '5', nVerticalPan, 'Pan Y', 0.1);
     oVerticalPanSlider.onchange = () => {
         nVerticalPan = oVerticalPanSlider.value;
-        draw();
+        drawMandelbrotSet();
     };
 
 };
@@ -295,7 +295,7 @@ let oZoomPoint = {
 const main = function () {
 
     createControls();
-    draw();
+    drawMandelbrotSet();
 
 };
 
