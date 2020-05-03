@@ -1,4 +1,3 @@
-const CANVAS_WIDTH = 1520;
 const CANVAS_HEIGHT = 600;
 const VERTICAL_MARGIN = 36;
 
