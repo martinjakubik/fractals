@@ -110,19 +110,19 @@ const createCanvas = function () {
     const oCanvas = document.createElement('canvas');
     document.body.appendChild(oCanvas);
 
-    const nParentWidth = oCanvas.parentNode.clientWidth ;
+    const nParentWidth = oCanvas.parentNode.clientWidth;
 
     oCanvas.width = nParentWidth;
     oCanvas.height = CANVAS_HEIGHT;
 
-    const nMarginSide = Math.floor(( nParentWidth - oCanvas.width ) / 2 ) ;
-    const sMarginSide = nMarginSide + "px" ;
-    const sMarginVertical = VERTICAL_MARGIN + "px" ;
+    const nMarginSide = Math.floor(( nParentWidth - oCanvas.width ) / 2 );
+    const sMarginSide = nMarginSide + "px";
+    const sMarginVertical = VERTICAL_MARGIN + "px";
 
-    oCanvas.style.marginLeft = sMarginSide ;
-    oCanvas.style.marginRight = sMarginSide ;
-    oCanvas.style.marginTop = sMarginVertical ;
-    oCanvas.style.marginBottom = sMarginVertical ;
+    oCanvas.style.marginLeft = sMarginSide;
+    oCanvas.style.marginRight = sMarginSide;
+    oCanvas.style.marginTop = sMarginVertical;
+    oCanvas.style.marginBottom = sMarginVertical;
 
     oCanvas.onclick = onTapCanvas;
 
