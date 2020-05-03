@@ -119,14 +119,6 @@ const createCanvas = function (sCanvasId, nZindex, oPage) {
     oCanvas.width = nParentWidth;
     oCanvas.height = CANVAS_HEIGHT;
 
-    const nMarginSide = Math.floor(( nParentWidth - oCanvas.width ) / 2 );
-    const sMarginSide = nMarginSide + "px";
-    const sMarginVertical = VERTICAL_MARGIN + "px";
-
-    oCanvas.style.marginLeft = sMarginSide;
-    oCanvas.style.marginRight = sMarginSide;
-    oCanvas.style.marginTop = sMarginVertical;
-    oCanvas.style.marginBottom = sMarginVertical;
     oCanvas.style.position = 'absolute';
     oCanvas.style.zindex = nZindex;
 
@@ -220,8 +212,17 @@ const createPage = function () {
 
     const nParentWidth = oPage.parentNode.clientWidth;
 
-    oPage.width = nParentWidth;
-    oPage.height = CANVAS_HEIGHT;
+    oPage.style.width = nParentWidth;
+    oPage.style.height = CANVAS_HEIGHT;
+
+    const nMarginSide = Math.floor(( nParentWidth - oPage.width ) / 2 );
+    const sMarginSide = nMarginSide + "px";
+    const sMarginVertical = VERTICAL_MARGIN + "px";
+
+    oPage.style.marginLeft = sMarginSide;
+    oPage.style.marginRight = sMarginSide;
+    oPage.style.marginTop = sMarginVertical;
+    oPage.style.marginBottom = sMarginVertical;
 
     return oPage;
 
