@@ -138,7 +138,7 @@ const updateControlState = function (sTransition) {
 
 const isTapInZoomInButton = function (nTapX, nTapY) {
 
-    return (Math.sqrt((nTapX - oZoomPoint.x) ** 2 + (nTapY - oZoomPoint.y) ** 2) < ZOOM_LENS_RADIUS);
+    return (Math.sqrt((nTapX - oZoomPoint.x) ** 2 + (nTapY - oZoomPoint.y) ** 2) < ZOOM_BUTTON_RADIUS);
 
 };
 
