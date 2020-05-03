@@ -8,7 +8,8 @@ const STROKE_NORMAL = '#aaa';
 
 const CONTROL_STATE = {
     VIEW: 0,
-    CHOOSE_ZOOM: 1
+    CHOOSE_ZOOM: 1,
+    ZOOMED_IN: 2
 };
 
 const degreeInMandelbrotSet = function (x, y) {
@@ -122,13 +123,18 @@ const hideZoomControl = function () {
 
 };
 
-const updateControlState = function (sTransition) {
+const updateControlState = function (bIsTapInZoomInButton) {
 
     switch (sControlState) {
         case CONTROL_STATE.VIEW:
             sControlState = CONTROL_STATE.CHOOSE_ZOOM;
             return;
+        case CONTROL_STATE.ZOOMED_IN:
         case CONTROL_STATE.CHOOSE_ZOOM:
+            if (bIsTapInZoomInButton) {
+                sControlState = CONTROL_STATE.ZOOMED_IN;
+                return;
+            }
         default:
             sControlState = CONTROL_STATE.VIEW;
             return;
@@ -147,9 +153,8 @@ const onTapCanvas = function (oEvent) {
     const nZoomToX = oEvent.x;
     const nZoomToY = oEvent.y - VERTICAL_MARGIN;
 
-    const sTransition = 'tap';
     const bIsTapInZoomInButton = isTapInZoomInButton(nZoomToX, nZoomToY);
-    updateControlState();
+    updateControlState(bIsTapInZoomInButton);
     
     if (sControlState === CONTROL_STATE.VIEW) {
         hideZoomControl();
@@ -159,6 +164,9 @@ const onTapCanvas = function (oEvent) {
             x: nZoomToX,
             y: nZoomToY
         }
+    } else if (sControlState === CONTROL_STATE.ZOOMED_IN) {
+        nZoom = nZoom * 2;
+        drawMandelbrotSet();
     }
 
 };
