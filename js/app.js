@@ -3,6 +3,12 @@ const CANVAS_HEIGHT = 600;
 const VERTICAL_MARGIN = 36;
 
 const SMALL_VALUE = 5;
+const STROKE_NORMAL = '#aaa';
+
+const CONTROL_STATE = {
+    VIEW: 0,
+    CHOOSE_ZOOM: 1
+};
 
 const degreeInMandelbrotSet = function (x, y) {
 
@@ -53,6 +59,52 @@ const draw = function () {
 
 }
 
+const showZoomControl = function (x, y) {
+
+    const nZoomRadius = 50;
+
+    const oContext = oCanvas.getContext('2d');
+    oContext.strokeStyle = STROKE_NORMAL;
+    oContext.lineWidth = 5;
+    oContext.beginPath();
+    oContext.arc(x, y, nZoomRadius, 0, Math.PI * 2);
+    oContext.stroke();
+
+};
+
+const hideZoomControl = function () {
+
+};
+
+const updateControlState = function () {
+
+    switch (sControlState) {
+        case CONTROL_STATE.VIEW:
+            sControlState = CONTROL_STATE.CHOOSE_ZOOM;
+            return;
+        case CONTROL_STATE.CHOOSE_ZOOM:
+        default:
+            sControlState = CONTROL_STATE.VIEW;
+            return;
+    };
+
+};
+
+const onTapCanvas = function (oEvent) {
+
+    const x = oEvent.x;
+    const y = oEvent.y;
+
+    updateControlState();
+
+    if (sControlState === CONTROL_STATE.VIEW) {
+        hideZoomControl(x, y);
+    } else if (sControlState === CONTROL_STATE.CHOOSE_ZOOM) {
+        showZoomControl(x, y);
+    }
+
+};
+
 const createCanvas = function () {
 
     const oCanvas = document.createElement('canvas');
@@ -71,6 +123,8 @@ const createCanvas = function () {
     oCanvas.style.marginRight = sMarginSide ;
     oCanvas.style.marginTop = sMarginVertical ;
     oCanvas.style.marginBottom = sMarginVertical ;
+
+    oCanvas.onclick = onTapCanvas;
 
     return oCanvas;
 
@@ -141,6 +195,8 @@ let nHue = 0;
 let nZoom = 200;
 let nHorizontalPan = 4;
 let nVerticalPan = 0.5;
+
+let sControlState = CONTROL_STATE.VIEW;
 
 const oCanvas = createCanvas();
 
