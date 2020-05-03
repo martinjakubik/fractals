@@ -85,6 +85,45 @@ const showZoomControl = function (x, y) {
     oContext.lineTo(x + nZoomRadius / 6, y);
     oContext.stroke();
 
+    // draws minus signs
+    const nMinusControlDistance = 120;
+    const x1 = x - nMinusControlDistance;
+    const x2 = x + nMinusControlDistance;
+    const y1 = y - nMinusControlDistance;
+    const y2 = y + nMinusControlDistance;
+    oContext.beginPath();
+    oContext.arc(x1, y, nZoomRadius / 4, 0, Math.PI * 2);
+    oContext.stroke();
+    oContext.beginPath();
+    oContext.arc(x2, y, nZoomRadius / 4, 0, Math.PI * 2);
+    oContext.stroke();
+    oContext.beginPath();
+    oContext.arc(x, y1, nZoomRadius / 4, 0, Math.PI * 2);
+    oContext.stroke();
+    oContext.beginPath();
+    oContext.arc(x, y2, nZoomRadius / 4, 0, Math.PI * 2);
+    oContext.stroke();
+
+    oContext.beginPath();
+    oContext.moveTo(x1 - nZoomRadius / 6, y);
+    oContext.lineTo(x1 + nZoomRadius / 6, y);
+    oContext.stroke();
+
+    oContext.beginPath();
+    oContext.moveTo(x2 - nZoomRadius / 6, y);
+    oContext.lineTo(x2 + nZoomRadius / 6, y);
+    oContext.stroke();
+
+    oContext.beginPath();
+    oContext.moveTo(x - nZoomRadius / 6, y1);
+    oContext.lineTo(x + nZoomRadius / 6, y1);
+    oContext.stroke();
+
+    oContext.beginPath();
+    oContext.moveTo(x - nZoomRadius / 6, y2);
+    oContext.lineTo(x + nZoomRadius / 6, y2);
+    oContext.stroke();
+
 };
 
 const hideZoomControl = function () {
