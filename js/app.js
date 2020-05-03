@@ -65,18 +65,18 @@ const showZoomControl = function (x, y) {
     const oContext = oControlCanvas.getContext('2d');
     oContext.strokeStyle = STROKE_NORMAL;
     oContext.lineWidth = 5;
-    
+
     // draws circle
     oContext.beginPath();
     oContext.arc(x, y, nZoomRadius, 0, Math.PI * 2);
     oContext.stroke();
-    
+
     // draws plus sign
     oContext.lineWidth = 3;
     oContext.beginPath();
     oContext.arc(x, y, nZoomRadius / 4, 0, Math.PI * 2);
     oContext.stroke();
-    
+
     oContext.beginPath();
     oContext.moveTo(x, y - nZoomRadius / 6);
     oContext.lineTo(x, y + nZoomRadius / 6);
@@ -84,7 +84,7 @@ const showZoomControl = function (x, y) {
     oContext.moveTo(x - nZoomRadius / 6, y);
     oContext.lineTo(x + nZoomRadius / 6, y);
     oContext.stroke();
-    
+
 };
 
 const hideZoomControl = function () {
@@ -178,7 +178,7 @@ const createSlider = function (sId, sMin, sMax, nValue, sLabel, nStep) {
     if (nStep) {
         oInput.step = nStep;
     }
-    
+
     const oLabel = document.createElement('label');
     oLabel.for = sId;
     oLabel.innerText = sLabel;
