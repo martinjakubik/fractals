@@ -58,7 +58,22 @@ const draw = function () {
 
 }
 
-const showZoomControl = function (x, y) {
+const drawZoomOutButton = function (x, y, nZoomButtonRadius) {
+
+    const oContext = oControlCanvas.getContext('2d');
+
+    oContext.beginPath();
+    oContext.arc(x, y, nZoomButtonRadius / 4, 0, Math.PI * 2);
+    oContext.stroke();
+
+    oContext.beginPath();
+    oContext.moveTo(x - nZoomButtonRadius / 6, y);
+    oContext.lineTo(x + nZoomButtonRadius / 6, y);
+    oContext.stroke();
+
+};
+
+const showZoomButtons = function (x, y) {
 
     const nZoomButtonRadius = 50;
 
@@ -91,38 +106,11 @@ const showZoomControl = function (x, y) {
     const x2 = x + nZoomOutButtonDistance;
     const y1 = y - nZoomOutButtonDistance;
     const y2 = y + nZoomOutButtonDistance;
-    oContext.beginPath();
-    oContext.arc(x1, y, nZoomButtonRadius / 4, 0, Math.PI * 2);
-    oContext.stroke();
-    oContext.beginPath();
-    oContext.arc(x2, y, nZoomButtonRadius / 4, 0, Math.PI * 2);
-    oContext.stroke();
-    oContext.beginPath();
-    oContext.arc(x, y1, nZoomButtonRadius / 4, 0, Math.PI * 2);
-    oContext.stroke();
-    oContext.beginPath();
-    oContext.arc(x, y2, nZoomButtonRadius / 4, 0, Math.PI * 2);
-    oContext.stroke();
 
-    oContext.beginPath();
-    oContext.moveTo(x1 - nZoomButtonRadius / 6, y);
-    oContext.lineTo(x1 + nZoomButtonRadius / 6, y);
-    oContext.stroke();
-
-    oContext.beginPath();
-    oContext.moveTo(x2 - nZoomButtonRadius / 6, y);
-    oContext.lineTo(x2 + nZoomButtonRadius / 6, y);
-    oContext.stroke();
-
-    oContext.beginPath();
-    oContext.moveTo(x - nZoomButtonRadius / 6, y1);
-    oContext.lineTo(x + nZoomButtonRadius / 6, y1);
-    oContext.stroke();
-
-    oContext.beginPath();
-    oContext.moveTo(x - nZoomButtonRadius / 6, y2);
-    oContext.lineTo(x + nZoomButtonRadius / 6, y2);
-    oContext.stroke();
+    drawZoomOutButton(x1, y, nZoomButtonRadius);
+    drawZoomOutButton(x2, y, nZoomButtonRadius);
+    drawZoomOutButton(x, y1, nZoomButtonRadius);
+    drawZoomOutButton(x, y2, nZoomButtonRadius);
 
 };
 
@@ -158,7 +146,7 @@ const onTapCanvas = function (oEvent) {
     if (sControlState === CONTROL_STATE.VIEW) {
         hideZoomControl();
     } else if (sControlState === CONTROL_STATE.CHOOSE_ZOOM) {
-        showZoomControl(zoomToX, zoomToY);
+        showZoomButtons(zoomToX, zoomToY);
         oZoomPoint = {
             x: zoomToX,
             y: zoomToY
