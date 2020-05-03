@@ -35,12 +35,12 @@ const degreeInMandelbrotSet = function (x, y) {
 
 const draw = function () {
 
-    const oContext = oCanvas.getContext('2d');
+    const oContext = oGraphicCanvas.getContext('2d');
 
     let x = 0;
     let y = 0;
-    for (x = 0; x < oCanvas.width; x++) {
-        for (y = 0; y < oCanvas.height; y++) {
+    for (x = 0; x < oGraphicCanvas.width; x++) {
+        for (y = 0; y < oGraphicCanvas.height; y++) {
 
             const iTransformedX = x / nZoom - nHorizontalPan;
             const iTransformedY = y / nZoom - nVerticalPan;
@@ -62,7 +62,7 @@ const showZoomControl = function (x, y) {
 
     const nZoomRadius = 50;
 
-    const oContext = oCanvas.getContext('2d');
+    const oContext = oControlCanvas.getContext('2d');
     oContext.strokeStyle = STROKE_NORMAL;
     oContext.lineWidth = 5;
     oContext.beginPath();
@@ -72,6 +72,10 @@ const showZoomControl = function (x, y) {
 };
 
 const hideZoomControl = function () {
+
+    const oContext = oControlCanvas.getContext('2d');
+    const nParentWidth = oControlCanvas.parentNode.clientWidth;
+    oContext.clearRect(0, 0, nParentWidth, CANVAS_HEIGHT);
 
 };
 
@@ -104,10 +108,11 @@ const onTapCanvas = function (oEvent) {
 
 };
 
-const createCanvas = function () {
+const createCanvas = function (sCanvasId, nZindex, oPage) {
 
     const oCanvas = document.createElement('canvas');
-    document.body.appendChild(oCanvas);
+    oCanvas.id = sCanvasId;
+    oPage.appendChild(oCanvas);
 
     const nParentWidth = oCanvas.parentNode.clientWidth;
 
@@ -122,9 +127,27 @@ const createCanvas = function () {
     oCanvas.style.marginRight = sMarginSide;
     oCanvas.style.marginTop = sMarginVertical;
     oCanvas.style.marginBottom = sMarginVertical;
+    oCanvas.style.position = 'absolute';
+    oCanvas.style.zindex = nZindex;
 
+    return oCanvas;
+
+};
+
+const createControlCanvas = function (oPage) {
+    
+    const nZindex = 1;
+    const oCanvas = createCanvas('controlCanvas', nZindex, oPage);
     oCanvas.onclick = onTapCanvas;
 
+    return oCanvas;
+
+};
+
+const createGraphicCanvas = function (oPage) {
+
+    const nZindex = 0;
+    const oCanvas = createCanvas('graphicCanvas', nZindex, oPage);
     return oCanvas;
 
 };
@@ -189,6 +212,21 @@ const createControls = function () {
 
 };
 
+const createPage = function () {
+
+    const oPage = document.createElement('div');
+    oPage.id = 'page';
+    document.body.appendChild(oPage);
+
+    const nParentWidth = oPage.parentNode.clientWidth;
+
+    oPage.width = nParentWidth;
+    oPage.height = CANVAS_HEIGHT;
+
+    return oPage;
+
+};
+
 let nPrecision = 4;
 let nHue = 0;
 let nZoom = 200;
@@ -197,7 +235,9 @@ let nVerticalPan = 0.5;
 
 let sControlState = CONTROL_STATE.VIEW;
 
-const oCanvas = createCanvas();
+const oPage = createPage();
+const oGraphicCanvas = createGraphicCanvas(oPage);
+const oControlCanvas = createControlCanvas(oPage);
 
 const main = function () {
 
