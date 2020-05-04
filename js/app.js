@@ -42,11 +42,18 @@ const drawMandelbrotSet = function () {
 
     let x = 0;
     let y = 0;
+
+    console.log(`zoom to x ${oZoomPoint.x / nZoom - nHorizontalPan}\t\ty: ${oZoomPoint.y / nZoom - nVerticalPan}`);
+
     for (x = 0; x < oGraphicCanvas.width; x++) {
         for (y = 0; y < oGraphicCanvas.height; y++) {
 
             const iTransformedX = x / nZoom - nHorizontalPan;
             const iTransformedY = y / nZoom - nVerticalPan;
+
+            if (x % 100 === 0 && y % 100 === 0) {
+                // console.log(`${iTransformedX}\t\t${iTransformedY}`);
+            }
 
             const nDegreeInSet = degreeInMandelbrotSet(iTransformedX, iTransformedY);
             if (nDegreeInSet == 0) {
@@ -164,8 +171,11 @@ const onTapCanvas = function (oEvent) {
             x: nZoomToX,
             y: nZoomToY
         }
+        console.log(`zoom to x ${oZoomPoint.x}\t\ty: ${oZoomPoint.y}`);
     } else if (sControlState === CONTROL_STATE.ZOOMED_IN) {
         nZoom = nZoom * 2;
+        nHorizontalPan = (oZoomPoint.x - oPage.clientWidth) / 2 / nZoom;
+        nVerticalPan = (oZoomPoint.y - oPage.clientHeight) / 2 / nZoom;
         drawMandelbrotSet();
     }
 
@@ -291,7 +301,7 @@ const createPage = function () {
 
 };
 
-let nPrecision = 4;
+let nPrecision = 70;
 let nHue = 0;
 let nZoom = 200;
 let nHorizontalPan = 4;
