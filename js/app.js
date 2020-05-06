@@ -49,8 +49,8 @@ const drawMandelbrotSet = function () {
             const iRealComponent = (x - nHorizontalPan) / nZoom;
             const iImaginaryComponent = (y - nVerticalPan) / nZoom;
 
-            if (x % 100 === 0 && y % 100 === 0) {
-                // console.log(`${iRealComponent}\t\t${iImaginaryComponent}`);
+            if (x % 200 === 0 && y % 200 === 0) {
+                console.log(`${iRealComponent}\t\t${iImaginaryComponent}`);
             }
 
             const nDegreeInSet = degreeInMandelbrotSet(iRealComponent, iImaginaryComponent);
@@ -68,7 +68,6 @@ const drawMandelbrotSet = function () {
 
 const updateControlState = function (bIsTapInZoomInButton) {
 
-    console.log(`old state: ${sControlState}`);
     switch (sControlState) {
         case CONTROL_STATE.VIEW:
             sControlState = CONTROL_STATE.CHOOSE_ZOOM;
@@ -113,7 +112,6 @@ const handleTap = function (nTapX, nTapY) {
         const nVerticalOffset = oTapPoint.y - oGraphicCanvas.height / 2;
         nHorizontalPan = nHorizontalPan - nHorizontalOffset;
         nVerticalPan = nVerticalPan - nVerticalOffset;
-        console.log(`horizontal offset: ${nHorizontalOffset}\t\thorizontal pan: ${nHorizontalPan}\t\tvertical pan: ${nVerticalPan}`);
         drawMandelbrotSet();
         sControlState = CONTROL_STATE.VIEW;
     }
