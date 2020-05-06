@@ -266,12 +266,6 @@ const createControls = function () {
         drawMandelbrotSet();
     };
 
-    const oZoomSlider = createSlider('zoom', '180', '10000', nZoom, 'Zoom');
-    oZoomSlider.onchange = () => {
-        nZoom = oZoomSlider.value;
-        drawMandelbrotSet();
-    };
-
 };
 
 const createPage = function () {
