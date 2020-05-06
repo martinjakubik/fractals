@@ -269,18 +269,6 @@ const createControls = function () {
         drawMandelbrotSet();
     };
 
-    const oHorizontalPanSlider = createSlider('horizontalPan', '1', '5', nHorizontalPan, 'Pan X', 0.1);
-    oHorizontalPanSlider.onchange = () => {
-        nHorizontalPan = oHorizontalPanSlider.value;
-        drawMandelbrotSet();
-    };
-
-    const oVerticalPanSlider = createSlider('verticalPan', '1', '5', nVerticalPan, 'Pan Y', 0.1);
-    oVerticalPanSlider.onchange = () => {
-        nVerticalPan = oVerticalPanSlider.value;
-        drawMandelbrotSet();
-    };
-
 };
 
 const createPage = function () {
