@@ -66,6 +66,56 @@ const drawMandelbrotSet = function () {
 
 }
 
+const updateControlState = function (bIsTapInZoomInButton) {
+
+    switch (sControlState) {
+        case CONTROL_STATE.VIEW:
+            sControlState = CONTROL_STATE.CHOOSE_ZOOM;
+            return;
+        case CONTROL_STATE.ZOOMED_IN:
+        case CONTROL_STATE.CHOOSE_ZOOM:
+            if (bIsTapInZoomInButton) {
+                sControlState = CONTROL_STATE.ZOOMED_IN;
+                return;
+            }
+        default:
+            sControlState = CONTROL_STATE.VIEW;
+            return;
+    };
+
+};
+
+const isTapInZoomInButton = function (nTapX, nTapY) {
+
+    return (Math.sqrt((nTapX - oZoomPoint.x) ** 2 + (nTapY - oZoomPoint.y) ** 2) < ZOOM_BUTTON_RADIUS);
+
+};
+
+const handleTap = function (nZoomToX, nZoomToY) {
+
+    const bIsTapInZoomInButton = isTapInZoomInButton(nZoomToX, nZoomToY);
+    updateControlState(bIsTapInZoomInButton);
+    
+    if (sControlState === CONTROL_STATE.VIEW) {
+        hideZoomControl();
+    } else if (sControlState === CONTROL_STATE.CHOOSE_ZOOM) {
+        showZoomButtons(nZoomToX, nZoomToY);
+        oZoomPoint = {
+            x: nZoomToX,
+            y: nZoomToY
+        }
+        console.log(`tapped at x ${oZoomPoint.x}\t\ty: ${oZoomPoint.y}`);
+    } else if (sControlState === CONTROL_STATE.ZOOMED_IN) {
+        nZoom = nZoom * 1;
+        const nHorizontalOffset = oZoomPoint.x - oGraphicCanvas.width / 2;
+        nHorizontalPan = nHorizontalPan + nHorizontalOffset;
+        // nVerticalPan = (oZoomPoint.y - oGraphicCanvas.height);
+        console.log(`horizontal offset: ${nHorizontalOffset}\t\thorizontal pan: ${nHorizontalPan}\t\tvertical pan: ${nVerticalPan}`);
+        drawMandelbrotSet();
+    }
+
+};
+
 const drawZoomOutButton = function (x, y) {
 
     const oContext = oControlCanvas.getContext('2d');
@@ -128,56 +178,12 @@ const hideZoomControl = function () {
 
 };
 
-const updateControlState = function (bIsTapInZoomInButton) {
-
-    switch (sControlState) {
-        case CONTROL_STATE.VIEW:
-            sControlState = CONTROL_STATE.CHOOSE_ZOOM;
-            return;
-        case CONTROL_STATE.ZOOMED_IN:
-        case CONTROL_STATE.CHOOSE_ZOOM:
-            if (bIsTapInZoomInButton) {
-                sControlState = CONTROL_STATE.ZOOMED_IN;
-                return;
-            }
-        default:
-            sControlState = CONTROL_STATE.VIEW;
-            return;
-    };
-
-};
-
-const isTapInZoomInButton = function (nTapX, nTapY) {
-
-    return (Math.sqrt((nTapX - oZoomPoint.x) ** 2 + (nTapY - oZoomPoint.y) ** 2) < ZOOM_BUTTON_RADIUS);
-
-};
-
 const onTapCanvas = function (oEvent) {
 
     const nZoomToX = oEvent.x;
     const nZoomToY = oEvent.y - VERTICAL_MARGIN;
 
-    const bIsTapInZoomInButton = isTapInZoomInButton(nZoomToX, nZoomToY);
-    updateControlState(bIsTapInZoomInButton);
-    
-    if (sControlState === CONTROL_STATE.VIEW) {
-        hideZoomControl();
-    } else if (sControlState === CONTROL_STATE.CHOOSE_ZOOM) {
-        showZoomButtons(nZoomToX, nZoomToY);
-        oZoomPoint = {
-            x: nZoomToX,
-            y: nZoomToY
-        }
-        console.log(`tapped at x ${oZoomPoint.x}\t\ty: ${oZoomPoint.y}`);
-    } else if (sControlState === CONTROL_STATE.ZOOMED_IN) {
-        nZoom = nZoom * 1;
-        const nHorizontalOffset = oZoomPoint.x - oGraphicCanvas.width / 2;
-        nHorizontalPan = nHorizontalPan + nHorizontalOffset;
-        // nVerticalPan = (oZoomPoint.y - oGraphicCanvas.height);
-        console.log(`horizontal offset: ${nHorizontalOffset}\t\thorizontal pan: ${nHorizontalPan}\t\tvertical pan: ${nVerticalPan}`);
-        drawMandelbrotSet();
-    }
+    handleTap(nZoomToX, nZoomToY);
 
 };
 
