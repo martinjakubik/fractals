@@ -68,6 +68,7 @@ const drawMandelbrotSet = function () {
 
 const updateControlState = function (bIsTapInZoomInButton) {
 
+    console.log(`old state: ${sControlState}`);
     switch (sControlState) {
         case CONTROL_STATE.VIEW:
             sControlState = CONTROL_STATE.CHOOSE_ZOOM;
@@ -114,6 +115,7 @@ const handleTap = function (nTapX, nTapY) {
         nVerticalPan = nVerticalPan - nVerticalOffset;
         console.log(`horizontal offset: ${nHorizontalOffset}\t\thorizontal pan: ${nHorizontalPan}\t\tvertical pan: ${nVerticalPan}`);
         drawMandelbrotSet();
+        sControlState = CONTROL_STATE.VIEW;
     }
 
 };
