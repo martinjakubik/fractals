@@ -12,21 +12,21 @@ const CONTROL_STATE = {
     ZOOMED_IN: 2
 };
 
-const degreeInMandelbrotSet = function (x, y) {
+const degreeInMandelbrotSet = function (iRealComponent, iImaginaryComponent) {
 
-    let iRealComponent = x;
-    let iImaginaryComponent = y;
+    let iIncrementalRealComponent = iRealComponent;
+    let iInrementalImaginaryComponent = iImaginaryComponent;
 
     let j = 0;
     for (j = 0; j < nPrecision; j++) {
 
-        let iTempRealComponent = iRealComponent * iRealComponent - iImaginaryComponent * iImaginaryComponent + x;
-        let iTempImaginaryComponent = 2 * iRealComponent * iImaginaryComponent + y;
+        let iTempRealComponent = iIncrementalRealComponent * iIncrementalRealComponent - iInrementalImaginaryComponent * iInrementalImaginaryComponent + iRealComponent;
+        let iTempImaginaryComponent = 2 * iIncrementalRealComponent * iInrementalImaginaryComponent + iImaginaryComponent;
 
-        iRealComponent = iTempRealComponent;
-        iImaginaryComponent = iTempImaginaryComponent;
+        iIncrementalRealComponent = iTempRealComponent;
+        iInrementalImaginaryComponent = iTempImaginaryComponent;
 
-        if (iRealComponent * iImaginaryComponent > SMALL_VALUE) {
+        if (iIncrementalRealComponent * iInrementalImaginaryComponent > SMALL_VALUE) {
             return j / nPrecision * 100;
         }
 
@@ -43,19 +43,17 @@ const drawMandelbrotSet = function () {
     let x = 0;
     let y = 0;
 
-    console.log(`zoom to x ${oZoomPoint.x / nZoom - nHorizontalPan}\t\ty: ${oZoomPoint.y / nZoom - nVerticalPan}`);
-
     for (x = 0; x < oGraphicCanvas.width; x++) {
         for (y = 0; y < oGraphicCanvas.height; y++) {
 
-            const iTransformedX = x / nZoom - nHorizontalPan;
-            const iTransformedY = y / nZoom - nVerticalPan;
+            const iRealComponent = (x - nHorizontalPan) / nZoom;
+            const iImaginaryComponent = (y - nVerticalPan) / nZoom;
 
             if (x % 100 === 0 && y % 100 === 0) {
-                // console.log(`${iTransformedX}\t\t${iTransformedY}`);
+                // console.log(`${iRealComponent}\t\t${iImaginaryComponent}`);
             }
 
-            const nDegreeInSet = degreeInMandelbrotSet(iTransformedX, iTransformedY);
+            const nDegreeInSet = degreeInMandelbrotSet(iRealComponent, iImaginaryComponent);
             if (nDegreeInSet == 0) {
                 oContext.fillStyle = '#000';
                 oContext.fillRect(x, y, 1, 1);
@@ -171,11 +169,13 @@ const onTapCanvas = function (oEvent) {
             x: nZoomToX,
             y: nZoomToY
         }
-        console.log(`zoom to x ${oZoomPoint.x}\t\ty: ${oZoomPoint.y}`);
+        console.log(`tapped at x ${oZoomPoint.x}\t\ty: ${oZoomPoint.y}`);
     } else if (sControlState === CONTROL_STATE.ZOOMED_IN) {
-        nZoom = nZoom * 2;
-        nHorizontalPan = (oZoomPoint.x - oPage.clientWidth) / 2 / nZoom;
-        nVerticalPan = (oZoomPoint.y - oPage.clientHeight) / 2 / nZoom;
+        nZoom = nZoom * 1;
+        const nHorizontalOffset = oZoomPoint.x - oGraphicCanvas.width / 2;
+        nHorizontalPan = nHorizontalPan + nHorizontalOffset;
+        // nVerticalPan = (oZoomPoint.y - oGraphicCanvas.height);
+        console.log(`horizontal offset: ${nHorizontalOffset}\t\thorizontal pan: ${nHorizontalPan}\t\tvertical pan: ${nVerticalPan}`);
         drawMandelbrotSet();
     }
 
@@ -304,8 +304,8 @@ const createPage = function () {
 let nPrecision = 70;
 let nHue = 0;
 let nZoom = 200;
-let nHorizontalPan = 4;
-let nVerticalPan = 0.5;
+let nHorizontalPan = 3 * nZoom;
+let nVerticalPan = 0.5 *nZoom;
 
 let sControlState = CONTROL_STATE.VIEW;
 
@@ -314,8 +314,8 @@ const oGraphicCanvas = createGraphicCanvas(oPage);
 const oControlCanvas = createControlCanvas(oPage);
 
 let oZoomPoint = {
-    x: oPage.style.width / 2,
-    y: oPage.style.height / 2
+    x: oGraphicCanvas.width / 2,
+    y: oGraphicCanvas.height / 2
 }
 
 const main = function () {
