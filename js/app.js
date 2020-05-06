@@ -180,10 +180,10 @@ const hideZoomControl = function () {
 
 const onTapCanvas = function (oEvent) {
 
-    const nZoomToX = oEvent.x;
-    const nZoomToY = oEvent.y - VERTICAL_MARGIN;
+    const nTapX = oEvent.x;
+    const nTapY = oEvent.y - VERTICAL_MARGIN;
 
-    handleTap(nZoomToX, nZoomToY);
+    handleTap(nTapX, nTapY);
 
 };
 
