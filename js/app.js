@@ -106,6 +106,7 @@ const handleTap = function (nTapX, nTapY) {
         }
         console.log(`tapped at x ${oTapPoint.x}\t\ty: ${oTapPoint.y}`);
     } else if (sControlState === CONTROL_STATE.ZOOMED_IN) {
+        hideZoomControl();
         nZoom = nZoom * 1;
         const nHorizontalOffset = oTapPoint.x - oGraphicCanvas.width / 2;
         const nVerticalOffset = oTapPoint.y - oGraphicCanvas.height / 2;
