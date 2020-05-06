@@ -108,7 +108,7 @@ const handleTap = function (nTapX, nTapY) {
     } else if (sControlState === CONTROL_STATE.ZOOMED_IN) {
         nZoom = nZoom * 1;
         const nHorizontalOffset = oTapPoint.x - oGraphicCanvas.width / 2;
-        nHorizontalPan = nHorizontalPan + nHorizontalOffset;
+        nHorizontalPan = nHorizontalPan - nHorizontalOffset;
         // nVerticalPan = (oTapPoint.y - oGraphicCanvas.height);
         console.log(`horizontal offset: ${nHorizontalOffset}\t\thorizontal pan: ${nHorizontalPan}\t\tvertical pan: ${nVerticalPan}`);
         drawMandelbrotSet();
