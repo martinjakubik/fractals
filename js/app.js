@@ -87,29 +87,29 @@ const updateControlState = function (bIsTapInZoomInButton) {
 
 const isTapInZoomInButton = function (nTapX, nTapY) {
 
-    return (Math.sqrt((nTapX - oZoomPoint.x) ** 2 + (nTapY - oZoomPoint.y) ** 2) < ZOOM_BUTTON_RADIUS);
+    return (Math.sqrt((nTapX - oTapPoint.x) ** 2 + (nTapY - oTapPoint.y) ** 2) < ZOOM_BUTTON_RADIUS);
 
 };
 
-const handleTap = function (nZoomToX, nZoomToY) {
+const handleTap = function (nTapX, nTapY) {
 
-    const bIsTapInZoomInButton = isTapInZoomInButton(nZoomToX, nZoomToY);
+    const bIsTapInZoomInButton = isTapInZoomInButton(nTapX, nTapY);
     updateControlState(bIsTapInZoomInButton);
     
     if (sControlState === CONTROL_STATE.VIEW) {
         hideZoomControl();
     } else if (sControlState === CONTROL_STATE.CHOOSE_ZOOM) {
-        showZoomButtons(nZoomToX, nZoomToY);
-        oZoomPoint = {
-            x: nZoomToX,
-            y: nZoomToY
+        showZoomButtons(nTapX, nTapY);
+        oTapPoint = {
+            x: nTapX,
+            y: nTapY
         }
-        console.log(`tapped at x ${oZoomPoint.x}\t\ty: ${oZoomPoint.y}`);
+        console.log(`tapped at x ${oTapPoint.x}\t\ty: ${oTapPoint.y}`);
     } else if (sControlState === CONTROL_STATE.ZOOMED_IN) {
         nZoom = nZoom * 1;
-        const nHorizontalOffset = oZoomPoint.x - oGraphicCanvas.width / 2;
+        const nHorizontalOffset = oTapPoint.x - oGraphicCanvas.width / 2;
         nHorizontalPan = nHorizontalPan + nHorizontalOffset;
-        // nVerticalPan = (oZoomPoint.y - oGraphicCanvas.height);
+        // nVerticalPan = (oTapPoint.y - oGraphicCanvas.height);
         console.log(`horizontal offset: ${nHorizontalOffset}\t\thorizontal pan: ${nHorizontalPan}\t\tvertical pan: ${nVerticalPan}`);
         drawMandelbrotSet();
     }
@@ -319,7 +319,7 @@ const oPage = createPage();
 const oGraphicCanvas = createGraphicCanvas(oPage);
 const oControlCanvas = createControlCanvas(oPage);
 
-let oZoomPoint = {
+let oTapPoint = {
     x: oGraphicCanvas.width / 2,
     y: oGraphicCanvas.height / 2
 }
