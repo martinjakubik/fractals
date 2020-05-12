@@ -296,7 +296,7 @@ let nPrecision = 70;
 let nHue = 0;
 let nZoom = 200;
 let nHorizontalPan = 3 * nZoom;
-let nVerticalPan = 0.5 *nZoom;
+let nVerticalPan = 1.5 * nZoom;
 
 let sControlState = CONTROL_STATE.VIEW;
 
