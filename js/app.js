@@ -223,11 +223,19 @@ const createCanvas = function (sCanvasId, nZindex, oPage) {
 };
 
 const createControlCanvas = function (oPage) {
-    
-    const nZindex = 1;
+
+    const nZindex = 2;
     const oCanvas = createCanvas('controlCanvas', nZindex, oPage);
     oCanvas.onclick = onTapCanvas;
 
+    return oCanvas;
+    
+};
+
+const createDebugCanvas = function (oPage) {
+
+    const nZindex = 1;
+    const oCanvas = createCanvas('debugCanvas', nZindex, oPage);
     return oCanvas;
 
 };
@@ -263,6 +271,10 @@ const createSlider = function (sId, sMin, sMax, nValue, sLabel, nStep) {
     document.body.appendChild(oInput);
 
     return oInput;
+
+};
+
+const createCheckbox = function (sId, sLabel, bValue) {
 
 };
 
@@ -316,6 +328,7 @@ let sControlState = CONTROL_STATE.VIEW;
 
 const oPage = createPage();
 const oGraphicCanvas = createGraphicCanvas(oPage);
+const oDebugCanvas = createDebugCanvas(oPage);
 const oControlCanvas = createControlCanvas(oPage);
 
 let oPreviousTapPoint = {
