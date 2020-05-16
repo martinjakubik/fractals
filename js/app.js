@@ -3,6 +3,8 @@ const VERTICAL_MARGIN = 36;
 const ZOOM_LENS_RADIUS = 50;
 const ZOOM_BUTTON_RADIUS = ZOOM_LENS_RADIUS / 4;
 
+const ZOOM_MULTIPLIER = 2;
+
 const SMALL_VALUE = 5;
 const STROKE_NORMAL = '#aaa';
 
@@ -39,18 +41,28 @@ const degreeInMandelbrotSet = function (iRealComponent, iImaginaryComponent) {
 const drawMandelbrotSet = function () {
 
     const oContext = oGraphicCanvas.getContext('2d');
+    const oControlContext = oControlCanvas.getContext('2d');
 
     let x = 0;
     let y = 0;
+    let sDebugText = '';
+    oControlContext.font = '8pt sans-serif';
+
+    sDebugText = `pan:${(nHorizontalPan)}, pan/zoom:${(nHorizontalPan / nZoom)}`;
+    oControlContext.fillStyle = '#fff';
+    oControlContext.fillText(sDebugText, 800, 580);
 
     for (x = 0; x < oGraphicCanvas.width; x++) {
         for (y = 0; y < oGraphicCanvas.height; y++) {
-
+            
             const iRealComponent = (x - nHorizontalPan) / nZoom;
             const iImaginaryComponent = (y - nVerticalPan) / nZoom;
-
+            
             if (x % 200 === 0 && y % 200 === 0) {
-                console.log(`${iRealComponent}\t\t${iImaginaryComponent}`);
+                // console.log(`(x - horizontal pan / nZoom): ${(x - nHorizontalPan) / nZoom}`);
+                sDebugText = `x:${x},a:${iRealComponent}`;
+                oControlContext.fillStyle = '#fff';
+                oControlContext.fillText(sDebugText, x, y);
             }
 
             const nDegreeInSet = degreeInMandelbrotSet(iRealComponent, iImaginaryComponent);
@@ -104,18 +116,20 @@ const handleTap = function (nTapX, nTapY) {
             x: nTapX,
             y: nTapY
         }
-        console.log(`tapped at x ${oTapPoint.x}\t\ty: ${oTapPoint.y}`);
     } else if (sControlState === CONTROL_STATE.ZOOMED_IN) {
         hideZoomControl();
-        nZoom = nZoom * 1.2;
-        console.log(`zoom ${nZoom}`);
-        const nHorizontalOffset = oTapPoint.x - oGraphicCanvas.width / 2;
-        const nVerticalOffset = oTapPoint.y - oGraphicCanvas.height / 2;
+        nZoom = nZoom * ZOOM_MULTIPLIER;
+        const nHorizontalOffset = oTapPoint.x - oPreviousTapPoint.x;
+        const nVerticalOffset = oTapPoint.y - oPreviousTapPoint.y;
         nHorizontalPan = nHorizontalPan - nHorizontalOffset;
         nVerticalPan = nVerticalPan - nVerticalOffset;
         drawMandelbrotSet();
         sControlState = CONTROL_STATE.VIEW;
-    }
+
+        oPreviousTapPoint.x = nTapX;
+        oPreviousTapPoint.y = nTapY;
+
+        }
 
 };
 
@@ -303,6 +317,11 @@ let sControlState = CONTROL_STATE.VIEW;
 const oPage = createPage();
 const oGraphicCanvas = createGraphicCanvas(oPage);
 const oControlCanvas = createControlCanvas(oPage);
+
+let oPreviousTapPoint = {
+    x: oGraphicCanvas.width / 2,
+    y: oGraphicCanvas.height / 2
+}
 
 let oTapPoint = {
     x: oGraphicCanvas.width / 2,
