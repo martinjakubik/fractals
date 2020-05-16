@@ -40,17 +40,18 @@ const degreeInMandelbrotSet = function (iRealComponent, iImaginaryComponent) {
 
 const drawMandelbrotSet = function () {
 
-    const oContext = oGraphicCanvas.getContext('2d');
+    const oGraphicContext = oGraphicCanvas.getContext('2d');
+    const oDebugContext = oDebugCanvas.getContext('2d');
     const oControlContext = oControlCanvas.getContext('2d');
 
     let x = 0;
     let y = 0;
     let sDebugText = '';
-    oControlContext.font = '8pt sans-serif';
+    oDebugContext.font = '8pt sans-serif';
 
     sDebugText = `pan:${(nHorizontalPan)}, pan/zoom:${(nHorizontalPan / nZoom)}`;
-    oControlContext.fillStyle = '#fff';
-    oControlContext.fillText(sDebugText, 800, 580);
+    oDebugContext.fillStyle = '#fff';
+    oDebugContext.fillText(sDebugText, 800, 580);
 
     for (x = 0; x < oGraphicCanvas.width; x++) {
         for (y = 0; y < oGraphicCanvas.height; y++) {
@@ -61,17 +62,17 @@ const drawMandelbrotSet = function () {
             if (x % 200 === 0 && y % 200 === 0) {
                 // console.log(`(x - horizontal pan / nZoom): ${(x - nHorizontalPan) / nZoom}`);
                 sDebugText = `x:${x},a:${iRealComponent}`;
-                oControlContext.fillStyle = '#fff';
-                oControlContext.fillText(sDebugText, x, y);
+                oDebugContext.fillStyle = '#fff';
+                oDebugContext.fillText(sDebugText, x, y);
             }
 
             const nDegreeInSet = degreeInMandelbrotSet(iRealComponent, iImaginaryComponent);
             if (nDegreeInSet == 0) {
-                oContext.fillStyle = '#000';
-                oContext.fillRect(x, y, 1, 1);
+                oGraphicContext.fillStyle = '#000';
+                oGraphicContext.fillRect(x, y, 1, 1);
             } else {
-                oContext.fillStyle = `hsl(${nHue}, 100%, ${nDegreeInSet}%)`;
-                oContext.fillRect(x, y, 1, 1);
+                oGraphicContext.fillStyle = `hsl(${nHue}, 100%, ${nDegreeInSet}%)`;
+                oGraphicContext.fillRect(x, y, 1, 1);
             }
         }
     }
