@@ -42,7 +42,6 @@ const drawMandelbrotSet = function () {
 
     const oGraphicContext = oGraphicCanvas.getContext('2d');
     const oDebugContext = oDebugCanvas.getContext('2d');
-    const oControlContext = oControlCanvas.getContext('2d');
 
     let x = 0;
     let y = 0;
@@ -275,7 +274,32 @@ const createSlider = function (sId, sMin, sMax, nValue, sLabel, nStep) {
 
 };
 
-const createCheckbox = function (sId, sLabel, bValue) {
+const createCheckbox = function (sId, bValue, sLabel) {
+
+    const sName = sId;
+
+    const oInput = document.createElement('input');
+    oInput.type = 'checkbox';
+    oInput.id = sId;
+    oInput.name = sName;
+    oInput.value = bValue;
+
+    const oLabel = document.createElement('label');
+    oLabel.for = sId;
+    oLabel.innerText = sLabel;
+
+    document.body.appendChild(oLabel);
+    document.body.appendChild(oInput);
+
+    return oInput;
+
+};
+
+const setBlockVisibility = function (bVisible)  {
+
+    let sStyle = 'position: absolute';
+    sStyle += bVisible ? '; display: block' : '; display: none';
+    return sStyle;
 
 };
 
@@ -291,6 +315,13 @@ const createControls = function () {
     oHueSlider.onchange = () => {
         nHue = oHueSlider.value;
         drawMandelbrotSet();
+    };
+
+    const oDebugCheckbox = createCheckbox('debug', DEBUG, 'Debug');
+    oDebugCheckbox.onchange = () => {
+        DEBUG = oDebugCheckbox.checked;
+        const sStyle =setBlockVisibility(DEBUG);
+        oDebugCanvas.style = sStyle;
     };
 
 };
@@ -327,9 +358,12 @@ let nVerticalPan = 1.5 * nZoom;
 
 let sControlState = CONTROL_STATE.VIEW;
 
+let DEBUG = false;
+
 const oPage = createPage();
 const oGraphicCanvas = createGraphicCanvas(oPage);
 const oDebugCanvas = createDebugCanvas(oPage);
+oDebugCanvas.style = setBlockVisibility(DEBUG);
 const oControlCanvas = createControlCanvas(oPage);
 
 let oPreviousTapPoint = {
