@@ -42,11 +42,14 @@ const drawMandelbrotSet = function () {
 
     const oGraphicContext = oGraphicCanvas.getContext('2d');
     const oDebugContext = oDebugCanvas.getContext('2d');
+    const nDebugCanvasWidth = oDebugCanvas.parentNode.clientWidth;
 
     let x = 0;
     let y = 0;
     let sDebugText = '';
     oDebugContext.font = '8pt sans-serif';
+
+    oDebugContext.clearRect(0, 0, nDebugCanvasWidth, CANVAS_HEIGHT);
 
     sDebugText = `pan:${(nHorizontalPan)}, pan/zoom:${(nHorizontalPan / nZoom)}`;
     oDebugContext.fillStyle = '#fff';
