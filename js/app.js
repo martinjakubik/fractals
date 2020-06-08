@@ -2,6 +2,7 @@ const CANVAS_HEIGHT = 600;
 const VERTICAL_MARGIN = 36;
 const ZOOM_LENS_RADIUS = 50;
 const ZOOM_BUTTON_RADIUS = ZOOM_LENS_RADIUS / 4;
+const ZOOM_OUT_BUTTON_DISTANCE = 120;
 
 const ZOOM_MULTIPLIER = 2;
 
@@ -11,7 +12,8 @@ const STROKE_NORMAL = '#aaa';
 const CONTROL_STATE = {
     VIEW: 0,
     CHOOSE_ZOOM: 1,
-    ZOOMED_IN: 2
+    ZOOMED_IN: 2,
+    ZOOMED_OUT: 3
 };
 
 const degreeInMandelbrotSet = function (iRealComponent, iImaginaryComponent) {
@@ -80,7 +82,7 @@ const drawMandelbrotSet = function () {
 
 }
 
-const updateControlState = function (bIsTapInZoomInButton) {
+const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton) {
 
     switch (sControlState) {
         case CONTROL_STATE.VIEW:
@@ -90,6 +92,9 @@ const updateControlState = function (bIsTapInZoomInButton) {
         case CONTROL_STATE.CHOOSE_ZOOM:
             if (bIsTapInZoomInButton) {
                 sControlState = CONTROL_STATE.ZOOMED_IN;
+                return;
+            } else if (bIsTapInZoomOutButton) {
+                sControlState = CONTROL_STATE.ZOOMED_OUT;
                 return;
             }
         default:
@@ -105,10 +110,25 @@ const isTapInZoomInButton = function (nTapX, nTapY) {
 
 };
 
+const isTapInZoomOutButton = function (nTapX, nTapY) {
+
+    const x1 = nTapX - ZOOM_OUT_BUTTON_DISTANCE;
+    const x2 = nTapX + ZOOM_OUT_BUTTON_DISTANCE;
+    const y1 = nTapY - ZOOM_OUT_BUTTON_DISTANCE;
+    const y2 = nTapY + ZOOM_OUT_BUTTON_DISTANCE;
+
+    return (Math.sqrt((x1 - oTapPoint.x) ** 2 + (nTapY - oTapPoint.y) ** 2) < ZOOM_BUTTON_RADIUS)
+        || (Math.sqrt((x2 - oTapPoint.x) ** 2 + (nTapY - oTapPoint.y) ** 2) < ZOOM_BUTTON_RADIUS)
+        || (Math.sqrt((nTapX - oTapPoint.x) ** 2 + (y1 - oTapPoint.y) ** 2) < ZOOM_BUTTON_RADIUS)
+        || (Math.sqrt((nTapX - oTapPoint.x) ** 2 + (y2 - oTapPoint.y) ** 2) < ZOOM_BUTTON_RADIUS);
+
+};
+
 const handleTap = function (nTapX, nTapY) {
 
     const bIsTapInZoomInButton = isTapInZoomInButton(nTapX, nTapY);
-    updateControlState(bIsTapInZoomInButton);
+    const bIsTapInZoomOutButton = isTapInZoomOutButton(nTapX, nTapY);
+    updateControlState(bIsTapInZoomInButton, bIsTapInZoomOutButton);
     
     if (sControlState === CONTROL_STATE.VIEW) {
         hideZoomControl();
@@ -118,9 +138,13 @@ const handleTap = function (nTapX, nTapY) {
             x: nTapX,
             y: nTapY
         }
-    } else if (sControlState === CONTROL_STATE.ZOOMED_IN) {
+    } else if (sControlState === CONTROL_STATE.ZOOMED_IN || sControlState === CONTROL_STATE.ZOOMED_OUT) {
         hideZoomControl();
-        nZoom = nZoom * ZOOM_MULTIPLIER;
+        if (sControlState === CONTROL_STATE.ZOOMED_IN) {
+            nZoom = nZoom * ZOOM_MULTIPLIER;
+        } else if (sControlState === CONTROL_STATE.ZOOMED_OUT) {
+            nZoom = nZoom / ZOOM_MULTIPLIER;
+        }
         const nHorizontalOffset = oTapPoint.x - oPreviousTapPoint.x;
         const nVerticalOffset = oTapPoint.y - oPreviousTapPoint.y;
         nHorizontalPan = nHorizontalPan - nHorizontalOffset;
@@ -130,7 +154,6 @@ const handleTap = function (nTapX, nTapY) {
 
         oPreviousTapPoint.x = nTapX;
         oPreviousTapPoint.y = nTapY;
-
     }
 
 };
@@ -176,11 +199,10 @@ const showZoomButtons = function (x, y) {
     oContext.stroke();
 
     // draws zoom out buttons
-    const nZoomOutButtonDistance = 120;
-    const x1 = x - nZoomOutButtonDistance;
-    const x2 = x + nZoomOutButtonDistance;
-    const y1 = y - nZoomOutButtonDistance;
-    const y2 = y + nZoomOutButtonDistance;
+    const x1 = x - ZOOM_OUT_BUTTON_DISTANCE;
+    const x2 = x + ZOOM_OUT_BUTTON_DISTANCE;
+    const y1 = y - ZOOM_OUT_BUTTON_DISTANCE;
+    const y2 = y + ZOOM_OUT_BUTTON_DISTANCE;
 
     drawZoomOutButton(x1, y);
     drawZoomOutButton(x2, y);
