@@ -51,18 +51,17 @@ const drawMandelbrotSet = function () {
 
     oDebugContext.clearRect(0, 0, nDebugCanvasWidth, CANVAS_HEIGHT);
 
-    sDebugText = `pan:${(nHorizontalPan)}, pan/zoom:${(nHorizontalPan / nZoom)}`;
+    sDebugText = `pan:${(nHorizontalPan)} zoom: ${nZoom} pan/zoom:${(nHorizontalPan / nZoom)} last click: ${oGraphicCanvas.width - nHorizontalPan} center point: ${((oGraphicCanvas.width / 2) - nHorizontalPan) / nZoom}`;
     oDebugContext.fillStyle = '#fff';
     oDebugContext.fillText(sDebugText, 800, 580);
 
     for (x = 0; x < oGraphicCanvas.width; x++) {
         for (y = 0; y < oGraphicCanvas.height; y++) {
             
-            const iRealComponent = (x - nHorizontalPan) / nZoom;
+            const iRealComponent = (x + nHorizontalPan) / nZoom;
             const iImaginaryComponent = (y - nVerticalPan) / nZoom;
             
             if (x % 200 === 0 && y % 200 === 0) {
-                // console.log(`(x - horizontal pan / nZoom): ${(x - nHorizontalPan) / nZoom}`);
                 sDebugText = `x:${x},a:${iRealComponent}`;
                 oDebugContext.fillStyle = '#fff';
                 oDebugContext.fillText(sDebugText, x, y);
@@ -353,7 +352,7 @@ const createPage = function () {
 
 };
 
-let nPrecision = 70;
+let nPrecision = 5;
 let nHue = 0;
 let nZoom = 200;
 let nHorizontalPan = 3 * nZoom;
