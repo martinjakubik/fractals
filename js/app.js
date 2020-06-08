@@ -132,7 +132,7 @@ const handleTap = function (nTapX, nTapY) {
         oPreviousTapPoint.x = nTapX;
         oPreviousTapPoint.y = nTapY;
 
-        }
+    }
 
 };
 
