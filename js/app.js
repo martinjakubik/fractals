@@ -374,9 +374,9 @@ const createControls = function () {
         drawMandelbrotSet();
     };
 
-    const oCenterXNumberInput = createNumberInput('center', nCenterReal, 'Center real');
-    oCenterXNumberInput.onchange = () => {
-        nCenterReal = oCenterXNumberInput.value;
+    const oCenterRealNumberInput = createNumberInput('center', nCenterReal, 'Center real');
+    oCenterRealNumberInput.onchange = () => {
+        nCenterReal = oCenterRealNumberInput.value;
     };
 
     const oDrawButton = createButton('draw', 'Draw');
