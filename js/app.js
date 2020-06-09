@@ -320,6 +320,36 @@ const createCheckbox = function (sId, bValue, sLabel) {
 
 };
 
+const createNumberInput = function (sId, nValue, sLabel) {
+
+    const oInput = document.createElement('input');
+    oInput.type = 'number';
+    oInput.id = sId;
+    oInput.value = nValue;
+
+    const oLabel = document.createElement('label');
+    oLabel.for = sId;
+    oLabel.innerText = sLabel;
+
+    document.body.appendChild(oLabel);
+    document.body.appendChild(oInput);
+
+    return oInput;
+
+};
+
+const createButton = function (sId, sLabel) {
+
+    const oButton = document.createElement('button');
+    oButton.id = sId;
+    oButton.innerText = sLabel;
+
+    document.body.appendChild(oButton);
+
+    return oButton;
+
+};
+
 const setBlockVisibility = function (bVisible)  {
 
     let sStyle = 'position: absolute';
@@ -339,6 +369,16 @@ const createControls = function () {
     const oHueSlider = createSlider('hue', '0', '359', nHue, 'Hue');
     oHueSlider.onchange = () => {
         nHue = oHueSlider.value;
+        drawMandelbrotSet();
+    };
+
+    const oCenterXNumberInput = createNumberInput('center', nCenterX, 'Center X');
+    oCenterXNumberInput.onchange = () => {
+        nCenterX = oCenterXNumberInput.value;
+    };
+
+    const oDrawButton = createButton('draw', 'Draw');
+    oDrawButton.onclick = () => {
         drawMandelbrotSet();
     };
 
@@ -390,6 +430,8 @@ const oGraphicCanvas = createGraphicCanvas(oPage);
 const oDebugCanvas = createDebugCanvas(oPage);
 oDebugCanvas.style = setBlockVisibility(DEBUG);
 const oControlCanvas = createControlCanvas(oPage);
+
+let nCenterX = Math.floor(oGraphicCanvas.width / 2);
 
 let oPreviousTapPoint = {
     x: oGraphicCanvas.width / 2,
