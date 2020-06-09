@@ -46,6 +46,8 @@ const drawMandelbrotSet = function () {
     const oDebugContext = oDebugCanvas.getContext('2d');
     const nDebugCanvasWidth = oDebugCanvas.parentNode.clientWidth;
 
+    nHorizontalPan = nCenterReal * nZoom;
+
     let x = 0;
     let y = 0;
     let sDebugText = '';
@@ -59,13 +61,13 @@ const drawMandelbrotSet = function () {
 
     for (x = 0; x < oGraphicCanvas.width; x++) {
         for (y = 0; y < oGraphicCanvas.height; y++) {
-            
-            const iRealComponent = (x + nHorizontalPan) / nZoom;
+
+            const iRealComponent = (x - nHorizontalPan) / nZoom;
             const iImaginaryComponent = (y - nVerticalPan) / nZoom;
-            
+
             // debug
             if (x % 200 === 0 && y % 200 === 0) {
-                sDebugText = `x:${x},a:${iRealComponent}`;
+                sDebugText = `x:${x}, r:${iRealComponent}`;
                 oDebugContext.fillStyle = '#fff';
                 oDebugContext.fillText(sDebugText, x, y);
             }
@@ -420,7 +422,6 @@ let nHue = 0;
 let nZoom = 200;
 let nHorizontalPan = 3 * nZoom;
 let nVerticalPan = 1.5 * nZoom;
-let nCenterReal = 0;
 
 let sControlState = CONTROL_STATE.VIEW;
 
@@ -432,6 +433,7 @@ const oDebugCanvas = createDebugCanvas(oPage);
 oDebugCanvas.style = setBlockVisibility(DEBUG);
 const oControlCanvas = createControlCanvas(oPage);
 
+let nCenterReal = ((oGraphicCanvas.width / 2) - nHorizontalPan) / nZoom;
 
 let oPreviousTapPoint = {
     x: oGraphicCanvas.width / 2,
