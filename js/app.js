@@ -362,9 +362,9 @@ const setBlockVisibility = function (bVisible)  {
 
 const createControls = function () {
 
-    const oMaxIterationSlider = createSlider('precision', '0', '100', nPrecision, 'Precision');
-    oMaxIterationSlider.onchange = () => {
-        nPrecision = oMaxIterationSlider.value;
+    const oPrecisionSlider = createSlider('precision', '0', '100', nPrecision, 'Precision');
+    oPrecisionSlider.onchange = () => {
+        nPrecision = oPrecisionSlider.value;
         drawMandelbrotSet();
     };
 
