@@ -47,6 +47,7 @@ const drawMandelbrotSet = function () {
     const nDebugCanvasWidth = oDebugCanvas.parentNode.clientWidth;
 
     nHorizontalPan = nCenterReal * nZoom;
+    nVerticalPan = nCenterImaginary * nZoom;
 
     let x = 0;
     let y = 0;
@@ -374,9 +375,14 @@ const createControls = function () {
         drawMandelbrotSet();
     };
 
-    const oCenterRealNumberInput = createNumberInput('center', nCenterReal, 'Center real');
+    const oCenterRealNumberInput = createNumberInput('centerreal', nCenterReal, 'Center real');
     oCenterRealNumberInput.onchange = () => {
         nCenterReal = oCenterRealNumberInput.value;
+    };
+
+    const oCenterImaginaryNumberInput = createNumberInput('centerimaginary', nCenterImaginary, 'Imaginary');
+    oCenterImaginaryNumberInput.onchange = () => {
+        nCenterImaginary = oCenterImaginaryNumberInput.value;
     };
 
     const oDrawButton = createButton('draw', 'Draw');
@@ -434,6 +440,7 @@ oDebugCanvas.style = setBlockVisibility(DEBUG);
 const oControlCanvas = createControlCanvas(oPage);
 
 let nCenterReal = ((oGraphicCanvas.width / 2) - nHorizontalPan) / nZoom;
+let nCenterImaginary = 1.5;
 
 let oPreviousTapPoint = {
     x: oGraphicCanvas.width / 2,
