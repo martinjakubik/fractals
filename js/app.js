@@ -55,7 +55,7 @@ const drawMandelbrotSet = function () {
 
     oDebugContext.clearRect(0, 0, nDebugCanvasWidth, CANVAS_HEIGHT);
 
-    sDebugText = `pan:${(nHorizontalPan)} zoom: ${nZoom} pan/zoom:${(nHorizontalPan / nZoom)} last click: ${oGraphicCanvas.width - nHorizontalPan} center point: ${((oGraphicCanvas.width / 2) - nHorizontalPan) / nZoom}`;
+    sDebugText = `precision: ${nPrecision} pan:${(nHorizontalPan)} zoom: ${nZoom} pan/zoom:${(nHorizontalPan / nZoom)} last click: ${oGraphicCanvas.width - nHorizontalPan} center point: ${((oGraphicCanvas.width / 2) - nHorizontalPan) / nZoom}`;
     oDebugContext.fillStyle = '#fff';
     oDebugContext.fillText(sDebugText, 800, 580);
 
@@ -362,7 +362,7 @@ const setBlockVisibility = function (bVisible)  {
 
 const createControls = function () {
 
-    const oPrecisionSlider = createSlider('precision', '0', '100', nPrecision, 'Precision');
+    const oPrecisionSlider = createSlider('precision', '0', '1000', nPrecision, 'Precision');
     oPrecisionSlider.onchange = () => {
         nPrecision = oPrecisionSlider.value;
         drawMandelbrotSet();
