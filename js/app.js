@@ -372,9 +372,9 @@ const createControls = function () {
         drawMandelbrotSet();
     };
 
-    const oCenterXNumberInput = createNumberInput('center', nCenterX, 'Center X');
+    const oCenterXNumberInput = createNumberInput('center', nCenterReal, 'Center real');
     oCenterXNumberInput.onchange = () => {
-        nCenterX = oCenterXNumberInput.value;
+        nCenterReal = oCenterXNumberInput.value;
     };
 
     const oDrawButton = createButton('draw', 'Draw');
@@ -420,6 +420,7 @@ let nHue = 0;
 let nZoom = 200;
 let nHorizontalPan = 3 * nZoom;
 let nVerticalPan = 1.5 * nZoom;
+let nCenterReal = 0;
 
 let sControlState = CONTROL_STATE.VIEW;
 
@@ -431,7 +432,6 @@ const oDebugCanvas = createDebugCanvas(oPage);
 oDebugCanvas.style = setBlockVisibility(DEBUG);
 const oControlCanvas = createControlCanvas(oPage);
 
-let nCenterX = Math.floor(oGraphicCanvas.width / 2);
 
 let oPreviousTapPoint = {
     x: oGraphicCanvas.width / 2,
