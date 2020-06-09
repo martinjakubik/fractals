@@ -70,9 +70,6 @@ const drawMandelbrotSet = function () {
                 oDebugContext.fillText(sDebugText, x, y);
             }
 
-            // debug
-            debugXYAB(x, y, iRealComponent, iImaginaryComponent);
-
             const nDegreeInSet = degreeInMandelbrotSet(iRealComponent, iImaginaryComponent);
             if (nDegreeInSet == 0) {
                 oGraphicContext.fillStyle = '#000';
@@ -403,27 +400,6 @@ let oTapPoint = {
     x: oGraphicCanvas.width / 2,
     y: oGraphicCanvas.height / 2
 }
-
-const debugXYAB = function (x, y, iRealComponent, iImaginaryComponent) {
-    let x1, x2, r1, r2;
-    if (x === 800) {
-        x1 = x;
-        // a(x1) + b = r1
-        r1 = iRealComponent;
-    } else if (x === 1000) {
-        x2 = x;
-        // a(x2) + b = r2
-        r2 = iRealComponent;
-        // b = r1 - a(x1)
-        // a(x2) + (r1 - a(x1)) = r2
-        // a(x2) + r1 - a(x1) = r2
-        // a(x2) - a(x1) + r1 = r2
-        // a(x2 - x1) = r2 - r1
-        // a = (r2 - r1) / (x2 - x1)
-        const a = (r2 - r1) / (x2 - x1);
-        console.log(`a: ${a}`);
-    }
-};
 
 const main = function () {
 
