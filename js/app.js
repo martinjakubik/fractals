@@ -163,6 +163,9 @@ const handleTap = function (nTapX, nTapY) {
             x: nTapX,
             y: nTapY
         }
+        const c = getComplexNumberFromPoint(oTapPoint.x, oTapPoint.y, nHorizontalPan, nVerticalPan, nZoom);
+        setCenterRealInputValue(c.real);
+        setCenterImaginaryInputValue(c.imaginary);
     } else if (sControlState === CONTROL_STATE.ZOOMED_IN || sControlState === CONTROL_STATE.ZOOMED_OUT) {
         hideZoomControl();
         if (sControlState === CONTROL_STATE.ZOOMED_IN) {
@@ -381,6 +384,16 @@ const setBlockVisibility = function (bVisible)  {
     return sStyle;
 
 };
+
+const setCenterRealInputValue = function (nRealValue) {
+    const oCenterRealNumberInput = document.getElementById('centerreal');
+    oCenterRealNumberInput.value = nRealValue;
+}
+
+const setCenterImaginaryInputValue = function (nImaginaryValue) {
+    const oCenterImaginaryNumberInput = document.getElementById('centerimaginary');
+    oCenterImaginaryNumberInput.value = nImaginaryValue;
+}
 
 const createControls = function () {
 
