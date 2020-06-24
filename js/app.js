@@ -475,13 +475,13 @@ oDebugCanvas.style = setBlockVisibility(DEBUG);
 const oControlCanvas = createControlCanvas(oPage);
 
 let nPrecision = 5;
-let nHue = 0;
+let nHue = Math.floor(Math.random() * 360);
 let nZoom = 200;
 let nHorizontalPan = 3 * nZoom;
 let nVerticalPan = 1.5 * nZoom;
 let c = {
     real: ((oGraphicCanvas.width / 2) - nHorizontalPan) / nZoom,
-    imaginary: 1.5
+    imaginary: ((oGraphicCanvas.height / 2) - nVerticalPan) / nZoom
 };    
 
 let sControlState = CONTROL_STATE.VIEW;
