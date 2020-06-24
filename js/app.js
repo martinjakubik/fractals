@@ -16,21 +16,32 @@ const CONTROL_STATE = {
     ZOOMED_OUT: 3
 };
 
-const degreeInMandelbrotSet = function (iRealComponent, iImaginaryComponent) {
+const getComplexNumberFromPoint = function (x, y, nHorizontalPan, nVerticalPan, nZoom) {
 
-    let iIncrementalRealComponent = iRealComponent;
-    let iInrementalImaginaryComponent = iImaginaryComponent;
+    const oComplexNumber = {
+        real: (x - nHorizontalPan) / nZoom,
+        imaginary: (y - nVerticalPan) / nZoom
+    }
+
+    return oComplexNumber;
+
+}
+
+const degreeInMandelbrotSet = function (c) {
+
+    let iIncrementalRealComponent = c.real;
+    let iIncrementalImaginaryComponent = c.imaginary;
 
     let j = 0;
     for (j = 0; j < nPrecision; j++) {
 
-        let iTempRealComponent = iIncrementalRealComponent * iIncrementalRealComponent - iInrementalImaginaryComponent * iInrementalImaginaryComponent + iRealComponent;
-        let iTempImaginaryComponent = 2 * iIncrementalRealComponent * iInrementalImaginaryComponent + iImaginaryComponent;
+        let iTempRealComponent = iIncrementalRealComponent * iIncrementalRealComponent - iIncrementalImaginaryComponent * iIncrementalImaginaryComponent + c.real;
+        let iTempImaginaryComponent = 2 * iIncrementalRealComponent * iIncrementalImaginaryComponent + c.imaginary;
 
         iIncrementalRealComponent = iTempRealComponent;
-        iInrementalImaginaryComponent = iTempImaginaryComponent;
+        iIncrementalImaginaryComponent = iTempImaginaryComponent;
 
-        if (iIncrementalRealComponent * iInrementalImaginaryComponent > SMALL_VALUE) {
+        if (iIncrementalRealComponent * iIncrementalImaginaryComponent > SMALL_VALUE) {
             return j / nPrecision * 100;
         }
 
@@ -63,17 +74,16 @@ const drawMandelbrotSet = function () {
     for (x = 0; x < oGraphicCanvas.width; x++) {
         for (y = 0; y < oGraphicCanvas.height; y++) {
 
-            const iRealComponent = (x - nHorizontalPan) / nZoom;
-            const iImaginaryComponent = (y - nVerticalPan) / nZoom;
+            const c = getComplexNumberFromPoint(x, y, nHorizontalPan, nVerticalPan, nZoom);
 
             // debug
             if (x % 200 === 0 && y % 200 === 0) {
-                sDebugText = `x:${x}, r:${iRealComponent}`;
+                sDebugText = `x:${x}, r:${c.real}`;
                 oDebugContext.fillStyle = '#fff';
                 oDebugContext.fillText(sDebugText, x, y);
             }
 
-            const nDegreeInSet = degreeInMandelbrotSet(iRealComponent, iImaginaryComponent);
+            const nDegreeInSet = degreeInMandelbrotSet(c);
             if (nDegreeInSet == 0) {
                 oGraphicContext.fillStyle = '#000';
                 oGraphicContext.fillRect(x, y, 1, 1);
