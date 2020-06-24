@@ -25,7 +25,18 @@ const getComplexNumberFromPoint = function (x, y, nHorizontalPan, nVerticalPan, 
 
     return oComplexNumber;
 
-}
+};
+
+const getPointFromComplexNumber = function (c, nHorizontalPan, nVerticalPan, nZoom) {
+
+    const oPoint = {
+        x: c.real * nZoom + nHorizontalPan,
+        y: c.imaginary * nZoom + nVerticalPan
+    };
+
+    return oPoint;
+
+};
 
 const degreeInMandelbrotSet = function (c) {
 
