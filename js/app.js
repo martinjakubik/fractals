@@ -62,14 +62,14 @@ const degreeInMandelbrotSet = function (c) {
 
 };
 
-const drawMandelbrotSet = function () {
+const drawMandelbrotSet = function (c, nZoom) {
 
     const oGraphicContext = oGraphicCanvas.getContext('2d');
     const oDebugContext = oDebugCanvas.getContext('2d');
     const nDebugCanvasWidth = oDebugCanvas.parentNode.clientWidth;
 
-    nHorizontalPan = nCenterReal * nZoom;
-    nVerticalPan = nCenterImaginary * nZoom;
+    nHorizontalPan = c.real * nZoom;
+    nVerticalPan = c.imaginary * nZoom;
 
     let x = 0;
     let y = 0;
@@ -156,8 +156,11 @@ const handleTap = function (nTapX, nTapY) {
     updateControlState(bIsTapInZoomInButton, bIsTapInZoomOutButton);
     
     if (sControlState === CONTROL_STATE.VIEW) {
+
         hideZoomControl();
+
     } else if (sControlState === CONTROL_STATE.CHOOSE_ZOOM) {
+
         showZoomButtons(nTapX, nTapY);
         oTapPoint = {
             x: nTapX,
@@ -166,7 +169,9 @@ const handleTap = function (nTapX, nTapY) {
         const c = getComplexNumberFromPoint(oTapPoint.x, oTapPoint.y, nHorizontalPan, nVerticalPan, nZoom);
         setCenterRealInputValue(c.real);
         setCenterImaginaryInputValue(c.imaginary);
+
     } else if (sControlState === CONTROL_STATE.ZOOMED_IN || sControlState === CONTROL_STATE.ZOOMED_OUT) {
+
         hideZoomControl();
         if (sControlState === CONTROL_STATE.ZOOMED_IN) {
             nZoom = nZoom * ZOOM_MULTIPLIER;
@@ -177,11 +182,12 @@ const handleTap = function (nTapX, nTapY) {
         const nVerticalOffset = oTapPoint.y - oPreviousTapPoint.y;
         nHorizontalPan = nHorizontalPan - nHorizontalOffset;
         nVerticalPan = nVerticalPan - nVerticalOffset;
-        drawMandelbrotSet();
+        drawMandelbrotSet(c, nZoom);
         sControlState = CONTROL_STATE.VIEW;
 
         oPreviousTapPoint.x = nTapX;
         oPreviousTapPoint.y = nTapY;
+
     }
 
 };
@@ -395,33 +401,36 @@ const setCenterImaginaryInputValue = function (nImaginaryValue) {
     oCenterImaginaryNumberInput.value = nImaginaryValue;
 }
 
+const getCenterRealInputValue = function () {
+    const oCenterRealNumberInput = document.getElementById('centerreal');
+    return oCenterRealNumberInput.value;
+}
+
+const getCenterImaginaryInputValue = function () {
+    const oCenterImaginaryNumberInput = document.getElementById('centerimaginary');
+    return oCenterImaginaryNumberInput.value;
+}
+
 const createControls = function () {
 
     const oPrecisionSlider = createSlider('precision', '0', '1000', nPrecision, 'Precision');
     oPrecisionSlider.onchange = () => {
         nPrecision = oPrecisionSlider.value;
-        drawMandelbrotSet();
+        drawMandelbrotSet(c, nZoom);
     };
 
     const oHueSlider = createSlider('hue', '0', '359', nHue, 'Hue');
     oHueSlider.onchange = () => {
         nHue = oHueSlider.value;
-        drawMandelbrotSet();
+        drawMandelbrotSet(c, nZoom);
     };
 
-    const oCenterRealNumberInput = createNumberInput('centerreal', nCenterReal, 'Center real');
-    oCenterRealNumberInput.onchange = () => {
-        nCenterReal = oCenterRealNumberInput.value;
-    };
-
-    const oCenterImaginaryNumberInput = createNumberInput('centerimaginary', nCenterImaginary, 'Imaginary');
-    oCenterImaginaryNumberInput.onchange = () => {
-        nCenterImaginary = oCenterImaginaryNumberInput.value;
-    };
+    createNumberInput('centerreal', 0, 'Center real');
+    createNumberInput('centerimaginary', 0, 'Imaginary');
 
     const oDrawButton = createButton('draw', 'Draw');
     oDrawButton.onclick = () => {
-        drawMandelbrotSet();
+        drawMandelbrotSet(c, nZoom);
     };
 
     const oDebugCheckbox = createCheckbox('debug', DEBUG, 'Debug');
@@ -457,14 +466,6 @@ const createPage = function () {
 
 };
 
-let nPrecision = 5;
-let nHue = 0;
-let nZoom = 200;
-let nHorizontalPan = 3 * nZoom;
-let nVerticalPan = 1.5 * nZoom;
-
-let sControlState = CONTROL_STATE.VIEW;
-
 let DEBUG = false;
 
 const oPage = createPage();
@@ -473,8 +474,17 @@ const oDebugCanvas = createDebugCanvas(oPage);
 oDebugCanvas.style = setBlockVisibility(DEBUG);
 const oControlCanvas = createControlCanvas(oPage);
 
-let nCenterReal = ((oGraphicCanvas.width / 2) - nHorizontalPan) / nZoom;
-let nCenterImaginary = 1.5;
+let nPrecision = 5;
+let nHue = 0;
+let nZoom = 200;
+let nHorizontalPan = 3 * nZoom;
+let nVerticalPan = 1.5 * nZoom;
+let c = {
+    real: ((oGraphicCanvas.width / 2) - nHorizontalPan) / nZoom,
+    imaginary: 1.5
+};    
+
+let sControlState = CONTROL_STATE.VIEW;
 
 let oPreviousTapPoint = {
     x: oGraphicCanvas.width / 2,
@@ -489,7 +499,11 @@ let oTapPoint = {
 const main = function () {
 
     createControls();
-    drawMandelbrotSet();
+
+    setCenterRealInputValue(c.real);
+    setCenterImaginaryInputValue(c.imaginary);
+
+    drawMandelbrotSet(c, nZoom);
 
 };
 
