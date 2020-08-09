@@ -1,0 +1,71 @@
+center of board c is 768
+c = 768
+
+x is the complex number (the x horizontal part)
+p is the pixel (horizontal coordinate)
+t is the time
+d is a difference
+
+old x - center is 0
+x[t0] = 0
+dx[t0] = undefined
+p[t0][0] is at 768
+p[t0][1] is at 769
+pan[t0] is 768
+
+pan[t0] = 768
+
+new x - center is 1
+x[t1] = 1
+dx[t1] = x[t1] - x[t0] = 1
+p[t1][0] is at 767
+p[t1][1] is at 768
+pan[t1] is 767
+
+pan[t1] = 767
+
+pan[t1] = pan[t0] - dx[t1]
+pan[t1] = pan[t0] - (x[t1] - x[t0])
+pan[t1] = 768 - (1 - 0)
+pan[t1] = 767
+
+- center is still 1
+x[t2] = 1
+dx[t2] = x[t2] - x[t1] = 0
+p[t2][0] is at 767
+p[t2][1] is at 768
+pan[t2] is 767
+
+pan[t2] = 767
+
+pan[t2] = pan[t1] - dx[t2]
+pan[t2] = pan[t1] - (x[t2] - x[t1])
+pan[t2] = 767 - (1 - 1)
+pan[t2] = 767b
+
+pan[t(n+1)] = pan[t(n)] - (x[t(n+1)] - x[t(n)])
+
+x[t0] + pan[t0]
+= 0 + 768
+= 768
+= c
+
+x[t1] + pan[t1]
+= 1 + 767
+= 768
+= c
+
+x[t2] + pan[t2]
+= 1 + 767
+= 768
+= c
+
+x[t(n)] + pan[t(n)] = c
+x[t(n)] = c - pan[t(n)]
+
+pan[t(n+1)] = pan[t(n)] - (x[t(n+1)] - x[t(n)])
+pan[t(n+1)] = pan[t(n)] - (x[t(n+1)] - (c - pan[t(n)]))
+pan[t(n+1)] = pan[t(n)] - x[t(n+1)] + (c - pan[t(n)])
+pan[t(n+1)] = pan[t(n)] - x[t(n+1)] + c - pan[t(n)]
+pan[t(n+1)] = - x[t(n+1)] + c
+pan[t(n+1)] = c - x[t(n+1)]

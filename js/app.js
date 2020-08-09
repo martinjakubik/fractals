@@ -16,22 +16,26 @@ const CONTROL_STATE = {
     ZOOMED_OUT: 3
 };
 
-const getComplexNumberFromPoint = function (x, y, nHorizontalPan, nVerticalPan, nZoom) {
+const getComplexNumberFromPoint = function (oPoint, oTransform) {
+    return getComplexNumberFromXY(oPoint.x, oPoint.y, oTransform);
+};
+
+const getComplexNumberFromXY = function (x, y, oTransform) {
 
     const oComplexNumber = {
-        real: (x - nHorizontalPan) / nZoom,
-        imaginary: (y - nVerticalPan) / nZoom
+        real: (x - oTransform.pan.horizontal) / oTransform.zoom,
+        imaginary: (y - oTransform.pan.vertical) / oTransform.zoom
     }
 
     return oComplexNumber;
 
 };
 
-const getPointFromComplexNumber = function (c, nHorizontalPan, nVerticalPan, nZoom) {
+const getPointFromComplexNumber = function (c, oTransform) {
 
     const oPoint = {
-        x: c.real * nZoom + nHorizontalPan,
-        y: c.imaginary * nZoom + nVerticalPan
+        x: c.real * oTransform.zoom + oTransform.pan.horizontal,
+        y: c.imaginary * oTransform.zoom + oTransform.pan.vertical
     };
 
     return oPoint;
@@ -62,14 +66,11 @@ const degreeInMandelbrotSet = function (c) {
 
 };
 
-const drawMandelbrotSet = function (c, nZoom) {
+const drawMandelbrotSet = function (oTransform) {
 
     const oGraphicContext = oGraphicCanvas.getContext('2d');
     const oDebugContext = oDebugCanvas.getContext('2d');
     const nDebugCanvasWidth = oDebugCanvas.parentNode.clientWidth;
-
-    nHorizontalPan = c.real * nZoom;
-    nVerticalPan = c.imaginary * nZoom;
 
     let x = 0;
     let y = 0;
@@ -78,24 +79,27 @@ const drawMandelbrotSet = function (c, nZoom) {
 
     oDebugContext.clearRect(0, 0, nDebugCanvasWidth, CANVAS_HEIGHT);
 
-    sDebugText = `precision: ${nPrecision} pan:${(nHorizontalPan)} zoom: ${nZoom} pan/zoom:${(nHorizontalPan / nZoom)} last click: ${oGraphicCanvas.width - nHorizontalPan} center point: ${((oGraphicCanvas.width / 2) - nHorizontalPan) / nZoom}`;
+    sDebugText = `precision: ${nPrecision} pan:${(oTransform.pan.horizontal)} zoom: ${oTransform.zoom} pan/zoom:${(oTransform.pan.horizontal / oTransform.zoom)} last click: ${oGraphicCanvas.width - oTransform.pan.horizontal} center point: ${((oGraphicCanvas.width / 2) - oTransform.pan.horizontal) / oTransform.zoom}`;
     oDebugContext.fillStyle = '#fff';
     oDebugContext.fillText(sDebugText, 800, 580);
 
     for (x = 0; x < oGraphicCanvas.width; x++) {
         for (y = 0; y < oGraphicCanvas.height; y++) {
 
-            const c = getComplexNumberFromPoint(x, y, nHorizontalPan, nVerticalPan, nZoom);
+            const c = getComplexNumberFromXY(x, y, oTransform);
 
             // debug
             if (x % 200 === 0 && y % 200 === 0) {
-                sDebugText = `x:${x}, r:${c.real}`;
+                sDebugText1 = `x:${x},y:${y}`;
+                sDebugText2 = `r:${c.real}, i:${c.imaginary}`;
                 oDebugContext.fillStyle = '#fff';
-                oDebugContext.fillText(sDebugText, x, y);
+                oDebugContext.fillText(sDebugText1, x, y + 8);
+                oDebugContext.fillText(sDebugText2, x, y + 22);
             }
 
-            const nDegreeInSet = degreeInMandelbrotSet(c);
-            if (nDegreeInSet == 0) {
+            // const nDegreeInSet = degreeInMandelbrotSet(c);
+            const nDegreeInSet = 0;
+            if (nDegreeInSet === 0) {
                 oGraphicContext.fillStyle = '#000';
                 oGraphicContext.fillRect(x, y, 1, 1);
             } else {
@@ -166,7 +170,7 @@ const handleTap = function (nTapX, nTapY) {
             x: nTapX,
             y: nTapY
         }
-        const c = getComplexNumberFromPoint(oTapPoint.x, oTapPoint.y, nHorizontalPan, nVerticalPan, nZoom);
+        const c = getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
         setCenterRealInputValue(c.real);
         setCenterImaginaryInputValue(c.imaginary);
 
@@ -174,15 +178,15 @@ const handleTap = function (nTapX, nTapY) {
 
         hideZoomControl();
         if (sControlState === CONTROL_STATE.ZOOMED_IN) {
-            nZoom = nZoom * ZOOM_MULTIPLIER;
+            oCurrentTransform.zoom = oCurrentTransform.zoom * ZOOM_MULTIPLIER;
         } else if (sControlState === CONTROL_STATE.ZOOMED_OUT) {
-            nZoom = nZoom / ZOOM_MULTIPLIER;
+            oCurrentTransform.zoom = oCurrentTransform.zoom / ZOOM_MULTIPLIER;
         }
         const nHorizontalOffset = oTapPoint.x - oPreviousTapPoint.x;
         const nVerticalOffset = oTapPoint.y - oPreviousTapPoint.y;
-        nHorizontalPan = nHorizontalPan - nHorizontalOffset;
-        nVerticalPan = nVerticalPan - nVerticalOffset;
-        drawMandelbrotSet(c, nZoom);
+        oCurrentTransform.pan.horizontal = oCurrentTransform.pan.horizontal - nHorizontalOffset;
+        oCurrentTransform.pan.vertical = oCurrentTransform.pan.vertical - nVerticalOffset;
+        drawMandelbrotSet(oCurrentTransform);
         sControlState = CONTROL_STATE.VIEW;
 
         oPreviousTapPoint.x = nTapX;
@@ -258,7 +262,7 @@ const onTapCanvas = function (oEvent) {
     const nTapX = oEvent.x;
     const nTapY = oEvent.y - VERTICAL_MARGIN;
 
-    handleTap(nTapX, nTapY);
+    handleTap(nTapX, nTapY, oCurrentTransform);
 
 };
 
@@ -411,29 +415,64 @@ const getCenterImaginaryInputValue = function () {
     return oCenterImaginaryNumberInput.value;
 }
 
-const createControls = function () {
+const _handleEnterKeyInNumber = function (oTransform) {
+    drawMandelbrotSet(oTransform);
+}
+
+const _handleDraw = function (oTransform) {
+    drawMandelbrotSet(oTransform);
+}
+
+const createControls = function (oTransform) {
 
     const oPrecisionSlider = createSlider('precision', '0', '1000', nPrecision, 'Precision');
+
     oPrecisionSlider.onchange = () => {
         nPrecision = oPrecisionSlider.value;
-        drawMandelbrotSet(c, nZoom);
+        drawMandelbrotSet(oTransform);
     };
 
     const oHueSlider = createSlider('hue', '0', '359', nHue, 'Hue');
+
     oHueSlider.onchange = () => {
         nHue = oHueSlider.value;
-        drawMandelbrotSet(c, nZoom);
+        drawMandelbrotSet(oTransform);
     };
 
-    createNumberInput('centerreal', 0, 'Center real');
-    createNumberInput('centerimaginary', 0, 'Imaginary');
+    const oCenterRealNumberInput = createNumberInput('centerreal', 0, 'Center real');
+
+    oCenterRealNumberInput.onkeyup = (oEvent) => {
+        if (oEvent.keyCode === 13) {
+            const c = {
+                real: oCenterRealNumberInput.value,
+                imaginary: oCenterImaginaryNumberInput.value
+            }
+            oTransform.pan.horizontal = (oGraphicCanvas.width / 2) - getPointFromComplexNumber(c, oTransform).x;
+            _handleDraw(oTransform);
+        }
+    };
+
+    const oCenterImaginaryNumberInput = createNumberInput('centerimaginary', 0, 'Imaginary');
+
+    oCenterImaginaryNumberInput.onkeyup = (oEvent) => {
+        if (oEvent.keyCode === 13) {
+            const c = {
+                real: oCenterRealNumberInput.value,
+                imaginary: oCenterImaginaryNumberInput.value
+            }
+            oTransform.pan.vertical = getPointFromComplexNumber(c, oTransform).y;
+            _handleDraw(oTransform);
+        }
+    }
 
     const oDrawButton = createButton('draw', 'Draw');
+
     oDrawButton.onclick = () => {
-        drawMandelbrotSet(c, nZoom);
+        _handleDraw(oTransform);
     };
 
     const oDebugCheckbox = createCheckbox('debug', DEBUG, 'Debug');
+
     oDebugCheckbox.onchange = () => {
         DEBUG = oDebugCheckbox.checked;
         const sStyle =setBlockVisibility(DEBUG);
@@ -476,13 +515,13 @@ const oControlCanvas = createControlCanvas(oPage);
 
 let nPrecision = 5;
 let nHue = Math.floor(Math.random() * 360);
-let nZoom = 200;
-let nHorizontalPan = 3 * nZoom;
-let nVerticalPan = 1.5 * nZoom;
-let c = {
-    real: ((oGraphicCanvas.width / 2) - nHorizontalPan) / nZoom,
-    imaginary: ((oGraphicCanvas.height / 2) - nVerticalPan) / nZoom
-};    
+let oCurrentTransform = {
+    pan: {
+        horizontal: oGraphicCanvas.width / 2,
+        vertical: oGraphicCanvas.height / 2
+    },
+    zoom: 1
+};
 
 let sControlState = CONTROL_STATE.VIEW;
 
@@ -496,14 +535,16 @@ let oTapPoint = {
     y: oGraphicCanvas.height / 2
 }
 
+let c = getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
+
 const main = function () {
 
-    createControls();
+    createControls(oCurrentTransform);
 
     setCenterRealInputValue(c.real);
     setCenterImaginaryInputValue(c.imaginary);
 
-    drawMandelbrotSet(c, nZoom);
+    drawMandelbrotSet(oCurrentTransform);
 
 };
 
