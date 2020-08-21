@@ -92,8 +92,8 @@ const drawMandelbrotSet = function (oTransform) {
 
             // debug
             if (x % 200 === 0 && y % 200 === 0) {
-                sDebugText1 = `x:${x},y:${y}`;
-                sDebugText2 = `r:${c.real}, i:${c.imaginary}`;
+                const sDebugText1 = `x:${x},y:${y}`;
+                const sDebugText2 = `r:${c.real}, i:${c.imaginary}`;
                 oDebugContext.fillStyle = '#fff';
                 oDebugContext.fillText(sDebugText1, x, y + 8);
                 oDebugContext.fillText(sDebugText2, x, y + 22);
