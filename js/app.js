@@ -1,3 +1,5 @@
+import { createSlider } from './lib/tools.js';
+
 const CANVAS_HEIGHT = 600;
 const VERTICAL_MARGIN = 36;
 const ZOOM_LENS_RADIUS = 50;
@@ -307,32 +309,6 @@ const createGraphicCanvas = function (oPage) {
     const nZindex = 0;
     const oCanvas = createCanvas('graphicCanvas', nZindex, oPage);
     return oCanvas;
-
-};
-
-const createSlider = function (sId, sMin, sMax, nValue, sLabel, nStep) {
-
-    const sName = sId;
-
-    const oInput = document.createElement('input');
-    oInput.type = 'range';
-    oInput.id = sId;
-    oInput.name = sName;
-    oInput.min = sMin;
-    oInput.max = sMax;
-    oInput.value = nValue;
-    if (nStep) {
-        oInput.step = nStep;
-    }
-
-    const oLabel = document.createElement('label');
-    oLabel.for = sId;
-    oLabel.innerText = sLabel;
-
-    document.body.appendChild(oLabel);
-    document.body.appendChild(oInput);
-
-    return oInput;
 
 };
 
