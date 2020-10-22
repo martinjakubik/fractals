@@ -101,12 +101,13 @@ const drawMandelbrotSet = function (oTransform) {
             const c = getComplexNumberFromXY(x, y, oTransform);
 
             // debug
-            if (x % 200 === 0 && y % 200 === 0) {
+            if (x % 50 === 0 && y % 50 === 0) {
                 const sDebugText1 = `x:${x},y:${y}`;
                 const sDebugText2 = `r:${c.real}, i:${c.imaginary}`;
                 oDebugContext.fillStyle = '#fff';
-                oDebugContext.fillText(sDebugText1, x, y + 8);
-                oDebugContext.fillText(sDebugText2, x, y + 22);
+                // oDebugContext.fillText(sDebugText1, x, y + 8);
+                // oDebugContext.fillText(sDebugText2, x, y + 22);
+                console.log(x, y);
                 drawImageOnCanvas(oDebugContext, x, y);
             }
 
@@ -120,8 +121,6 @@ const drawMandelbrotSet = function (oTransform) {
                 oGraphicContext.fillStyle = `hsl(${nHue}, 100%, ${nDegreeInSet}%)`;
                 oGraphicContext.fillRect(x, y, 1, 1);
             }
-
-            console.log(x, y);
         }
     }
 
@@ -545,10 +544,11 @@ const main = function () {
     setCenterRealInputValue(c.real);
     setCenterImaginaryInputValue(c.imaginary);
 
-    oImage.addEventListener('load', e => {
-        oImage.removeEventListener('load', this);
+    const f = e => {
+        oImage.removeEventListener('load', f);
         drawMandelbrotSet(oCurrentTransform);
-    })
+    };
+    oImage.addEventListener('load', f);
 
 };
 
