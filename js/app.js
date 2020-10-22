@@ -537,6 +537,16 @@ let oTapPoint = {
 
 let c = getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
 
+const waitUntilImageLoadedAndStart = function () {
+
+    const fnHandleImageLoaded = e => {
+        oImage.removeEventListener('load', fnHandleImageLoaded);
+        drawMandelbrotSet(oCurrentTransform);
+    };
+    oImage.addEventListener('load', fnHandleImageLoaded);
+
+};
+
 const main = function () {
 
     createControls(oCurrentTransform);
@@ -544,11 +554,7 @@ const main = function () {
     setCenterRealInputValue(c.real);
     setCenterImaginaryInputValue(c.imaginary);
 
-    const f = e => {
-        oImage.removeEventListener('load', f);
-        drawMandelbrotSet(oCurrentTransform);
-    };
-    oImage.addEventListener('load', f);
+    waitUntilImageLoadedAndStart();
 
 };
 
