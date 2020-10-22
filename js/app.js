@@ -68,6 +68,16 @@ const degreeInMandelbrotSet = function (c) {
 
 };
 
+const drawImageOnCanvas = function (oContext, x, y) {
+    const oImageContext = oImageCanvas.getContext('2d');
+    const oImageData = oImageContext.getImageData(0, 0, oImageCanvas.width, oImageCanvas.height);
+    const r = oImageData.data[x * y];
+    const g = oImageData.data[x * y + 1];
+    const b = oImageData.data[x * y + 2];
+    oContext.fillStyle = `#{r}{g}{b}`;
+    oContext.fillRect(x, y, 1, 1);
+};
+
 const drawMandelbrotSet = function (oTransform) {
 
     const oGraphicContext = oGraphicCanvas.getContext('2d');
@@ -97,10 +107,12 @@ const drawMandelbrotSet = function (oTransform) {
                 oDebugContext.fillStyle = '#fff';
                 oDebugContext.fillText(sDebugText1, x, y + 8);
                 oDebugContext.fillText(sDebugText2, x, y + 22);
+                drawImageOnCanvas(oDebugContext, x, y);
             }
 
             // const nDegreeInSet = degreeInMandelbrotSet(c);
             const nDegreeInSet = 0;
+            
             if (nDegreeInSet === 0) {
                 oGraphicContext.fillStyle = '#000';
                 oGraphicContext.fillRect(x, y, 1, 1);
@@ -108,6 +120,8 @@ const drawMandelbrotSet = function (oTransform) {
                 oGraphicContext.fillStyle = `hsl(${nHue}, 100%, ${nDegreeInSet}%)`;
                 oGraphicContext.fillRect(x, y, 1, 1);
             }
+
+            console.log(x, y);
         }
     }
 
@@ -282,6 +296,14 @@ const createCanvas = function (sCanvasId, nZindex, oPage) {
     oCanvas.style.position = 'absolute';
     oCanvas.style.zindex = nZindex;
 
+    return oCanvas;
+
+};
+
+const createImageCanvas = function (oPage) {
+
+    const nZindex = 3;
+    const oCanvas = createCanvas('imageCanvas', nZindex, oPage);
     return oCanvas;
 
 };
@@ -481,13 +503,16 @@ const createPage = function () {
 
 };
 
-let DEBUG = false;
+let DEBUG = true;
 
 const oPage = createPage();
 const oGraphicCanvas = createGraphicCanvas(oPage);
 const oDebugCanvas = createDebugCanvas(oPage);
 oDebugCanvas.style = setBlockVisibility(DEBUG);
 const oControlCanvas = createControlCanvas(oPage);
+const oImageCanvas = createImageCanvas(oPage);
+const oImage = new Image();
+oImage.src = '../resources/redstars.png';
 
 let nPrecision = 5;
 let nHue = Math.floor(Math.random() * 360);
@@ -520,7 +545,10 @@ const main = function () {
     setCenterRealInputValue(c.real);
     setCenterImaginaryInputValue(c.imaginary);
 
-    drawMandelbrotSet(oCurrentTransform);
+    oImage.addEventListener('load', e => {
+        oImage.removeEventListener('load', this);
+        drawMandelbrotSet(oCurrentTransform);
+    })
 
 };
 
