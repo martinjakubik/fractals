@@ -68,13 +68,18 @@ const degreeInMandelbrotSet = function (c) {
 
 };
 
+const convertDecimalToHexadecimalString = function (d) {
+    return d.toString(16).length < 2 ? '0' + d.toString(16) : d.toString(16);
+};
+
 const drawImageOnCanvas = function (oContext, x, y) {
-    const oImageContext = oImageCanvas.getContext('2d');
-    const oImageData = oImageContext.getImageData(0, 0, oImageCanvas.width, oImageCanvas.height);
-    const r = oImageData.data[x * y];
-    const g = oImageData.data[x * y + 1];
-    const b = oImageData.data[x * y + 2];
-    oContext.fillStyle = `#{r}{g}{b}`;
+    const rDecimal = oImageDataData[x + y * oImageCanvas.width];
+    const gDecimal = oImageDataData[x + y * oImageCanvas.width + 1];
+    const bDecimal = oImageDataData[x + y * oImageCanvas.width + 2];
+    const r = convertDecimalToHexadecimalString(rDecimal);
+    const g = convertDecimalToHexadecimalString(gDecimal);
+    const b = convertDecimalToHexadecimalString(bDecimal);
+    oContext.fillStyle = `#${r}${g}${b}`;
     oContext.fillRect(x, y, 1, 1);
 };
 
@@ -101,13 +106,16 @@ const drawMandelbrotSet = function (oTransform) {
             const c = getComplexNumberFromXY(x, y, oTransform);
 
             // debug
-            if (x % 50 === 0 && y % 50 === 0) {
+            if (x % 200 === 0 && y % 200 === 0) {
                 const sDebugText1 = `x:${x},y:${y}`;
                 const sDebugText2 = `r:${c.real}, i:${c.imaginary}`;
                 oDebugContext.fillStyle = '#fff';
                 // oDebugContext.fillText(sDebugText1, x, y + 8);
                 // oDebugContext.fillText(sDebugText2, x, y + 22);
-                console.log(x, y);
+            }
+            const iDebugFrequency = 100;
+            if (    (x % iDebugFrequency === 0 || x % iDebugFrequency === 1 || x % iDebugFrequency === 2 || x % iDebugFrequency === 3)
+                &&  (y % iDebugFrequency === 0 || y % iDebugFrequency === 1 || y % iDebugFrequency === 2 || y % iDebugFrequency === 3)) {
                 drawImageOnCanvas(oDebugContext, x, y);
             }
 
@@ -468,11 +476,11 @@ const createControls = function (oTransform) {
         _handleDraw(oTransform);
     };
 
-    const oDebugCheckbox = createCheckbox('debug', DEBUG, 'Debug');
+    const oDebugCheckbox = createCheckbox('debug', IS_DEBUG, 'Debug');
 
     oDebugCheckbox.onchange = () => {
-        DEBUG = oDebugCheckbox.checked;
-        const sStyle =setBlockVisibility(DEBUG);
+        IS_DEBUG = oDebugCheckbox.checked;
+        const sStyle =setBlockVisibility(IS_DEBUG);
         oDebugCanvas.style = sStyle;
     };
 
@@ -502,16 +510,18 @@ const createPage = function () {
 
 };
 
-let DEBUG = true;
+let IS_DEBUG = true;
 
 const oPage = createPage();
 const oGraphicCanvas = createGraphicCanvas(oPage);
 const oDebugCanvas = createDebugCanvas(oPage);
-oDebugCanvas.style = setBlockVisibility(DEBUG);
+oDebugCanvas.style = setBlockVisibility(IS_DEBUG);
 const oControlCanvas = createControlCanvas(oPage);
 const oImageCanvas = createImageCanvas(oPage);
+oImageCanvas.style = setBlockVisibility(false);
 const oImage = new Image();
 oImage.src = '../resources/redstars.png';
+let oImageDataData = {};
 
 let nPrecision = 5;
 let nHue = Math.floor(Math.random() * 360);
@@ -541,6 +551,12 @@ const waitUntilImageLoadedAndStart = function () {
 
     const fnHandleImageLoaded = e => {
         oImage.removeEventListener('load', fnHandleImageLoaded);
+
+        const oImageContext = oImageCanvas.getContext('2d');
+        oImageContext.drawImage(oImage, 0, 0);
+        const oImageData = oImageContext.getImageData(0, 0, oImageCanvas.width, oImageCanvas.height);
+        oImageDataData = oImageData.data;
+    
         drawMandelbrotSet(oCurrentTransform);
     };
     oImage.addEventListener('load', fnHandleImageLoaded);
