@@ -72,10 +72,10 @@ const convertDecimalToHexadecimalString = function (d) {
     return d.toString(16).length < 2 ? '0' + d.toString(16) : d.toString(16);
 };
 
-const drawImageOnCanvas = function (oContext, x, y) {
-    const rDecimal = oImageDataData[x + y * oImageCanvas.width];
-    const gDecimal = oImageDataData[x + y * oImageCanvas.width + 1];
-    const bDecimal = oImageDataData[x + y * oImageCanvas.width + 2];
+const drawImagePixelOnCanvas = function (oContext, x, y) {
+    const rDecimal = oImageDataData[(x * 4) + (y * 4) * oImageCanvas.width];
+    const gDecimal = oImageDataData[(x * 4) + (y * 4) * oImageCanvas.width + 1];
+    const bDecimal = oImageDataData[(x * 4) + (y * 4) * oImageCanvas.width + 2];
     const r = convertDecimalToHexadecimalString(rDecimal);
     const g = convertDecimalToHexadecimalString(gDecimal);
     const b = convertDecimalToHexadecimalString(bDecimal);
@@ -113,11 +113,7 @@ const drawMandelbrotSet = function (oTransform) {
                 // oDebugContext.fillText(sDebugText1, x, y + 8);
                 // oDebugContext.fillText(sDebugText2, x, y + 22);
             }
-            const iDebugFrequency = 100;
-            if (    (x % iDebugFrequency === 0 || x % iDebugFrequency === 1 || x % iDebugFrequency === 2 || x % iDebugFrequency === 3)
-                &&  (y % iDebugFrequency === 0 || y % iDebugFrequency === 1 || y % iDebugFrequency === 2 || y % iDebugFrequency === 3)) {
-                drawImageOnCanvas(oDebugContext, x, y);
-            }
+            drawImagePixelOnCanvas(oDebugContext, x, y);
 
             // const nDegreeInSet = degreeInMandelbrotSet(c);
             const nDegreeInSet = 0;
