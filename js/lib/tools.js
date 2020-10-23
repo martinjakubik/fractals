@@ -1,4 +1,8 @@
-const createSlider = function (sId, sMin, sMax, nValue, sLabel, nStep) {
+const createSlider = function (sId, sMin, sMax, nValue, sLabel, nStep, oParent) {
+
+    if (!oParent) {
+        oParent = document.body;
+    }
 
     const sName = sId;
 
@@ -17,8 +21,8 @@ const createSlider = function (sId, sMin, sMax, nValue, sLabel, nStep) {
     oLabel.for = sId;
     oLabel.innerText = sLabel;
 
-    document.body.appendChild(oLabel);
-    document.body.appendChild(oInput);
+    oParent.appendChild(oLabel);
+    oParent.appendChild(oInput);
 
     return oInput;
 

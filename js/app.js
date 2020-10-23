@@ -311,7 +311,7 @@ const onTapCanvas = function (oEvent) {
 const createCanvas = function (sCanvasId, nZindex, oParent) {
 
     if (!oParent) {
-        oParent = document;
+        oParent = document.body;
     }
 
     const oCanvas = document.createElement('canvas');
@@ -333,7 +333,7 @@ const createCanvas = function (sCanvasId, nZindex, oParent) {
 const createImageCanvas = function (oParent) {
 
     if (!oParent) {
-        oParent = document;
+        oParent = document.body;
     }
 
     const nZindex = 3;
@@ -345,7 +345,7 @@ const createImageCanvas = function (oParent) {
 const createControlCanvas = function (oParent) {
 
     if (!oParent) {
-        oParent = document;
+        oParent = document.body;
     }
 
     const nZindex = 2;
@@ -359,7 +359,7 @@ const createControlCanvas = function (oParent) {
 const createDebugCanvas = function (oParent) {
 
     if (!oParent) {
-        oParent = document;
+        oParent = document.body;
     }
 
     const nZindex = 1;
@@ -371,7 +371,7 @@ const createDebugCanvas = function (oParent) {
 const createGraphicCanvas = function (oParent) {
 
     if (!oParent) {
-        oParent = document;
+        oParent = document.body;
     }
 
     const nZindex = 0;
@@ -383,23 +383,23 @@ const createGraphicCanvas = function (oParent) {
 const createCheckbox = function (sId, bValue, sLabel, oParent) {
 
     if (!oParent) {
-        oParent = document;
+        oParent = document.body;
     }
 
     const sName = sId;
 
-    const oInput = oParent.createElement('input');
+    const oInput = document.createElement('input');
     oInput.type = 'checkbox';
     oInput.id = sId;
     oInput.name = sName;
     oInput.value = bValue;
 
-    const oLabel = oParent.createElement('label');
+    const oLabel = document.createElement('label');
     oLabel.for = sId;
     oLabel.innerText = sLabel;
 
-    oParent.body.appendChild(oLabel);
-    oParent.body.appendChild(oInput);
+    oParent.appendChild(oLabel);
+    oParent.appendChild(oInput);
 
     return oInput;
 
@@ -408,20 +408,20 @@ const createCheckbox = function (sId, bValue, sLabel, oParent) {
 const createNumberInput = function (sId, nValue, sLabel, oParent) {
 
     if (!oParent) {
-        oParent = document;
+        oParent = document.body;
     }
 
-    const oInput = oParent.createElement('input');
+    const oInput = document.createElement('input');
     oInput.type = 'number';
     oInput.id = sId;
     oInput.value = nValue;
 
-    const oLabel = oParent.createElement('label');
+    const oLabel = document.createElement('label');
     oLabel.for = sId;
     oLabel.innerText = sLabel;
 
-    oParent.body.appendChild(oLabel);
-    oParent.body.appendChild(oInput);
+    oParent.appendChild(oLabel);
+    oParent.appendChild(oInput);
 
     return oInput;
 
@@ -430,14 +430,14 @@ const createNumberInput = function (sId, nValue, sLabel, oParent) {
 const createButton = function (sId, sLabel, oParent) {
 
     if (!oParent) {
-        oParent = document;
+        oParent = document.body;
     }
 
-    const oButton = oParent.createElement('button');
+    const oButton = document.createElement('button');
     oButton.id = sId;
     oButton.innerText = sLabel;
 
-    oParent.body.appendChild(oButton);
+    oParent.appendChild(oButton);
 
     return oButton;
 
@@ -481,21 +481,25 @@ const _handleDraw = function (oTransform) {
 
 const createControls = function (oTransform) {
 
-    const oPrecisionSlider = createSlider('precision', '0', '1000', nPrecision, 'Precision');
+    const oControlBar = document.createElement('div');
+    oControlBar.classList.add('controlBar');
+    document.body.appendChild(oControlBar);
+
+    const oPrecisionSlider = createSlider('precision', '0', '1000', nPrecision, 'Precision', null, oControlBar);
 
     oPrecisionSlider.onchange = () => {
         nPrecision = oPrecisionSlider.value;
         drawImages(oTransform);
     };
 
-    const oHueSlider = createSlider('hue', '0', '359', nHue, 'Hue');
+    const oHueSlider = createSlider('hue', '0', '359', nHue, 'Hue', null, oControlBar);
 
     oHueSlider.onchange = () => {
         nHue = oHueSlider.value;
         drawImages(oTransform);
     };
 
-    const oCenterRealNumberInput = createNumberInput('centerreal', 0, 'Center real');
+    const oCenterRealNumberInput = createNumberInput('centerreal', 0, 'Center real', oControlBar);
 
     oCenterRealNumberInput.onkeyup = (oEvent) => {
         if (oEvent.keyCode === 13) {
@@ -508,7 +512,7 @@ const createControls = function (oTransform) {
         }
     };
 
-    const oCenterImaginaryNumberInput = createNumberInput('centerimaginary', 0, 'Imaginary');
+    const oCenterImaginaryNumberInput = createNumberInput('centerimaginary', 0, 'Imaginary', oControlBar);
 
     oCenterImaginaryNumberInput.onkeyup = (oEvent) => {
         if (oEvent.keyCode === 13) {
@@ -521,13 +525,13 @@ const createControls = function (oTransform) {
         }
     }
 
-    const oDrawButton = createButton('draw', 'Draw');
+    const oDrawButton = createButton('draw', 'Draw', oControlBar);
 
     oDrawButton.onclick = () => {
         _handleDraw(oTransform);
     };
 
-    const oDebugCheckbox = createCheckbox('debug', IS_DEBUG, 'Debug');
+    const oDebugCheckbox = createCheckbox('debug', IS_DEBUG, 'Debug', oControlBar);
 
     oDebugCheckbox.onchange = () => {
         IS_DEBUG = oDebugCheckbox.checked;
