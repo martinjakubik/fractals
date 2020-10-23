@@ -68,15 +68,39 @@ const degreeInMandelbrotSet = function (c) {
 
 };
 
-const drawImagePixelOnCanvas = function (oContext, x, y) {
+const drawImagePixelOnCanvas = function (oContext, x, y, oTransform) {
+
+    const tx = (x + oTransform.pan.horizontal) * oTransform.zoom;
+    const ty = (y + oTransform.pan.vertical) * oTransform.zoom;
+    
     const index = (x * 4) + (y * 4) * oImageCanvas.width;
-    const rDecimal = oImageDataData[index];
-    const gDecimal = oImageDataData[index + 1];
-    const bDecimal = oImageDataData[index + 2];
-    const alphaDecimal = oImageDataData[index + 3] / 255;
+
+    const rDecimal = oImage_Data[index];
+    const gDecimal = oImage_Data[index + 1];
+    const bDecimal = oImage_Data[index + 2];
+    const alphaDecimal = oImage_Data[index + 3] / 255;
     const sRGBA = `rgba(${rDecimal}, ${gDecimal}, ${bDecimal}, ${alphaDecimal})`;
     oContext.fillStyle = sRGBA;
     oContext.fillRect(x, y, 1, 1);
+
+};
+
+const drawImages = function (oTransform) {
+
+    drawMandelbrotSet(oTransform);
+    drawOverlay(oTransform);
+
+};
+
+const drawOverlay = function (oTransform) {
+    
+    const oGraphicContext = oGraphicCanvas.getContext('2d');
+    for (let x = 0; x < oImageCanvas.width; x++) {
+        for (let y = 0; y < oImageCanvas.height; y++) {
+            drawImagePixelOnCanvas(oGraphicContext, x, y, oTransform);
+        }
+    }
+
 };
 
 const drawMandelbrotSet = function (oTransform) {
@@ -109,7 +133,7 @@ const drawMandelbrotSet = function (oTransform) {
                 oDebugContext.fillText(sDebugText1, x, y + 8);
                 oDebugContext.fillText(sDebugText2, x, y + 22);
             }
-            
+
             const nDegreeInSet = degreeInMandelbrotSet(c);
 
             if (nDegreeInSet === 0) {
@@ -119,7 +143,6 @@ const drawMandelbrotSet = function (oTransform) {
                 oGraphicContext.fillStyle = `hsl(${nHue}, 100%, ${nDegreeInSet}%)`;
                 oGraphicContext.fillRect(x, y, 1, 1);
             }
-            drawImagePixelOnCanvas(oGraphicContext, x, y);
         }
     }
 
@@ -200,7 +223,7 @@ const handleTap = function (nTapX, nTapY) {
         const nVerticalOffset = oTapPoint.y - oPreviousTapPoint.y;
         oCurrentTransform.pan.horizontal = oCurrentTransform.pan.horizontal - nHorizontalOffset;
         oCurrentTransform.pan.vertical = oCurrentTransform.pan.vertical - nVerticalOffset;
-        drawMandelbrotSet(oCurrentTransform);
+        drawImages(oCurrentTransform);
         sControlState = CONTROL_STATE.VIEW;
 
         oPreviousTapPoint.x = nTapX;
@@ -412,11 +435,11 @@ const getCenterImaginaryInputValue = function () {
 }
 
 const _handleEnterKeyInNumber = function (oTransform) {
-    drawMandelbrotSet(oTransform);
+    drawImages(oTransform);
 }
 
 const _handleDraw = function (oTransform) {
-    drawMandelbrotSet(oTransform);
+    drawImages(oTransform);
 }
 
 const createControls = function (oTransform) {
@@ -425,14 +448,14 @@ const createControls = function (oTransform) {
 
     oPrecisionSlider.onchange = () => {
         nPrecision = oPrecisionSlider.value;
-        drawMandelbrotSet(oTransform);
+        drawImages(oTransform);
     };
 
     const oHueSlider = createSlider('hue', '0', '359', nHue, 'Hue');
 
     oHueSlider.onchange = () => {
         nHue = oHueSlider.value;
-        drawMandelbrotSet(oTransform);
+        drawImages(oTransform);
     };
 
     const oCenterRealNumberInput = createNumberInput('centerreal', 0, 'Center real');
@@ -512,7 +535,7 @@ const oImageCanvas = createImageCanvas(oPage);
 oImageCanvas.style = setBlockVisibility(false);
 const oImage = new Image();
 oImage.src = '../resources/redstars.png';
-let oImageDataData = {};
+let oImage_Data = {};
 
 let nPrecision = 5;
 let nHue = Math.floor(Math.random() * 360);
@@ -546,9 +569,9 @@ const waitUntilImageLoadedAndStart = function () {
         const oImageContext = oImageCanvas.getContext('2d');
         oImageContext.drawImage(oImage, 0, 0);
         const oImageData = oImageContext.getImageData(0, 0, oImageCanvas.width, oImageCanvas.height);
-        oImageDataData = oImageData.data;
+        oImage_Data = oImageData.data;
     
-        drawMandelbrotSet(oCurrentTransform);
+        drawImages(oCurrentTransform);
     };
     oImage.addEventListener('load', fnHandleImageLoaded);
 
