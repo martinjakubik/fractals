@@ -68,8 +68,19 @@ const degreeInMandelbrotSet = function (c) {
 
 };
 
-const drawImagePixelOnCanvas = function (oContext, x, y, oTransform) {
+const drawImages = function (oTransform) {
 
+    drawMandelbrotSet(oTransform);
+    drawOverlay(oTransform);
+
+};
+
+const drawImagePixelOnCanvas = function (oSourceContext, oDestinationCanvas, oDestinationContext, x, y, oTransform) {
+
+    const iDestinationCanvasHorizontalMiddle = oDestinationCanvas.width / 2;
+    const iDestinationCanvasVerticalMiddle = oDestinationCanvas.height / 2;
+    const iStartX = iDestinationCanvasHorizontalMiddle - oImage_Width / 2;
+    const iStartY = iDestinationCanvasVerticalMiddle - oImage_Height / 2;
     const tx = (x + oTransform.pan.horizontal) * oTransform.zoom;
     const ty = (y + oTransform.pan.vertical) * oTransform.zoom;
     
@@ -80,24 +91,18 @@ const drawImagePixelOnCanvas = function (oContext, x, y, oTransform) {
     const bDecimal = oImage_Data[index + 2];
     const alphaDecimal = oImage_Data[index + 3] / 255;
     const sRGBA = `rgba(${rDecimal}, ${gDecimal}, ${bDecimal}, ${alphaDecimal})`;
-    oContext.fillStyle = sRGBA;
-    oContext.fillRect(x, y, 1, 1);
-
-};
-
-const drawImages = function (oTransform) {
-
-    drawMandelbrotSet(oTransform);
-    drawOverlay(oTransform);
+    oDestinationContext.fillStyle = sRGBA;
+    oDestinationContext.fillRect(iStartX + x, iStartY + y, 1, 1);
 
 };
 
 const drawOverlay = function (oTransform) {
-    
+
     const oGraphicContext = oGraphicCanvas.getContext('2d');
-    for (let x = 0; x < oImageCanvas.width; x++) {
-        for (let y = 0; y < oImageCanvas.height; y++) {
-            drawImagePixelOnCanvas(oGraphicContext, x, y, oTransform);
+    const oImageContext = oImageCanvas.getContext('2d');
+    for (let x = 0; x < oImage_Width; x++) {
+        for (let y = 0; y < oImage_Height; y++) {
+            drawImagePixelOnCanvas(oImageContext, oGraphicCanvas, oGraphicContext, x, y, oTransform);
         }
     }
 
@@ -536,6 +541,8 @@ oImageCanvas.style = setBlockVisibility(false);
 const oImage = new Image();
 oImage.src = '../resources/redstars.png';
 let oImage_Data = {};
+let oImage_Width = 0;
+let oImage_Height = 0;
 
 let nPrecision = 5;
 let nHue = Math.floor(Math.random() * 360);
@@ -570,6 +577,8 @@ const waitUntilImageLoadedAndStart = function () {
         oImageContext.drawImage(oImage, 0, 0);
         const oImageData = oImageContext.getImageData(0, 0, oImageCanvas.width, oImageCanvas.height);
         oImage_Data = oImageData.data;
+        oImage_Width = oImage.width;
+        oImage_Height = oImage.height;
     
         drawImages(oCurrentTransform);
     };
