@@ -106,8 +106,8 @@ const drawMandelbrotSet = function (oTransform) {
                 const sDebugText1 = `x:${x},y:${y}`;
                 const sDebugText2 = `r:${c.real}, i:${c.imaginary}`;
                 oDebugContext.fillStyle = '#fff';
-                // oDebugContext.fillText(sDebugText1, x, y + 8);
-                // oDebugContext.fillText(sDebugText2, x, y + 22);
+                oDebugContext.fillText(sDebugText1, x, y + 8);
+                oDebugContext.fillText(sDebugText2, x, y + 22);
             }
             
             const nDegreeInSet = degreeInMandelbrotSet(c);
@@ -501,7 +501,7 @@ const createPage = function () {
 
 };
 
-let IS_DEBUG = true;
+let IS_DEBUG = false;
 
 const oPage = createPage();
 const oGraphicCanvas = createGraphicCanvas(oPage);
