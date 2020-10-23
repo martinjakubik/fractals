@@ -15,4 +15,6 @@ div.controlBar {
     position: absolute;
     bottom: 0px;
     padding: 6px;
+    width: 100%;
+    box-sizing: border-box;
 }
