@@ -68,18 +68,14 @@ const degreeInMandelbrotSet = function (c) {
 
 };
 
-const convertDecimalToHexadecimalString = function (d) {
-    return d.toString(16).length < 2 ? '0' + d.toString(16) : d.toString(16);
-};
-
 const drawImagePixelOnCanvas = function (oContext, x, y) {
-    const rDecimal = oImageDataData[(x * 4) + (y * 4) * oImageCanvas.width];
-    const gDecimal = oImageDataData[(x * 4) + (y * 4) * oImageCanvas.width + 1];
-    const bDecimal = oImageDataData[(x * 4) + (y * 4) * oImageCanvas.width + 2];
-    const r = convertDecimalToHexadecimalString(rDecimal);
-    const g = convertDecimalToHexadecimalString(gDecimal);
-    const b = convertDecimalToHexadecimalString(bDecimal);
-    oContext.fillStyle = `#${r}${g}${b}`;
+    const index = (x * 4) + (y * 4) * oImageCanvas.width;
+    const rDecimal = oImageDataData[index];
+    const gDecimal = oImageDataData[index + 1];
+    const bDecimal = oImageDataData[index + 2];
+    const alphaDecimal = oImageDataData[index + 3] / 255;
+    const sRGBA = `rgba(${rDecimal}, ${gDecimal}, ${bDecimal}, ${alphaDecimal})`;
+    oContext.fillStyle = sRGBA;
     oContext.fillRect(x, y, 1, 1);
 };
 
@@ -113,11 +109,9 @@ const drawMandelbrotSet = function (oTransform) {
                 // oDebugContext.fillText(sDebugText1, x, y + 8);
                 // oDebugContext.fillText(sDebugText2, x, y + 22);
             }
-            drawImagePixelOnCanvas(oDebugContext, x, y);
-
-            // const nDegreeInSet = degreeInMandelbrotSet(c);
-            const nDegreeInSet = 0;
             
+            const nDegreeInSet = degreeInMandelbrotSet(c);
+
             if (nDegreeInSet === 0) {
                 oGraphicContext.fillStyle = '#000';
                 oGraphicContext.fillRect(x, y, 1, 1);
@@ -125,6 +119,7 @@ const drawMandelbrotSet = function (oTransform) {
                 oGraphicContext.fillStyle = `hsl(${nHue}, 100%, ${nDegreeInSet}%)`;
                 oGraphicContext.fillRect(x, y, 1, 1);
             }
+            drawImagePixelOnCanvas(oGraphicContext, x, y);
         }
     }
 
