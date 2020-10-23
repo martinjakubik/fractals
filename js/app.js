@@ -308,11 +308,15 @@ const onTapCanvas = function (oEvent) {
 
 };
 
-const createCanvas = function (sCanvasId, nZindex, oPage) {
+const createCanvas = function (sCanvasId, nZindex, oParent) {
+
+    if (!oParent) {
+        oParent = document;
+    }
 
     const oCanvas = document.createElement('canvas');
     oCanvas.id = sCanvasId;
-    oPage.appendChild(oCanvas);
+    oParent.appendChild(oCanvas);
 
     const nParentWidth = oCanvas.parentNode.clientWidth;
 
@@ -326,86 +330,114 @@ const createCanvas = function (sCanvasId, nZindex, oPage) {
 
 };
 
-const createImageCanvas = function (oPage) {
+const createImageCanvas = function (oParent) {
+
+    if (!oParent) {
+        oParent = document;
+    }
 
     const nZindex = 3;
-    const oCanvas = createCanvas('imageCanvas', nZindex, oPage);
+    const oCanvas = createCanvas('imageCanvas', nZindex, oParent);
     return oCanvas;
 
 };
 
-const createControlCanvas = function (oPage) {
+const createControlCanvas = function (oParent) {
+
+    if (!oParent) {
+        oParent = document;
+    }
 
     const nZindex = 2;
-    const oCanvas = createCanvas('controlCanvas', nZindex, oPage);
+    const oCanvas = createCanvas('controlCanvas', nZindex, oParent);
     oCanvas.onclick = onTapCanvas;
 
     return oCanvas;
     
 };
 
-const createDebugCanvas = function (oPage) {
+const createDebugCanvas = function (oParent) {
+
+    if (!oParent) {
+        oParent = document;
+    }
 
     const nZindex = 1;
-    const oCanvas = createCanvas('debugCanvas', nZindex, oPage);
+    const oCanvas = createCanvas('debugCanvas', nZindex, oParent);
     return oCanvas;
 
 };
 
-const createGraphicCanvas = function (oPage) {
+const createGraphicCanvas = function (oParent) {
+
+    if (!oParent) {
+        oParent = document;
+    }
 
     const nZindex = 0;
-    const oCanvas = createCanvas('graphicCanvas', nZindex, oPage);
+    const oCanvas = createCanvas('graphicCanvas', nZindex, oParent);
     return oCanvas;
 
 };
 
-const createCheckbox = function (sId, bValue, sLabel) {
+const createCheckbox = function (sId, bValue, sLabel, oParent) {
+
+    if (!oParent) {
+        oParent = document;
+    }
 
     const sName = sId;
 
-    const oInput = document.createElement('input');
+    const oInput = oParent.createElement('input');
     oInput.type = 'checkbox';
     oInput.id = sId;
     oInput.name = sName;
     oInput.value = bValue;
 
-    const oLabel = document.createElement('label');
+    const oLabel = oParent.createElement('label');
     oLabel.for = sId;
     oLabel.innerText = sLabel;
 
-    document.body.appendChild(oLabel);
-    document.body.appendChild(oInput);
+    oParent.body.appendChild(oLabel);
+    oParent.body.appendChild(oInput);
 
     return oInput;
 
 };
 
-const createNumberInput = function (sId, nValue, sLabel) {
+const createNumberInput = function (sId, nValue, sLabel, oParent) {
 
-    const oInput = document.createElement('input');
+    if (!oParent) {
+        oParent = document;
+    }
+
+    const oInput = oParent.createElement('input');
     oInput.type = 'number';
     oInput.id = sId;
     oInput.value = nValue;
 
-    const oLabel = document.createElement('label');
+    const oLabel = oParent.createElement('label');
     oLabel.for = sId;
     oLabel.innerText = sLabel;
 
-    document.body.appendChild(oLabel);
-    document.body.appendChild(oInput);
+    oParent.body.appendChild(oLabel);
+    oParent.body.appendChild(oInput);
 
     return oInput;
 
 };
 
-const createButton = function (sId, sLabel) {
+const createButton = function (sId, sLabel, oParent) {
 
-    const oButton = document.createElement('button');
+    if (!oParent) {
+        oParent = document;
+    }
+
+    const oButton = oParent.createElement('button');
     oButton.id = sId;
     oButton.innerText = sLabel;
 
-    document.body.appendChild(oButton);
+    oParent.body.appendChild(oButton);
 
     return oButton;
 
