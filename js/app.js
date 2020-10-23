@@ -81,8 +81,8 @@ const drawImagePixelOnCanvas = function (oSourceContext, oDestinationCanvas, oDe
     const iDestinationCanvasVerticalMiddle = oDestinationCanvas.height / 2;
     const iStartX = iDestinationCanvasHorizontalMiddle - oImage_Width / 2;
     const iStartY = iDestinationCanvasVerticalMiddle - oImage_Height / 2;
-    const tx = (x + oTransform.pan.horizontal) * oTransform.zoom;
-    const ty = (y + oTransform.pan.vertical) * oTransform.zoom;
+    const tx = iStartX + x * oTransform.zoom;
+    const ty = iStartY + y * oTransform.zoom;
     
     const index = (x * 4) + (y * 4) * oImageCanvas.width;
 
@@ -92,7 +92,7 @@ const drawImagePixelOnCanvas = function (oSourceContext, oDestinationCanvas, oDe
     const alphaDecimal = oImage_Data[index + 3] / 255;
     const sRGBA = `rgba(${rDecimal}, ${gDecimal}, ${bDecimal}, ${alphaDecimal})`;
     oDestinationContext.fillStyle = sRGBA;
-    oDestinationContext.fillRect(iStartX + x, iStartY + y, 1, 1);
+    oDestinationContext.fillRect(tx, ty, 1, 1);
 
 };
 
