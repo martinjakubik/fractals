@@ -75,15 +75,29 @@ const drawImages = function (oTransform) {
 
 };
 
-const drawImagePixelOnCanvas = function (oSourceContext, oDestinationCanvas, oDestinationContext, x, y, oTransform) {
+const transformPoint = function (x, y, oTransform, oDestinationCanvas, oImageDimensions) {
+    const oTransformedPoint = {
+        x: 0,
+        y: 0
+    };
 
     const iDestinationCanvasHorizontalMiddle = oDestinationCanvas.width / 2;
     const iDestinationCanvasVerticalMiddle = oDestinationCanvas.height / 2;
-    const iStartX = iDestinationCanvasHorizontalMiddle - oImage_Width / 2;
-    const iStartY = iDestinationCanvasVerticalMiddle - oImage_Height / 2;
-    const tx = iStartX + x * oTransform.zoom;
-    const ty = iStartY + y * oTransform.zoom;
-    
+    const iStartX = iDestinationCanvasHorizontalMiddle - oImageDimensions.width / 2;
+    const iStartY = iDestinationCanvasVerticalMiddle - oImageDimensions.height / 2;
+    oTransformedPoint.x = iStartX + x * oTransform.zoom;
+    oTransformedPoint.y = iStartY + y * oTransform.zoom;
+
+    return oTransformedPoint;
+}
+
+const drawImagePixelOnCanvas = function (oDestinationCanvas, oDestinationContext, x, y, oTransform) {
+
+    const oImageDimensions = {
+        width: oImage_Width,
+        height: oImage_Height
+    }
+    const oTransformedPoint = transformPoint(x, y, oTransform, oDestinationCanvas, oImageDimensions);
     const index = (x * 4) + (y * 4) * oImageCanvas.width;
 
     const rDecimal = oImage_Data[index];
@@ -92,17 +106,16 @@ const drawImagePixelOnCanvas = function (oSourceContext, oDestinationCanvas, oDe
     const alphaDecimal = oImage_Data[index + 3] / 255;
     const sRGBA = `rgba(${rDecimal}, ${gDecimal}, ${bDecimal}, ${alphaDecimal})`;
     oDestinationContext.fillStyle = sRGBA;
-    oDestinationContext.fillRect(tx, ty, 1, 1);
+    oDestinationContext.fillRect(oTransformedPoint.x, oTransformedPoint.y, 1, 1);
 
 };
 
 const drawOverlay = function (oTransform) {
 
     const oGraphicContext = oGraphicCanvas.getContext('2d');
-    const oImageContext = oImageCanvas.getContext('2d');
     for (let x = 0; x < oImage_Width; x++) {
         for (let y = 0; y < oImage_Height; y++) {
-            drawImagePixelOnCanvas(oImageContext, oGraphicCanvas, oGraphicContext, x, y, oTransform);
+            drawImagePixelOnCanvas(oGraphicCanvas, oGraphicContext, x, y, oTransform);
         }
     }
 
