@@ -1,4 +1,4 @@
-import { CANVAS_HEIGHT, createCanvas, createSlider } from './lib/tools.js';
+import { CANVAS_HEIGHT, createButton, createCanvas, createSlider } from './lib/tools.js';
 
 const VERTICAL_MARGIN = 36;
 const ZOOM_LENS_RADIUS = 50;
@@ -368,22 +368,6 @@ const createNumberInput = function (sId, nValue, sLabel, oParent) {
     oParent.appendChild(oInput);
 
     return oInput;
-
-};
-
-const createButton = function (sId, sLabel, oParent) {
-
-    if (!oParent) {
-        oParent = document.body;
-    }
-
-    const oButton = document.createElement('button');
-    oButton.id = sId;
-    oButton.innerText = sLabel;
-
-    oParent.appendChild(oButton);
-
-    return oButton;
 
 };
 

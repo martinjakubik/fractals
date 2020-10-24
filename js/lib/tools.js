@@ -1,5 +1,21 @@
 const CANVAS_HEIGHT = 600;
 
+const createButton = function (sId, sLabel, oParent) {
+
+    if (!oParent) {
+        oParent = document.body;
+    }
+
+    const oButton = document.createElement('button');
+    oButton.id = sId;
+    oButton.innerText = sLabel;
+
+    oParent.appendChild(oButton);
+
+    return oButton;
+
+};
+
 const createCanvas = function (sCanvasId, nZindex, oParent) {
 
     if (!oParent) {
@@ -52,4 +68,4 @@ const createSlider = function (sId, sMin, sMax, nValue, sLabel, nStep, oParent) 
 
 };
 
-export { CANVAS_HEIGHT, createCanvas, createSlider };
+export { CANVAS_HEIGHT, createButton, createCanvas, createSlider };
