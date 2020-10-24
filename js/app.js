@@ -138,7 +138,7 @@ const drawMandelbrotSet = function (oTransform) {
     oDebugContext.clearRect(0, 0, nDebugCanvasWidth, CANVAS_HEIGHT);
 
     sDebugText = `precision: ${nPrecision} pan:${(oTransform.pan.horizontal)} zoom: ${oTransform.zoom} pan/zoom:${(oTransform.pan.horizontal / oTransform.zoom)} last click: ${oGraphicCanvas.width - oTransform.pan.horizontal} center point: ${((oGraphicCanvas.width / 2) - oTransform.pan.horizontal) / oTransform.zoom}`;
-    oDebugContext.fillStyle = '#fff';
+    oDebugContext.fillStyle = STROKE_NORMAL;
     oDebugContext.fillText(sDebugText, 800, 580);
 
     for (x = 0; x < oGraphicCanvas.width; x++) {
@@ -150,7 +150,7 @@ const drawMandelbrotSet = function (oTransform) {
             if (x % 200 === 0 && y % 200 === 0) {
                 const sDebugText1 = `x:${x},y:${y}`;
                 const sDebugText2 = `r:${c.real}, i:${c.imaginary}`;
-                oDebugContext.fillStyle = '#fff';
+                oDebugContext.fillStyle = STROKE_NORMAL;
                 oDebugContext.fillText(sDebugText1, x, y + 8);
                 oDebugContext.fillText(sDebugText2, x, y + 22);
             }
@@ -450,7 +450,7 @@ const onMouseMoveOnCanvas = function (e) {
     oContext.clearRect(oOrigin.x, oOrigin.y, oPreviousMousePosition.x - oOrigin.x, oPreviousMousePosition.y - oOrigin.y);
 
     oContext.beginPath();
-    oContext.strokeStyle = 'white';
+    oContext.strokeStyle = STROKE_NORMAL;
     oContext.lineWidth = 1;
     oContext.moveTo(oOrigin.x, oOrigin.y);
     oContext.lineTo(e.offsetX, e.offsetY);
