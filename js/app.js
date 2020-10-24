@@ -80,10 +80,10 @@ const transformPoint = function (x, y, oTransform, oDestinationCanvas, oImageDim
     const iDestinationCanvasVerticalMiddle = oDestinationCanvas.height / 2;
 
     const iImageHorizontalMiddle = oImageDimensions.width * oTransform.zoom / 2 - oTransform.pan.horizontal;
-    const iImageVertivalMiddle = oImageDimensions.height * oTransform.zoom / 2;
+    const iImageVerticalMiddle = oImageDimensions.height * oTransform.zoom / 2 - oTransform.pan.vertical;
 
     const iStartX = iDestinationCanvasHorizontalMiddle - iImageHorizontalMiddle;
-    const iStartY = iDestinationCanvasVerticalMiddle - iImageVertivalMiddle;
+    const iStartY = iDestinationCanvasVerticalMiddle - iImageVerticalMiddle;
 
     const oTransformedPoint = {
         x: iStartX + x * oTransform.zoom,
@@ -137,7 +137,7 @@ const drawMandelbrotSet = function (oTransform) {
 
     oDebugContext.clearRect(0, 0, nDebugCanvasWidth, CANVAS_HEIGHT);
 
-    sDebugText = `precision: ${nPrecision} pan:${(oTransform.pan.horizontal)} zoom: ${oTransform.zoom} pan/zoom:${(oTransform.pan.horizontal / oTransform.zoom)} last click: ${oGraphicCanvas.width - oTransform.pan.horizontal} center point: ${((oGraphicCanvas.width / 2) - oTransform.pan.horizontal) / oTransform.zoom}`;
+    sDebugText = `precision: ${nPrecision} pan:${(oTransform.pan.horizontal)} zoom: ${oTransform.zoom} pan/zoom:${(oTransform.pan.horizontal / oTransform.zoom)} last click x: ${oTapPoint.x} center point real: ${((oGraphicCanvas.width / 2) - oTransform.pan.horizontal) / oTransform.zoom}`;
     oDebugContext.fillStyle = STROKE_COLOR_NORMAL;
     oDebugContext.fillText(sDebugText, 800, 580);
 
@@ -240,8 +240,8 @@ const handleTap = function (nTapX, nTapY) {
         } else if (sControlState === CONTROL_STATE.ZOOMED_OUT) {
             oCurrentTransform.zoom = oCurrentTransform.zoom / ZOOM_MULTIPLIER;
         }
-        const nHorizontalOffset = oTapPoint.x - oPreviousTapPoint.x;
-        const nVerticalOffset = oTapPoint.y - oPreviousTapPoint.y;
+        const nHorizontalOffset = oTapPoint.x - oOrigin.x;
+        const nVerticalOffset = oTapPoint.y - oOrigin.y;
         oCurrentTransform.pan.horizontal = oCurrentTransform.pan.horizontal - nHorizontalOffset;
         oCurrentTransform.pan.vertical = oCurrentTransform.pan.vertical - nVerticalOffset;
         drawImages(oCurrentTransform);
