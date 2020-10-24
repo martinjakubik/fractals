@@ -582,15 +582,44 @@ const createPage = function () {
 
 };
 
+const handleMouseMove = function (e) {
+
+    const oDebugContext = oDebugCanvas.getContext('2d');
+    
+    oDebugContext.clearRect(oOrigin.x, oOrigin.y, oPreviousMousePosition.x - oOrigin.x, oPreviousMousePosition.y - oOrigin.y);
+
+    oDebugContext.beginPath();
+    oDebugContext.strokeStyle = 'white';
+    oDebugContext.lineWidth = 1;
+    oDebugContext.moveTo(oOrigin.x, oOrigin.y);
+    oDebugContext.lineTo(e.offsetX, e.offsetY);
+    oDebugContext.closePath();
+    oDebugContext.stroke();
+
+    oPreviousMousePosition.x = e.offsetX;
+    oPreviousMousePosition.y = e.offsetY;
+
+};
+
 let IS_DEBUG = false;
 
 const oPage = createPage();
 const oGraphicCanvas = createGraphicCanvas(oPage);
+
 const oDebugCanvas = createDebugCanvas(oPage);
 oDebugCanvas.style = setBlockVisibility(IS_DEBUG);
+
+const oOrigin = {
+    x: oDebugCanvas.width / 2,
+    y: oDebugCanvas.height / 2
+};
+
 const oControlCanvas = createControlCanvas(oPage);
+oControlCanvas.addEventListener('mousemove', handleMouseMove);
+
 const oImageCanvas = createImageCanvas(oPage);
 oImageCanvas.style = setBlockVisibility(false);
+
 const oImage = new Image();
 oImage.src = '../resources/redstars.png';
 let oImage_Data = {};
@@ -618,6 +647,11 @@ let oTapPoint = {
     x: oGraphicCanvas.width / 2,
     y: oGraphicCanvas.height / 2
 }
+
+let oPreviousMousePosition = {
+    x: 0,
+    y: 0
+};
 
 let c = getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
 
