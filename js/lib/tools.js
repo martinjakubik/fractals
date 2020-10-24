@@ -115,4 +115,12 @@ const createSlider = function (sId, sMin, sMax, nValue, sLabel, nStep, oParent) 
 
 };
 
-export { CANVAS_HEIGHT, createButton, createCanvas, createCheckbox, createNumberInput, createSlider };
+const setBlockVisibility = function (bVisible)  {
+
+    let sStyle = 'position: absolute';
+    sStyle += bVisible ? '; display: block' : '; display: none';
+    return sStyle;
+
+};
+
+export { CANVAS_HEIGHT, createButton, createCanvas, createCheckbox, createNumberInput, createSlider, setBlockVisibility };

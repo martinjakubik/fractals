@@ -1,4 +1,4 @@
-import { CANVAS_HEIGHT, createButton, createCanvas, createCheckbox, createNumberInput, createSlider } from './lib/tools.js';
+import { CANVAS_HEIGHT, createButton, createCanvas, createCheckbox, createNumberInput, createSlider, setBlockVisibility } from './lib/tools.js';
 
 const VERTICAL_MARGIN = 36;
 const ZOOM_LENS_RADIUS = 50;
@@ -321,14 +321,6 @@ const onTapCanvas = function (oEvent) {
     const nTapY = oEvent.y - VERTICAL_MARGIN;
 
     handleTap(nTapX, nTapY, oCurrentTransform);
-
-};
-
-const setBlockVisibility = function (bVisible)  {
-
-    let sStyle = 'position: absolute';
-    sStyle += bVisible ? '; display: block' : '; display: none';
-    return sStyle;
 
 };
 
