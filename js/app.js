@@ -1,4 +1,4 @@
-import { CANVAS_HEIGHT, createButton, createCanvas, createSlider } from './lib/tools.js';
+import { CANVAS_HEIGHT, createButton, createCanvas, createCheckbox, createSlider } from './lib/tools.js';
 
 const VERTICAL_MARGIN = 36;
 const ZOOM_LENS_RADIUS = 50;
@@ -321,31 +321,6 @@ const onTapCanvas = function (oEvent) {
     const nTapY = oEvent.y - VERTICAL_MARGIN;
 
     handleTap(nTapX, nTapY, oCurrentTransform);
-
-};
-
-const createCheckbox = function (sId, bValue, sLabel, oParent) {
-
-    if (!oParent) {
-        oParent = document.body;
-    }
-
-    const sName = sId;
-
-    const oInput = document.createElement('input');
-    oInput.type = 'checkbox';
-    oInput.id = sId;
-    oInput.name = sName;
-    oInput.value = bValue;
-
-    const oLabel = document.createElement('label');
-    oLabel.for = sId;
-    oLabel.innerText = sLabel;
-
-    oParent.appendChild(oLabel);
-    oParent.appendChild(oInput);
-
-    return oInput;
 
 };
 

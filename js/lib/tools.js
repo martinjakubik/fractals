@@ -38,6 +38,31 @@ const createCanvas = function (sCanvasId, nZindex, oParent) {
 
 };
 
+const createCheckbox = function (sId, bValue, sLabel, oParent) {
+
+    if (!oParent) {
+        oParent = document.body;
+    }
+
+    const sName = sId;
+
+    const oInput = document.createElement('input');
+    oInput.type = 'checkbox';
+    oInput.id = sId;
+    oInput.name = sName;
+    oInput.value = bValue;
+
+    const oLabel = document.createElement('label');
+    oLabel.for = sId;
+    oLabel.innerText = sLabel;
+
+    oParent.appendChild(oLabel);
+    oParent.appendChild(oInput);
+
+    return oInput;
+
+};
+
 const createSlider = function (sId, sMin, sMax, nValue, sLabel, nStep, oParent) {
 
     if (!oParent) {
@@ -68,4 +93,4 @@ const createSlider = function (sId, sMin, sMax, nValue, sLabel, nStep, oParent) 
 
 };
 
-export { CANVAS_HEIGHT, createButton, createCanvas, createSlider };
+export { CANVAS_HEIGHT, createButton, createCanvas, createCheckbox, createSlider };
