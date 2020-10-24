@@ -63,6 +63,28 @@ const createCheckbox = function (sId, bValue, sLabel, oParent) {
 
 };
 
+const createNumberInput = function (sId, nValue, sLabel, oParent) {
+
+    if (!oParent) {
+        oParent = document.body;
+    }
+
+    const oInput = document.createElement('input');
+    oInput.type = 'number';
+    oInput.id = sId;
+    oInput.value = nValue;
+
+    const oLabel = document.createElement('label');
+    oLabel.for = sId;
+    oLabel.innerText = sLabel;
+
+    oParent.appendChild(oLabel);
+    oParent.appendChild(oInput);
+
+    return oInput;
+
+};
+
 const createSlider = function (sId, sMin, sMax, nValue, sLabel, nStep, oParent) {
 
     if (!oParent) {
@@ -93,4 +115,4 @@ const createSlider = function (sId, sMin, sMax, nValue, sLabel, nStep, oParent) 
 
 };
 
-export { CANVAS_HEIGHT, createButton, createCanvas, createCheckbox, createSlider };
+export { CANVAS_HEIGHT, createButton, createCanvas, createCheckbox, createNumberInput, createSlider };
