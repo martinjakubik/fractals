@@ -533,7 +533,7 @@ const createPage = function () {
 
 };
 
-const handleMouseMove = function (e) {
+const onMouseMoveOnCanvas = function (e) {
 
     if (!IS_DEBUG) {
         return;
@@ -568,7 +568,8 @@ const oDebugDrawCanvas = createCanvas('debugDrawCanvas', 2, oPage);
 oDebugDrawCanvas.style = setBlockVisibility(IS_DEBUG);
 
 const oControlCanvas = createCanvas('controlCanvas', 3, oPage);
-oControlCanvas.addEventListener('mousemove', handleMouseMove);
+oControlCanvas.addEventListener('mousemove', onMouseMoveOnCanvas);
+oControlCanvas.addEventListener('click', onTapCanvas);
 
 const oImageCanvas = createCanvas('imageCanvas', 4, oPage);
 oImageCanvas.style = setBlockVisibility(false);
@@ -607,8 +608,8 @@ let oTapPoint = {
 }
 
 let oPreviousMousePosition = {
-    x: 0,
-    y: 0
+    x: oOrigin.x,
+    y: oOrigin.y
 };
 
 let c = getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
