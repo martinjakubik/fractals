@@ -80,7 +80,7 @@ const transformPoint = function (x, y, oTransform, oDestinationCanvas, oImageDim
     const iDestinationCanvasHorizontalMiddle = oDestinationCanvas.width / 2;
     const iDestinationCanvasVerticalMiddle = oDestinationCanvas.height / 2;
 
-    const iImageHorizontalMiddle = oImageDimensions.width * oTransform.zoom / 2;
+    const iImageHorizontalMiddle = oImageDimensions.width * oTransform.zoom / 2 - oTransform.pan.horizontal;
     const iImageVertivalMiddle = oImageDimensions.height * oTransform.zoom / 2;
 
     const iStartX = iDestinationCanvasHorizontalMiddle - iImageHorizontalMiddle;
@@ -601,8 +601,8 @@ let nPrecision = 5;
 let nHue = Math.floor(Math.random() * 360);
 let oCurrentTransform = {
     pan: {
-        horizontal: oGraphicCanvas.width / 2,
-        vertical: oGraphicCanvas.height / 2
+        horizontal: 0,
+        vertical: 0
     },
     zoom: 1
 };
@@ -624,6 +624,7 @@ let c = getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
 const waitUntilImageLoadedAndStart = function () {
 
     const fnHandleImageLoaded = e => {
+
         oImage.removeEventListener('load', fnHandleImageLoaded);
 
         const oImageContext = oImageCanvas.getContext('2d');
@@ -634,7 +635,9 @@ const waitUntilImageLoadedAndStart = function () {
         oImage_Height = oImage.height;
     
         drawImages(oCurrentTransform);
+
     };
+
     oImage.addEventListener('load', fnHandleImageLoaded);
 
 };
