@@ -439,7 +439,7 @@ const createPage = function () {
 
 };
 
-const onMouseMoveOnCanvas = function (e) {
+const onMouseMoveOnCanvas = function (oEvent) {
 
     if (!IS_DEBUG) {
         return;
@@ -453,12 +453,12 @@ const onMouseMoveOnCanvas = function (e) {
     oContext.strokeStyle = STROKE_COLOR_NORMAL;
     oContext.lineWidth = 1;
     oContext.moveTo(oOrigin.x, oOrigin.y);
-    oContext.lineTo(e.offsetX, e.offsetY);
+    oContext.lineTo(oEvent.offsetX, oEvent.offsetY);
     oContext.closePath();
     oContext.stroke();
 
-    oPreviousMousePosition.x = e.offsetX;
-    oPreviousMousePosition.y = e.offsetY;
+    oPreviousMousePosition.x = oEvent.offsetX;
+    oPreviousMousePosition.y = oEvent.offsetY;
 
 };
 
