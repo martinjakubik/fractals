@@ -7,7 +7,7 @@ const ZOOM_OUT_BUTTON_DISTANCE = 120;
 
 const ZOOM_MULTIPLIER = 2;
 
-const SMALL_VALUE = 5;
+const MANDELBROT_PRECISION_SMALL_VALUE = 5;
 const STROKE_NORMAL = '#aaa';
 
 const CONTROL_STATE = {
@@ -57,7 +57,7 @@ const degreeInMandelbrotSet = function (c) {
         iIncrementalRealComponent = iTempRealComponent;
         iIncrementalImaginaryComponent = iTempImaginaryComponent;
 
-        if (iIncrementalRealComponent * iIncrementalImaginaryComponent > SMALL_VALUE) {
+        if (iIncrementalRealComponent * iIncrementalImaginaryComponent > MANDELBROT_PRECISION_SMALL_VALUE) {
             return j / nPrecision * 100;
         }
 
