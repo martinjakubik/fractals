@@ -1,3 +1,27 @@
+const CANVAS_HEIGHT = 600;
+
+const createCanvas = function (sCanvasId, nZindex, oParent) {
+
+    if (!oParent) {
+        oParent = document.body;
+    }
+
+    const oCanvas = document.createElement('canvas');
+    oCanvas.id = sCanvasId;
+    oParent.appendChild(oCanvas);
+
+    const nParentWidth = oCanvas.parentNode.clientWidth;
+
+    oCanvas.width = nParentWidth;
+    oCanvas.height = CANVAS_HEIGHT;
+
+    oCanvas.style.position = 'absolute';
+    oCanvas.style.zindex = nZindex;
+
+    return oCanvas;
+
+};
+
 const createSlider = function (sId, sMin, sMax, nValue, sLabel, nStep, oParent) {
 
     if (!oParent) {
@@ -28,4 +52,4 @@ const createSlider = function (sId, sMin, sMax, nValue, sLabel, nStep, oParent) 
 
 };
 
-export { createSlider };
+export { CANVAS_HEIGHT, createCanvas, createSlider };

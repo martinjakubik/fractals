@@ -1,6 +1,5 @@
-import { createSlider } from './lib/tools.js';
+import { CANVAS_HEIGHT, createCanvas, createSlider } from './lib/tools.js';
 
-const CANVAS_HEIGHT = 600;
 const VERTICAL_MARGIN = 36;
 const ZOOM_LENS_RADIUS = 50;
 const ZOOM_BUTTON_RADIUS = ZOOM_LENS_RADIUS / 4;
@@ -322,28 +321,6 @@ const onTapCanvas = function (oEvent) {
     const nTapY = oEvent.y - VERTICAL_MARGIN;
 
     handleTap(nTapX, nTapY, oCurrentTransform);
-
-};
-
-const createCanvas = function (sCanvasId, nZindex, oParent) {
-
-    if (!oParent) {
-        oParent = document.body;
-    }
-
-    const oCanvas = document.createElement('canvas');
-    oCanvas.id = sCanvasId;
-    oParent.appendChild(oCanvas);
-
-    const nParentWidth = oCanvas.parentNode.clientWidth;
-
-    oCanvas.width = nParentWidth;
-    oCanvas.height = CANVAS_HEIGHT;
-
-    oCanvas.style.position = 'absolute';
-    oCanvas.style.zindex = nZindex;
-
-    return oCanvas;
 
 };
 
