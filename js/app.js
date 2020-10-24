@@ -8,7 +8,7 @@ const ZOOM_OUT_BUTTON_DISTANCE = 120;
 const ZOOM_MULTIPLIER = 2;
 
 const MANDELBROT_PRECISION_SMALL_VALUE = 5;
-const STROKE_NORMAL = '#aaa';
+const STROKE_COLOR_NORMAL = '#aaa';
 
 const CONTROL_STATE = {
     VIEW: 0,
@@ -138,7 +138,7 @@ const drawMandelbrotSet = function (oTransform) {
     oDebugContext.clearRect(0, 0, nDebugCanvasWidth, CANVAS_HEIGHT);
 
     sDebugText = `precision: ${nPrecision} pan:${(oTransform.pan.horizontal)} zoom: ${oTransform.zoom} pan/zoom:${(oTransform.pan.horizontal / oTransform.zoom)} last click: ${oGraphicCanvas.width - oTransform.pan.horizontal} center point: ${((oGraphicCanvas.width / 2) - oTransform.pan.horizontal) / oTransform.zoom}`;
-    oDebugContext.fillStyle = STROKE_NORMAL;
+    oDebugContext.fillStyle = STROKE_COLOR_NORMAL;
     oDebugContext.fillText(sDebugText, 800, 580);
 
     for (x = 0; x < oGraphicCanvas.width; x++) {
@@ -150,7 +150,7 @@ const drawMandelbrotSet = function (oTransform) {
             if (x % 200 === 0 && y % 200 === 0) {
                 const sDebugText1 = `x:${x},y:${y}`;
                 const sDebugText2 = `r:${c.real}, i:${c.imaginary}`;
-                oDebugContext.fillStyle = STROKE_NORMAL;
+                oDebugContext.fillStyle = STROKE_COLOR_NORMAL;
                 oDebugContext.fillText(sDebugText1, x, y + 8);
                 oDebugContext.fillText(sDebugText2, x, y + 22);
             }
@@ -272,7 +272,7 @@ const drawZoomOutButton = function (x, y) {
 const showZoomButtons = function (x, y) {
 
     const oContext = oControlCanvas.getContext('2d');
-    oContext.strokeStyle = STROKE_NORMAL;
+    oContext.strokeStyle = STROKE_COLOR_NORMAL;
     oContext.lineWidth = 5;
 
     // draws circle
@@ -450,7 +450,7 @@ const onMouseMoveOnCanvas = function (e) {
     oContext.clearRect(oOrigin.x, oOrigin.y, oPreviousMousePosition.x - oOrigin.x, oPreviousMousePosition.y - oOrigin.y);
 
     oContext.beginPath();
-    oContext.strokeStyle = STROKE_NORMAL;
+    oContext.strokeStyle = STROKE_COLOR_NORMAL;
     oContext.lineWidth = 1;
     oContext.moveTo(oOrigin.x, oOrigin.y);
     oContext.lineTo(e.offsetX, e.offsetY);
