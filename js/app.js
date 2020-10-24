@@ -76,19 +76,23 @@ const drawImages = function (oTransform) {
 };
 
 const transformPoint = function (x, y, oTransform, oDestinationCanvas, oImageDimensions) {
-    const oTransformedPoint = {
-        x: 0,
-        y: 0
-    };
 
     const iDestinationCanvasHorizontalMiddle = oDestinationCanvas.width / 2;
     const iDestinationCanvasVerticalMiddle = oDestinationCanvas.height / 2;
-    const iStartX = iDestinationCanvasHorizontalMiddle - oImageDimensions.width / 2;
-    const iStartY = iDestinationCanvasVerticalMiddle - oImageDimensions.height / 2;
-    oTransformedPoint.x = iStartX + x * oTransform.zoom;
-    oTransformedPoint.y = iStartY + y * oTransform.zoom;
+
+    const iImageHorizontalMiddle = oImageDimensions.width * oTransform.zoom / 2;
+    const iImageVertivalMiddle = oImageDimensions.height * oTransform.zoom / 2;
+
+    const iStartX = iDestinationCanvasHorizontalMiddle - iImageHorizontalMiddle;
+    const iStartY = iDestinationCanvasVerticalMiddle - iImageVertivalMiddle;
+
+    const oTransformedPoint = {
+        x: iStartX + x * oTransform.zoom,
+        y: iStartY + y * oTransform.zoom
+    };
 
     return oTransformedPoint;
+
 }
 
 const drawImagePixelOnCanvas = function (oDestinationCanvas, oDestinationContext, x, y, oTransform) {
