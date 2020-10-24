@@ -347,56 +347,6 @@ const createCanvas = function (sCanvasId, nZindex, oParent) {
 
 };
 
-const createImageCanvas = function (oParent) {
-
-    if (!oParent) {
-        oParent = document.body;
-    }
-
-    const nZindex = 3;
-    const oCanvas = createCanvas('imageCanvas', nZindex, oParent);
-    return oCanvas;
-
-};
-
-const createControlCanvas = function (oParent) {
-
-    if (!oParent) {
-        oParent = document.body;
-    }
-
-    const nZindex = 2;
-    const oCanvas = createCanvas('controlCanvas', nZindex, oParent);
-    oCanvas.onclick = onTapCanvas;
-
-    return oCanvas;
-    
-};
-
-const createDebugCanvas = function (oParent) {
-
-    if (!oParent) {
-        oParent = document.body;
-    }
-
-    const nZindex = 1;
-    const oCanvas = createCanvas('debugCanvas', nZindex, oParent);
-    return oCanvas;
-
-};
-
-const createGraphicCanvas = function (oParent) {
-
-    if (!oParent) {
-        oParent = document.body;
-    }
-
-    const nZindex = 0;
-    const oCanvas = createCanvas('graphicCanvas', nZindex, oParent);
-    return oCanvas;
-
-};
-
 const createCheckbox = function (sId, bValue, sLabel, oParent) {
 
     if (!oParent) {
@@ -552,8 +502,9 @@ const createControls = function (oTransform) {
 
     oDebugCheckbox.onchange = () => {
         IS_DEBUG = oDebugCheckbox.checked;
-        const sStyle =setBlockVisibility(IS_DEBUG);
+        const sStyle = setBlockVisibility(IS_DEBUG);
         oDebugCanvas.style = sStyle;
+        oDebugDrawCanvas.style = sStyle;
     };
 
 };
@@ -584,17 +535,21 @@ const createPage = function () {
 
 const handleMouseMove = function (e) {
 
-    const oDebugContext = oDebugCanvas.getContext('2d');
-    
-    oDebugContext.clearRect(oOrigin.x, oOrigin.y, oPreviousMousePosition.x - oOrigin.x, oPreviousMousePosition.y - oOrigin.y);
+    if (!IS_DEBUG) {
+        return;
+    }
 
-    oDebugContext.beginPath();
-    oDebugContext.strokeStyle = 'white';
-    oDebugContext.lineWidth = 1;
-    oDebugContext.moveTo(oOrigin.x, oOrigin.y);
-    oDebugContext.lineTo(e.offsetX, e.offsetY);
-    oDebugContext.closePath();
-    oDebugContext.stroke();
+    const oContext = oDebugDrawCanvas.getContext('2d');
+    
+    oContext.clearRect(oOrigin.x, oOrigin.y, oPreviousMousePosition.x - oOrigin.x, oPreviousMousePosition.y - oOrigin.y);
+
+    oContext.beginPath();
+    oContext.strokeStyle = 'white';
+    oContext.lineWidth = 1;
+    oContext.moveTo(oOrigin.x, oOrigin.y);
+    oContext.lineTo(e.offsetX, e.offsetY);
+    oContext.closePath();
+    oContext.stroke();
 
     oPreviousMousePosition.x = e.offsetX;
     oPreviousMousePosition.y = e.offsetY;
@@ -604,21 +559,24 @@ const handleMouseMove = function (e) {
 let IS_DEBUG = false;
 
 const oPage = createPage();
-const oGraphicCanvas = createGraphicCanvas(oPage);
+const oGraphicCanvas = createCanvas('graphicCanvas', 0, oPage);
 
-const oDebugCanvas = createDebugCanvas(oPage);
+const oDebugCanvas = createCanvas('debugCanvas', 1, oPage);
 oDebugCanvas.style = setBlockVisibility(IS_DEBUG);
 
-const oOrigin = {
-    x: oDebugCanvas.width / 2,
-    y: oDebugCanvas.height / 2
-};
+const oDebugDrawCanvas = createCanvas('debugDrawCanvas', 2, oPage);
+oDebugDrawCanvas.style = setBlockVisibility(IS_DEBUG);
 
-const oControlCanvas = createControlCanvas(oPage);
+const oControlCanvas = createCanvas('controlCanvas', 3, oPage);
 oControlCanvas.addEventListener('mousemove', handleMouseMove);
 
-const oImageCanvas = createImageCanvas(oPage);
+const oImageCanvas = createCanvas('imageCanvas', 4, oPage);
 oImageCanvas.style = setBlockVisibility(false);
+
+const oOrigin = {
+    x: oDebugDrawCanvas.width / 2,
+    y: oDebugDrawCanvas.height / 2
+};
 
 const oImage = new Image();
 oImage.src = '../resources/redstars.png';
