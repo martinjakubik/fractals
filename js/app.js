@@ -67,22 +67,22 @@ const degreeInMandelbrotSet = function (c) {
 
 };
 
-const drawImages = function (oTransform) {
+const drawGraphics = function (oTransform, oImageDescription) {
 
     const oGraphicContext = oGraphicCanvas.getContext('2d');
     oGraphicContext.clearRect(0, 0, oGraphicCanvas.width, CANVAS_HEIGHT);
     drawMandelbrotSet(oTransform);
-    drawOverlay(oTransform);
+    drawLoadedImage(oTransform, oImageDescription);
 
 };
 
-const transformPoint = function (x, y, oTransform, oDestinationCanvas, oImageDimensions) {
+const transformPoint = function (oDestinationCanvas, x, y, oTransform, oImageDescription) {
 
     const iDestinationCanvasHorizontalMiddle = oDestinationCanvas.width / 2;
     const iDestinationCanvasVerticalMiddle = oDestinationCanvas.height / 2;
 
-    const iImageHorizontalMiddle = oImageDimensions.width / 2 - oTransform.pan.horizontal;
-    const iImageVerticalMiddle = oImageDimensions.height / 2 - oTransform.pan.vertical;
+    const iImageHorizontalMiddle = oImageDescription.width / 2 - oTransform.pan.horizontal;
+    const iImageVerticalMiddle = oImageDescription.height / 2 - oTransform.pan.vertical;
 
     const iStartX = iDestinationCanvasHorizontalMiddle - iImageHorizontalMiddle * oTransform.zoom;
     const iStartY = iDestinationCanvasVerticalMiddle - iImageVerticalMiddle * oTransform.zoom;
@@ -96,31 +96,27 @@ const transformPoint = function (x, y, oTransform, oDestinationCanvas, oImageDim
 
 }
 
-const drawImagePixelOnCanvas = function (oDestinationCanvas, oDestinationContext, x, y, oTransform) {
+const drawImagePixelOnCanvas = function (oDestinationCanvas, oDestinationContext, x, y, oTransform, oImageDescription) {
 
-    const oImageDimensions = {
-        width: oImage_Width,
-        height: oImage_Height
-    }
-    const oTransformedPoint = transformPoint(x, y, oTransform, oDestinationCanvas, oImageDimensions);
+    const oTransformedPoint = transformPoint(oDestinationCanvas, x, y, oTransform, oImageDescription);
     const index = (x * 4) + (y * 4) * oImageCanvas.width;
 
-    const rDecimal = oImage_Data[index];
-    const gDecimal = oImage_Data[index + 1];
-    const bDecimal = oImage_Data[index + 2];
-    const alphaDecimal = oImage_Data[index + 3] / 255;
+    const rDecimal = oImageDescription.data[index];
+    const gDecimal = oImageDescription.data[index + 1];
+    const bDecimal = oImageDescription.data[index + 2];
+    const alphaDecimal = oImageDescription.data[index + 3] / 255;
     const sRGBA = `rgba(${rDecimal}, ${gDecimal}, ${bDecimal}, ${alphaDecimal})`;
     oDestinationContext.fillStyle = sRGBA;
     oDestinationContext.fillRect(oTransformedPoint.x, oTransformedPoint.y, 1, 1);
 
 };
 
-const drawOverlay = function (oTransform) {
+const drawLoadedImage = function (oTransform, oImageDescription) {
 
     const oGraphicContext = oGraphicCanvas.getContext('2d');
-    for (let x = 0; x < oImage_Width; x++) {
-        for (let y = 0; y < oImage_Height; y++) {
-            drawImagePixelOnCanvas(oGraphicCanvas, oGraphicContext, x, y, oTransform);
+    for (let x = 0; x < oImageDescription.width; x++) {
+        for (let y = 0; y < oImageDescription.height; y++) {
+            drawImagePixelOnCanvas(oGraphicCanvas, oGraphicContext, x, y, oTransform, oImageDescription);
         }
     }
 
@@ -213,7 +209,7 @@ const isTapInZoomOutButton = function (nTapX, nTapY) {
 
 };
 
-const handleTap = function (nTapX, nTapY) {
+const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) {
 
     const bIsTapInZoomInButton = isTapInZoomInButton(nTapX, nTapY);
     const bIsTapInZoomOutButton = isTapInZoomOutButton(nTapX, nTapY);
@@ -246,7 +242,7 @@ const handleTap = function (nTapX, nTapY) {
         const nVerticalOffset = oTapPoint.y - oOrigin.y;
         oCurrentTransform.pan.horizontal = oCurrentTransform.pan.horizontal - nHorizontalOffset;
         oCurrentTransform.pan.vertical = oCurrentTransform.pan.vertical - nVerticalOffset;
-        drawImages(oCurrentTransform);
+        drawGraphics(oCurrentTransform, oImageDescription);
         sControlState = CONTROL_STATE.VIEW;
 
         oPreviousTapPoint.x = nTapX;
@@ -322,7 +318,7 @@ const onTapCanvas = function (oEvent) {
     const nTapX = oEvent.x;
     const nTapY = oEvent.y - VERTICAL_MARGIN;
 
-    handleTap(nTapX, nTapY, oCurrentTransform);
+    handleTap(nTapX, nTapY, oCurrentTransform, oImageDescription);
 
 };
 
@@ -347,11 +343,11 @@ const getCenterImaginaryInputValue = function () {
 }
 
 const handleEnterKeyInNumber = function (oTransform) {
-    drawImages(oTransform);
+    drawGraphics(oTransform, oImageDescription);
 }
 
 const handleDraw = function (oTransform) {
-    drawImages(oTransform);
+    drawGraphics(oTransform, oImageDescription);
 }
 
 const createControls = function (oTransform) {
@@ -364,14 +360,14 @@ const createControls = function (oTransform) {
 
     oPrecisionSlider.onchange = () => {
         nPrecision = oPrecisionSlider.value;
-        drawImages(oTransform);
+        drawGraphics(oTransform, oImageDescription);
     };
 
     const oHueSlider = createSlider('hue', '0', '359', nHue, 'Hue', null, oControlBar);
 
     oHueSlider.onchange = () => {
         nHue = oHueSlider.value;
-        drawImages(oTransform);
+        drawGraphics(oTransform, oImageDescription);
     };
 
     const oCenterRealNumberInput = createNumberInput('centerreal', 0, 'Center real', oControlBar);
@@ -489,9 +485,7 @@ const oOrigin = {
 
 const oImage = new Image();
 oImage.src = '../resources/redstars.png';
-let oImage_Data = {};
-let oImage_Width = 0;
-let oImage_Height = 0;
+let oImageDescription = {};
 
 let nPrecision = 5;
 let nHue = Math.floor(Math.random() * 360);
@@ -531,11 +525,13 @@ const waitUntilImageLoadedAndStart = function () {
         const oImageContext = oImageCanvas.getContext('2d');
         oImageContext.drawImage(oImage, 0, 0);
         const oImageData = oImageContext.getImageData(0, 0, oImageCanvas.width, oImageCanvas.height);
-        oImage_Data = oImageData.data;
-        oImage_Width = oImage.width;
-        oImage_Height = oImage.height;
+        oImageDescription = {
+            data: oImageData.data,
+            width: oImage.width,
+            height: oImage.height
+        };
     
-        drawImages(oCurrentTransform);
+        drawGraphics(oCurrentTransform, oImageDescription);
 
     };
 
