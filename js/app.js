@@ -72,11 +72,11 @@ const drawGraphics = function (oTransform, oImageDescription) {
     const oGraphicContext = oGraphicCanvas.getContext('2d');
     oGraphicContext.clearRect(0, 0, oGraphicCanvas.width, CANVAS_HEIGHT);
     drawMandelbrotSet(oTransform);
-    drawLoadedImage(oTransform, oImageDescription);
+    drawImageOnCanvas(oTransform, oImageDescription);
 
 };
 
-const transformPoint = function (oDestinationCanvas, x, y, oTransform, oImageDescription) {
+const transformPixelPoint = function (oDestinationCanvas, x, y, oTransform, oImageDescription) {
 
     const iDestinationCanvasHorizontalMiddle = oDestinationCanvas.width / 2;
     const iDestinationCanvasVerticalMiddle = oDestinationCanvas.height / 2;
@@ -98,7 +98,7 @@ const transformPoint = function (oDestinationCanvas, x, y, oTransform, oImageDes
 
 const drawImagePixelOnCanvas = function (oDestinationCanvas, oDestinationContext, x, y, oTransform, oImageDescription) {
 
-    const oTransformedPoint = transformPoint(oDestinationCanvas, x, y, oTransform, oImageDescription);
+    const oTransformedPoint = transformPixelPoint(oDestinationCanvas, x, y, oTransform, oImageDescription);
     const index = (x * 4) + (y * 4) * oImageCanvas.width;
 
     const rDecimal = oImageDescription.data[index];
@@ -111,7 +111,7 @@ const drawImagePixelOnCanvas = function (oDestinationCanvas, oDestinationContext
 
 };
 
-const drawLoadedImage = function (oTransform, oImageDescription) {
+const drawImageOnCanvas = function (oTransform, oImageDescription) {
 
     const oGraphicContext = oGraphicCanvas.getContext('2d');
     for (let x = 0; x < oImageDescription.width; x++) {
