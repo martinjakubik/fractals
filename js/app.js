@@ -69,6 +69,8 @@ const degreeInMandelbrotSet = function (c) {
 
 const drawImages = function (oTransform) {
 
+    const oGraphicContext = oGraphicCanvas.getContext('2d');
+    oGraphicContext.clearRect(0, 0, oGraphicCanvas.width, CANVAS_HEIGHT);
     drawMandelbrotSet(oTransform);
     drawOverlay(oTransform);
 
@@ -79,11 +81,11 @@ const transformPoint = function (x, y, oTransform, oDestinationCanvas, oImageDim
     const iDestinationCanvasHorizontalMiddle = oDestinationCanvas.width / 2;
     const iDestinationCanvasVerticalMiddle = oDestinationCanvas.height / 2;
 
-    const iImageHorizontalMiddle = oImageDimensions.width * oTransform.zoom / 2 - oTransform.pan.horizontal;
-    const iImageVerticalMiddle = oImageDimensions.height * oTransform.zoom / 2 - oTransform.pan.vertical;
+    const iImageHorizontalMiddle = oImageDimensions.width / 2 - oTransform.pan.horizontal;
+    const iImageVerticalMiddle = oImageDimensions.height / 2 - oTransform.pan.vertical;
 
-    const iStartX = iDestinationCanvasHorizontalMiddle - iImageHorizontalMiddle;
-    const iStartY = iDestinationCanvasVerticalMiddle - iImageVerticalMiddle;
+    const iStartX = iDestinationCanvasHorizontalMiddle - iImageHorizontalMiddle * oTransform.zoom;
+    const iStartY = iDestinationCanvasVerticalMiddle - iImageVerticalMiddle * oTransform.zoom;
 
     const oTransformedPoint = {
         x: iStartX + x * oTransform.zoom,
@@ -137,9 +139,9 @@ const drawMandelbrotSet = function (oTransform) {
 
     oDebugContext.clearRect(0, 0, nDebugCanvasWidth, CANVAS_HEIGHT);
 
-    sDebugText = `precision: ${nPrecision} pan:${(oTransform.pan.horizontal)} zoom: ${oTransform.zoom} pan/zoom:${(oTransform.pan.horizontal / oTransform.zoom)} last click x: ${oTapPoint.x} center point real: ${((oGraphicCanvas.width / 2) - oTransform.pan.horizontal) / oTransform.zoom}`;
+    sDebugText = `precision: ${nPrecision} pan:${(oTransform.pan.horizontal)} zoom: ${oTransform.zoom} pan/zoom:${(oTransform.pan.horizontal / oTransform.zoom)} last click: (${oTapPoint.x}, ${oTapPoint.y}) center point real: ${((oGraphicCanvas.width / 2) - oTransform.pan.horizontal) / oTransform.zoom}`;
     oDebugContext.fillStyle = STROKE_COLOR_NORMAL;
-    oDebugContext.fillText(sDebugText, 800, 580);
+    oDebugContext.fillText(sDebugText, 80, 580);
 
     for (x = 0; x < oGraphicCanvas.width; x++) {
         for (y = 0; y < oGraphicCanvas.height; y++) {
@@ -344,11 +346,11 @@ const getCenterImaginaryInputValue = function () {
     return oCenterImaginaryNumberInput.value;
 }
 
-const _handleEnterKeyInNumber = function (oTransform) {
+const handleEnterKeyInNumber = function (oTransform) {
     drawImages(oTransform);
 }
 
-const _handleDraw = function (oTransform) {
+const handleDraw = function (oTransform) {
     drawImages(oTransform);
 }
 
@@ -381,7 +383,7 @@ const createControls = function (oTransform) {
                 imaginary: oCenterImaginaryNumberInput.value
             }
             oTransform.pan.horizontal = (oGraphicCanvas.width / 2) - getPointFromComplexNumber(c, oTransform).x;
-            _handleDraw(oTransform);
+            handleDraw(oTransform);
         }
     };
 
@@ -394,14 +396,14 @@ const createControls = function (oTransform) {
                 imaginary: oCenterImaginaryNumberInput.value
             }
             oTransform.pan.vertical = getPointFromComplexNumber(c, oTransform).y;
-            _handleDraw(oTransform);
+            handleDraw(oTransform);
         }
     }
 
     const oDrawButton = createButton('draw', 'Draw', oControlBar);
 
     oDrawButton.onclick = () => {
-        _handleDraw(oTransform);
+        handleDraw(oTransform);
     };
 
     const oDebugCheckbox = createCheckbox('debug', IS_DEBUG, 'Debug', oControlBar);
