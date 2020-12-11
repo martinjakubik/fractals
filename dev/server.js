@@ -1,50 +1,78 @@
-var oHttp = require("http");
-var oUrl = require("url");
-var oFs = require("fs");
-var oPath = require("path");
-var sBaseDirectory = ".";
+let oHttp = require('http');
+let oUrl = require('url');
+let oFs = require('fs');
+let oPath = require('path');
+let sBaseDirectory = '.';
 
-var port = 1995;
+let nPort = 1995;
+
+let getDefaultIfBlankPath = function (sPath) {
+    let sDefaultPath = sPath;
+
+    if (process.platform === 'win32') {
+        if (sPath === '.\\') {
+            sDefaultPath = '.\\index.html';
+        }
+    } else {
+        if (sPath === './') {
+            sDefaultPath = './index.html';
+        }
+    }
+
+    return sDefaultPath;
+}
+
+let getContentType = function (sPath) {
+    let sContentType = 'text/plain';
+
+    if (process.platform === 'win32' && sPath === '.\\index.html') {
+        sContentType = 'text/html';
+    } else if (sPath === './index.html') {
+        sContentType = 'text/html';
+    } else if (sPath.includes('/css/')) {
+        sContentType = 'text/css';
+    } else if (sPath.includes('/html/')) {
+        sContentType = 'text/html';
+    } else if (sPath.includes('/js/')) {
+        sContentType = 'application/javascript';
+    }
+
+    return sContentType;
+}
 
 oHttp.createServer(function (oRequest, oResponse) {
-   try {
-     var oRequestUrl = oUrl.parse(oRequest.url);
+    try {
+        let oRequestUrl = oUrl.parse(oRequest.url);
 
-     var sPath = oRequestUrl.pathname;
+        let sPath = oRequestUrl.pathname;
 
-     // need to use oPath.normalize so people can't access directories underneath sBaseDirectory
-     var sFSPath = sBaseDirectory + oPath.normalize(sPath);
-     console.log("path: \"" + sFSPath + "\"");
+        // need to use oPath.normalize so people can't access directories underneath sBaseDirectory
+        let sFSPath = sBaseDirectory + oPath.normalize(sPath);
 
-     var sContentType = "text/plain";
+        let sFinalPath = getDefaultIfBlankPath(sFSPath);
 
-     if (sFSPath.includes("/css/")) {
-         sContentType = "text/css";
-     } else if (sFSPath.includes("/html/")) {
-         sContentType = "text/html";
-     } else if (sFSPath.includes("/js/")) {
-         sContentType = "application/javascript";
-     }
+        let sContentType = getContentType(sFinalPath);
 
-     var oHeaders =  {
-        "Content-Type": sContentType
-     };
+        let oHeaders =  {
+           'Content-Type': sContentType
+        };
 
-     oResponse.writeHead(200, oHeaders);
-     var oFileStream = oFs.createReadStream(sFSPath);
-     oFileStream.pipe(oResponse);
-     oFileStream.on('error',function(e) {
-         // assumes the file doesn't exist
-         oResponse.writeHead(404);
-         oResponse.end()
-     });
-   } catch(e) {
-     oResponse.writeHead(500);
+        oResponse.writeHead(200, oHeaders);
+        let oFileStream = oFs.createReadStream(sFinalPath);
+        oFileStream.pipe(oResponse);
+        oFileStream.on('error', function(e) {
+            // assumes the file doesn't exist
+            oResponse.writeHead(404);
+            oResponse.end()
+        });
+    } catch(e) {
+        oResponse.writeHead(500);
 
-     // ends the oResponse so browsers don't hang
-     oResponse.end();
-     console.log(e.stack)
-   }
-}).listen(port);
+        // ends the oResponse so browsers don't hang
+        oResponse.end();
+        console.log(e.stack)
+    }
 
-console.log("listening on port \"" + port + "\"");
+}).listen(process.env.PORT || nPort);
+
+console.log(`listening on port '${nPort}'`);
