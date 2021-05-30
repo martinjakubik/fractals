@@ -1,7 +1,8 @@
-let oHttp = require('http');
-let oUrl = require('url');
-let oFs = require('fs');
-let oPath = require('path');
+import * as oHttp from 'http';
+import * as oUrl from 'url';
+import * as oFs from 'fs';
+import * as oPath from 'path';
+
 let sBaseDirectory = '.';
 
 let nPort = 1995;
