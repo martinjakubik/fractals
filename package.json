@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/martinjakubik/fractals/issues"
   },
-  "homepage": "https://github.com/martinjakubik/fractals#readme"
+  "homepage": "https://github.com/martinjakubik/fractals#readme",
+  "dependencies": {
+    "learnhypertext": "^1.1.0"
+  }
 }
