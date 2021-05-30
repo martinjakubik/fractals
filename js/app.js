@@ -78,6 +78,10 @@ const drawGraphics = function (oTransform, oImageDescription) {
 
 const transformPixelPoint = function (oDestinationCanvas, x, y, oTransform, oImageDescription) {
 
+    let bDebugMe = false;
+    if (Math.abs(x - 80) < 5 && Math.abs(y - 117) < 5) {
+        bDebugMe = true;
+    }
     const iDestinationCanvasHorizontalMiddle = oDestinationCanvas.width / 2;
     const iDestinationCanvasVerticalMiddle = oDestinationCanvas.height / 2;
 
