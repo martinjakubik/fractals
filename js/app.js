@@ -1,4 +1,4 @@
-import { CANVAS_HEIGHT, createButton, createCanvas, createCheckbox, createNumberInput, createSlider, setBlockVisibility } from './lib/hypertext.js';
+import { CANVAS_HEIGHT, createButton, createCanvas, createCheckbox, createNumberInput, createSlider, setBlockVisibility } from '../../lib/js/learnhypertext.mjs';
 
 const VERTICAL_MARGIN = 36;
 const ZOOM_LENS_RADIUS = 50;
