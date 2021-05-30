@@ -1,0 +1,23 @@
+{
+  "name": "fractals",
+  "version": "1.0.0",
+  "description": "navigates mandelbrot set",
+  "main": "dev/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martinjakubik/fractals.git"
+  },
+  "keywords": [
+    "fractals",
+    "graphics"
+  ],
+  "author": "martin jakubik",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/martinjakubik/fractals/issues"
+  },
+  "homepage": "https://github.com/martinjakubik/fractals#readme"
+}
