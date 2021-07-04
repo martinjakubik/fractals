@@ -34,6 +34,10 @@ let getContentType = function (sPath) {
         sContentType = 'text/css';
     } else if (sPath.includes('/html/')) {
         sContentType = 'text/html';
+    } else if (sPath.includes('/resources/')) {
+        sContentType = 'image/png';
+    } else if (process.platform === 'win32' && sPath.includes('\\resources\\')) {
+        sContentType = 'image/png';
     } else if (sPath.includes('/js/')) {
         sContentType = 'application/javascript';
     }
@@ -51,8 +55,9 @@ oHttp.createServer(function (oRequest, oResponse) {
         let sFSPath = sBaseDirectory + oPath.normalize(sPath);
 
         let sFinalPath = getDefaultIfBlankPath(sFSPath);
-
         let sContentType = getContentType(sFinalPath);
+
+        console.log(`final path: '${sFinalPath}'; content type: '${sContentType}'`);
 
         let oHeaders =  {
            'Content-Type': sContentType
