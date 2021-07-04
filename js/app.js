@@ -459,8 +459,12 @@ const onMouseMoveOnCanvas = function (oEvent) {
         return;
     }
 
+    const nTextBoxWidth = 60;
+    const nTextBoxHeight = 14;
     const oContext = oDebugDrawCanvas.getContext('2d');
-    
+
+    oContext.clearRect(oPreviousMousePosition.x + 10, oPreviousMousePosition.y, nTextBoxWidth, nTextBoxHeight);
+
     oContext.beginPath();
     oContext.lineWidth = 3;
     oContext.globalCompositeOperation = 'destination-out';
@@ -477,6 +481,13 @@ const onMouseMoveOnCanvas = function (oEvent) {
     oContext.lineTo(oEvent.offsetX, oEvent.offsetY);
     oContext.closePath();
     oContext.stroke();
+
+    oContext.fillStyle = '#000';
+    oContext.fillRect(oEvent.offsetX + 10, oEvent.offsetY, nTextBoxWidth, nTextBoxHeight);
+    
+    const sDebugText1 = `x:${oEvent.offsetX}, y:${oEvent.offsetY}`;
+    oContext.fillStyle = STROKE_COLOR_NORMAL;
+    oContext.fillText(sDebugText1, oEvent.offsetX + 10, oEvent.offsetY + 10);
 
     oPreviousMousePosition.x = oEvent.offsetX;
     oPreviousMousePosition.y = oEvent.offsetY;
