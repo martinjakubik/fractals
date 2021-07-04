@@ -459,8 +459,8 @@ const onMouseMoveOnCanvas = function (oEvent) {
         return;
     }
 
-    const nTextBoxWidth = 60;
-    const nTextBoxHeight = 14;
+    const nTextBoxWidth = 120;
+    const nTextBoxHeight = 28;
     const oContext = oDebugDrawCanvas.getContext('2d');
 
     oContext.clearRect(oPreviousMousePosition.x + 10, oPreviousMousePosition.y, nTextBoxWidth, nTextBoxHeight);
@@ -486,8 +486,11 @@ const onMouseMoveOnCanvas = function (oEvent) {
     oContext.fillRect(oEvent.offsetX + 10, oEvent.offsetY, nTextBoxWidth, nTextBoxHeight);
     
     const sDebugText1 = `x:${oEvent.offsetX}, y:${oEvent.offsetY}`;
+    const oTransformedPoint = transformXY(oEvent.offsetX, oEvent.offsetY, oCurrentTransform);
+    const sDebugText2 = `x:${oTransformedPoint.x}, y:${oTransformedPoint.y}`;
     oContext.fillStyle = STROKE_COLOR_NORMAL;
     oContext.fillText(sDebugText1, oEvent.offsetX + 10, oEvent.offsetY + 10);
+    oContext.fillText(sDebugText2, oEvent.offsetX + 10, oEvent.offsetY + 24);
 
     oPreviousMousePosition.x = oEvent.offsetX;
     oPreviousMousePosition.y = oEvent.offsetY;
