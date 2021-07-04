@@ -449,7 +449,14 @@ const onMouseMoveOnCanvas = function (oEvent) {
 
     const oContext = oDebugDrawCanvas.getContext('2d');
     
-    oContext.clearRect(oOrigin.x, oOrigin.y, oPreviousMousePosition.x - oOrigin.x, oPreviousMousePosition.y - oOrigin.y);
+    oContext.beginPath();
+    oContext.lineWidth = 3;
+    oContext.globalCompositeOperation = 'destination-out';
+    oContext.moveTo(oOrigin.x, oOrigin.y);
+    oContext.lineTo(oPreviousMousePosition.x, oPreviousMousePosition.y);
+    oContext.closePath();
+    oContext.stroke();
+    oContext.globalCompositeOperation = 'source-over';
 
     oContext.beginPath();
     oContext.strokeStyle = STROKE_COLOR_NORMAL;
