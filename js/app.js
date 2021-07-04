@@ -495,7 +495,7 @@ const oOrigin = {
 };
 
 const oImage = new Image();
-oImage.src = '../resources/redstars.png';
+oImage.src = '../resources/flower.png';
 let oImageDescription = {};
 
 let nPrecision = 5;
