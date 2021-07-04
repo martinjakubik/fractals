@@ -23,12 +23,24 @@ const getComplexNumberFromPoint = function (oPoint, oTransform) {
 
 const getComplexNumberFromXY = function (x, y, oTransform) {
 
+    const oTransformedXY = transformXY(x, y, oTransform);
     const oComplexNumber = {
-        real: (x - oTransform.pan.horizontal) / oTransform.zoom,
-        imaginary: (y - oTransform.pan.vertical) / oTransform.zoom
+        real: oTransformedXY.x,
+        imaginary: oTransformedXY.y
     }
 
     return oComplexNumber;
+
+};
+
+const transformXY = function (x, y, oTransform) {
+
+    const oTransformedXY = {
+        x: (x - oTransform.pan.horizontal) / oTransform.zoom,
+        y: (y - oTransform.pan.vertical) / oTransform.zoom
+    }
+
+    return oTransformedXY;
 
 };
 
