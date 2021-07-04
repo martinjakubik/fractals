@@ -70,8 +70,8 @@ const degreeInMandelbrotSet = function (c) {
 const drawGraphics = function (oTransform, oImageDescription) {
 
     const oGraphicContext = oGraphicCanvas.getContext('2d');
-    oGraphicContext.clearRect(0, 0, oGraphicCanvas.width, CANVAS_HEIGHT);
-    drawMandelbrotSet(oTransform);
+    oGraphicContext.clearRect(0, 0, oGraphicCanvas.width, oGraphicCanvas.height);
+    // drawMandelbrotSet(oTransform);
     drawImageOnCanvas(oTransform, oImageDescription);
 
 };
@@ -137,7 +137,7 @@ const drawMandelbrotSet = function (oTransform) {
     let sDebugText = '';
     oDebugContext.font = '8pt sans-serif';
 
-    oDebugContext.clearRect(0, 0, nDebugCanvasWidth, CANVAS_HEIGHT);
+    oDebugContext.clearRect(0, 0, nDebugCanvasWidth, oDebugCanvas.height);
 
     sDebugText = `precision: ${nPrecision} pan:${(oTransform.pan.horizontal)} zoom: ${oTransform.zoom} pan/zoom:${(oTransform.pan.horizontal / oTransform.zoom)} last click: (${oTapPoint.x}, ${oTapPoint.y}) center point real: ${((oGraphicCanvas.width / 2) - oTransform.pan.horizontal) / oTransform.zoom}`;
     oDebugContext.fillStyle = STROKE_COLOR_NORMAL;
@@ -313,7 +313,7 @@ const hideZoomControl = function () {
 
     const oContext = oControlCanvas.getContext('2d');
     const nParentWidth = oControlCanvas.parentNode.clientWidth;
-    oContext.clearRect(0, 0, nParentWidth, CANVAS_HEIGHT);
+    oContext.clearRect(0, 0, nParentWidth, oControlCanvas.height);
 
 };
 
