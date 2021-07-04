@@ -467,19 +467,19 @@ const onMouseMoveOnCanvas = function (oEvent) {
 let IS_DEBUG = false;
 
 const oPage = createPage();
-const oGraphicCanvas = createCanvas('graphicCanvas', 0, oPage);
+const oGraphicCanvas = createCanvas('graphicCanvas', '', 0, oPage);
 
-const oDebugCanvas = createCanvas('debugCanvas', 1, oPage);
+const oDebugCanvas = createCanvas('debugCanvas', '', 1, oPage);
 oDebugCanvas.style = setBlockVisibility(IS_DEBUG);
 
-const oDebugDrawCanvas = createCanvas('debugDrawCanvas', 2, oPage);
+const oDebugDrawCanvas = createCanvas('debugDrawCanvas', '', 2, oPage);
 oDebugDrawCanvas.style = setBlockVisibility(IS_DEBUG);
 
-const oControlCanvas = createCanvas('controlCanvas', 3, oPage);
+const oControlCanvas = createCanvas('controlCanvas', '', 3, oPage);
 oControlCanvas.addEventListener('mousemove', onMouseMoveOnCanvas);
 oControlCanvas.addEventListener('click', onTapCanvas);
 
-const oImageCanvas = createCanvas('imageCanvas', 4, oPage);
+const oImageCanvas = createCanvas('imageCanvas', '', 4, oPage);
 oImageCanvas.style = setBlockVisibility(false);
 
 const oOrigin = {
@@ -488,7 +488,7 @@ const oOrigin = {
 };
 
 const oImage = new Image();
-oImage.src = '../resources/redstars.png';
+// oImage.src = '../resources/redstars.png';
 let oImageDescription = {};
 
 let nPrecision = 5;
