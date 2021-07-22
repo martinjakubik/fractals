@@ -93,11 +93,12 @@ const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton
     case CONTROL_STATE.CHOOSE_ZOOM:
         if (bIsTapInZoomInButton) {
             sControlState = CONTROL_STATE.ZOOMED_IN;
-            return;
         } else if (bIsTapInZoomOutButton) {
             sControlState = CONTROL_STATE.ZOOMED_OUT;
-            return;
+        } else {
+            sControlState = CONTROL_STATE.VIEW;
         }
+        return;
     }
 
 };
@@ -116,7 +117,6 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
     } else if (sControlState === CONTROL_STATE.CHOOSE_ZOOM) {
 
         const oControlContext = oControlCanvas.getContext('2d');
-        Zoom.hideZoomButtons(oControlCanvas);
         Zoom.showZoomButtons(nTapX, nTapY, oControlContext, STROKE_COLOR_NORMAL);
         oTapPoint = {
             x: nTapX,
