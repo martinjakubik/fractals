@@ -116,6 +116,7 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
     } else if (sControlState === CONTROL_STATE.CHOOSE_ZOOM) {
 
         const oControlContext = oControlCanvas.getContext('2d');
+        Zoom.hideZoomButtons(oControlCanvas);
         Zoom.showZoomButtons(nTapX, nTapY, oControlContext, STROKE_COLOR_NORMAL);
         oTapPoint = {
             x: nTapX,
