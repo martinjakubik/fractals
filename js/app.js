@@ -25,7 +25,7 @@ const getComplexNumberFromXY = function (x, y, oTransform) {
     const oComplexNumber = {
         real: oTransformedXY.x,
         imaginary: oTransformedXY.y
-    }
+    };
 
     return oComplexNumber;
 
@@ -36,7 +36,7 @@ const transformXY = function (x, y, oTransform) {
     const oTransformedXY = {
         x: (x - oTransform.pan.horizontal) / oTransform.zoom,
         y: (y - oTransform.pan.vertical) / oTransform.zoom
-    }
+    };
 
     return oTransformedXY;
 
@@ -108,7 +108,7 @@ const transformPixelPoint = function (oDestinationCanvas, x, y, oTransform, oIma
 
     return oTransformedPoint;
 
-}
+};
 
 const drawImagePixelOnCanvas = function (oDestinationCanvas, oDestinationContext, x, y, oTransform, oImageDescription) {
 
@@ -179,27 +179,27 @@ const drawMandelbrotSet = function (oTransform) {
         }
     }
 
-}
+};
 
 const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton) {
 
     switch (sControlState) {
-        case CONTROL_STATE.VIEW:
-            sControlState = CONTROL_STATE.CHOOSE_ZOOM;
+    case CONTROL_STATE.VIEW:
+        sControlState = CONTROL_STATE.CHOOSE_ZOOM;
+        return;
+    case CONTROL_STATE.ZOOMED_IN:
+    case CONTROL_STATE.CHOOSE_ZOOM:
+        if (bIsTapInZoomInButton) {
+            sControlState = CONTROL_STATE.ZOOMED_IN;
             return;
-        case CONTROL_STATE.ZOOMED_IN:
-        case CONTROL_STATE.CHOOSE_ZOOM:
-            if (bIsTapInZoomInButton) {
-                sControlState = CONTROL_STATE.ZOOMED_IN;
-                return;
-            } else if (bIsTapInZoomOutButton) {
-                sControlState = CONTROL_STATE.ZOOMED_OUT;
-                return;
-            }
-        default:
-            sControlState = CONTROL_STATE.VIEW;
+        } else if (bIsTapInZoomOutButton) {
+            sControlState = CONTROL_STATE.ZOOMED_OUT;
             return;
-    };
+        }
+    default:
+        sControlState = CONTROL_STATE.VIEW;
+        return;
+    }
 
 };
 
@@ -209,7 +209,7 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
     const bIsTapInZoomInButton = Zoom.isTapInZoomInButton(nTapX, nTapY, oZoomControlCenterPoint);
     const bIsTapInZoomOutButton = Zoom.isTapInZoomOutButton(nTapX, nTapY, oZoomControlCenterPoint);
     updateControlState(bIsTapInZoomInButton, bIsTapInZoomOutButton);
-    
+
     if (sControlState === CONTROL_STATE.VIEW) {
 
         Zoom.hideZoomButtons(oControlCanvas);
@@ -221,7 +221,7 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
         oTapPoint = {
             x: nTapX,
             y: nTapY
-        }
+        };
         const c = getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
         setCenterRealInputValue(c.real);
         setCenterImaginaryInputValue(c.imaginary);
@@ -260,30 +260,30 @@ const onTapCanvas = function (oEvent) {
 const setCenterRealInputValue = function (nRealValue) {
     const oCenterRealNumberInput = document.getElementById('centerreal');
     oCenterRealNumberInput.value = nRealValue;
-}
+};
 
 const setCenterImaginaryInputValue = function (nImaginaryValue) {
     const oCenterImaginaryNumberInput = document.getElementById('centerimaginary');
     oCenterImaginaryNumberInput.value = nImaginaryValue;
-}
+};
 
 const getCenterRealInputValue = function () {
     const oCenterRealNumberInput = document.getElementById('centerreal');
     return oCenterRealNumberInput.value;
-}
+};
 
 const getCenterImaginaryInputValue = function () {
     const oCenterImaginaryNumberInput = document.getElementById('centerimaginary');
     return oCenterImaginaryNumberInput.value;
-}
+};
 
 const handleEnterKeyInNumber = function (oTransform) {
     drawGraphics(oTransform, oImageDescription);
-}
+};
 
 const handleDraw = function (oTransform) {
     drawGraphics(oTransform, oImageDescription);
-}
+};
 
 const createControls = function (oTransform) {
 
@@ -312,7 +312,7 @@ const createControls = function (oTransform) {
             const c = {
                 real: oCenterRealNumberInput.value,
                 imaginary: oCenterImaginaryNumberInput.value
-            }
+            };
             oTransform.pan.horizontal = (oGraphicCanvas.width / 2) - getPointFromComplexNumber(c, oTransform).x;
             handleDraw(oTransform);
         }
@@ -325,11 +325,11 @@ const createControls = function (oTransform) {
             const c = {
                 real: oCenterRealNumberInput.value,
                 imaginary: oCenterImaginaryNumberInput.value
-            }
+            };
             oTransform.pan.vertical = getPointFromComplexNumber(c, oTransform).y;
             handleDraw(oTransform);
         }
-    }
+    };
 
     const oDrawButton = createButton('draw', 'Draw', oControlBar);
 
@@ -359,7 +359,7 @@ const createPage = function () {
     oPage.style.width = nParentWidth;
     oPage.style.height = CANVAS_HEIGHT;
 
-    const nMarginSide = Math.floor(( nParentWidth - oPage.width ) / 2 );
+    const nMarginSide = Math.floor((nParentWidth - oPage.width) / 2);
     const sMarginSide = nMarginSide + "px";
     const sMarginVertical = VERTICAL_MARGIN + "px";
 
@@ -403,7 +403,7 @@ const onMouseMoveOnCanvas = function (oEvent) {
 
     oContext.fillStyle = '#000';
     oContext.fillRect(oEvent.offsetX + 10, oEvent.offsetY, nTextBoxWidth, nTextBoxHeight);
-    
+
     const sDebugText1 = `x:${oEvent.offsetX}, y:${oEvent.offsetY}`;
     const oTransformedPoint = transformXY(oEvent.offsetX, oEvent.offsetY, oCurrentTransform);
     const sDebugText2 = `x:${oTransformedPoint.x}, y:${oTransformedPoint.y}`;
@@ -458,12 +458,12 @@ let sControlState = CONTROL_STATE.VIEW;
 let oPreviousTapPoint = {
     x: oGraphicCanvas.width / 2,
     y: oGraphicCanvas.height / 2
-}
+};
 
 let oTapPoint = {
     x: oGraphicCanvas.width / 2,
     y: oGraphicCanvas.height / 2
-}
+};
 
 let oPreviousMousePosition = {
     x: oOrigin.x,
@@ -486,7 +486,7 @@ const waitUntilImageLoadedAndStart = function () {
             width: oImage.width,
             height: oImage.height
         };
-    
+
         drawGraphics(oCurrentTransform, oImageDescription);
 
     };
