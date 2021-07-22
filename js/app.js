@@ -1,11 +1,12 @@
 import { CANVAS_HEIGHT, createButton, createCanvas, createCheckbox, createNumberInput, createSlider, setBlockVisibility } from '../../lib/js/learnhypertext.mjs';
 import { Zoom } from './zoom.mjs';
+import { Mandelbrot } from './mandelbrot.mjs';
+
 
 const VERTICAL_MARGIN = 36;
 
 const ZOOM_MULTIPLIER = 2;
 
-const MANDELBROT_PRECISION_SMALL_VALUE = 5;
 const STROKE_COLOR_NORMAL = '#aaa';
 
 const CONTROL_STATE = {
@@ -13,33 +14,6 @@ const CONTROL_STATE = {
     CHOOSE_ZOOM: 1,
     ZOOMED_IN: 2,
     ZOOMED_OUT: 3
-};
-
-const getComplexNumberFromPoint = function (oPoint, oTransform) {
-    return getComplexNumberFromXY(oPoint.x, oPoint.y, oTransform);
-};
-
-const getComplexNumberFromXY = function (x, y, oTransform) {
-
-    const oTransformedXY = transformXY(x, y, oTransform);
-    const oComplexNumber = {
-        real: oTransformedXY.x,
-        imaginary: oTransformedXY.y
-    };
-
-    return oComplexNumber;
-
-};
-
-const transformXY = function (x, y, oTransform) {
-
-    const oTransformedXY = {
-        x: (x - oTransform.pan.horizontal) / oTransform.zoom,
-        y: (y - oTransform.pan.vertical) / oTransform.zoom
-    };
-
-    return oTransformedXY;
-
 };
 
 const getPointFromComplexNumber = function (c, oTransform) {
@@ -53,45 +27,17 @@ const getPointFromComplexNumber = function (c, oTransform) {
 
 };
 
-const degreeInMandelbrotSet = function (c) {
-
-    let iIncrementalRealComponent = c.real;
-    let iIncrementalImaginaryComponent = c.imaginary;
-
-    let j = 0;
-    for (j = 0; j < nPrecision; j++) {
-
-        let iTempRealComponent = iIncrementalRealComponent * iIncrementalRealComponent - iIncrementalImaginaryComponent * iIncrementalImaginaryComponent + c.real;
-        let iTempImaginaryComponent = 2 * iIncrementalRealComponent * iIncrementalImaginaryComponent + c.imaginary;
-
-        iIncrementalRealComponent = iTempRealComponent;
-        iIncrementalImaginaryComponent = iTempImaginaryComponent;
-
-        if (iIncrementalRealComponent * iIncrementalImaginaryComponent > MANDELBROT_PRECISION_SMALL_VALUE) {
-            return j / nPrecision * 100;
-        }
-
-    }
-
-    return 0;
-
-};
-
 const drawGraphics = function (oTransform, oImageDescription) {
 
     const oGraphicContext = oGraphicCanvas.getContext('2d');
     oGraphicContext.clearRect(0, 0, oGraphicCanvas.width, oGraphicCanvas.height);
-    // drawMandelbrotSet(oTransform);
+    Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, STROKE_COLOR_NORMAL, nHue, oTapPoint);
     drawImageOnCanvas(oTransform, oImageDescription);
 
 };
 
 const transformPixelPoint = function (oDestinationCanvas, x, y, oTransform, oImageDescription) {
 
-    let bDebugMe = false;
-    if (Math.abs(x - 80) < 5 && Math.abs(y - 117) < 5) {
-        bDebugMe = true;
-    }
     const iDestinationCanvasHorizontalMiddle = oDestinationCanvas.width / 2;
     const iDestinationCanvasVerticalMiddle = oDestinationCanvas.height / 2;
 
@@ -131,51 +77,6 @@ const drawImageOnCanvas = function (oTransform, oImageDescription) {
     for (let x = 0; x < oImageDescription.width; x++) {
         for (let y = 0; y < oImageDescription.height; y++) {
             drawImagePixelOnCanvas(oGraphicCanvas, oGraphicContext, x, y, oTransform, oImageDescription);
-        }
-    }
-
-};
-
-const drawMandelbrotSet = function (oTransform) {
-
-    const oGraphicContext = oGraphicCanvas.getContext('2d');
-    const oDebugContext = oDebugCanvas.getContext('2d');
-    const nDebugCanvasWidth = oDebugCanvas.parentNode.clientWidth;
-
-    let x = 0;
-    let y = 0;
-    let sDebugText = '';
-    oDebugContext.font = '8pt sans-serif';
-
-    oDebugContext.clearRect(0, 0, nDebugCanvasWidth, oDebugCanvas.height);
-
-    sDebugText = `precision: ${nPrecision} pan:${(oTransform.pan.horizontal)} zoom: ${oTransform.zoom} pan/zoom:${(oTransform.pan.horizontal / oTransform.zoom)} last click: (${oTapPoint.x}, ${oTapPoint.y}) center point real: ${((oGraphicCanvas.width / 2) - oTransform.pan.horizontal) / oTransform.zoom}`;
-    oDebugContext.fillStyle = STROKE_COLOR_NORMAL;
-    oDebugContext.fillText(sDebugText, 80, 580);
-
-    for (x = 0; x < oGraphicCanvas.width; x++) {
-        for (y = 0; y < oGraphicCanvas.height; y++) {
-
-            const c = getComplexNumberFromXY(x, y, oTransform);
-
-            // debug
-            if (x % 200 === 0 && y % 200 === 0) {
-                const sDebugText1 = `x:${x},y:${y}`;
-                const sDebugText2 = `r:${c.real}, i:${c.imaginary}`;
-                oDebugContext.fillStyle = STROKE_COLOR_NORMAL;
-                oDebugContext.fillText(sDebugText1, x, y + 8);
-                oDebugContext.fillText(sDebugText2, x, y + 22);
-            }
-
-            const nDegreeInSet = degreeInMandelbrotSet(c);
-
-            if (nDegreeInSet === 0) {
-                oGraphicContext.fillStyle = '#000';
-                oGraphicContext.fillRect(x, y, 1, 1);
-            } else {
-                oGraphicContext.fillStyle = `hsl(${nHue}, 100%, ${nDegreeInSet}%)`;
-                oGraphicContext.fillRect(x, y, 1, 1);
-            }
         }
     }
 
@@ -222,7 +123,7 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
             x: nTapX,
             y: nTapY
         };
-        const c = getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
+        const c = Mandelbrot.getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
         setCenterRealInputValue(c.real);
         setCenterImaginaryInputValue(c.imaginary);
 
@@ -405,7 +306,7 @@ const onMouseMoveOnCanvas = function (oEvent) {
     oContext.fillRect(oEvent.offsetX + 10, oEvent.offsetY, nTextBoxWidth, nTextBoxHeight);
 
     const sDebugText1 = `x:${oEvent.offsetX}, y:${oEvent.offsetY}`;
-    const oTransformedPoint = transformXY(oEvent.offsetX, oEvent.offsetY, oCurrentTransform);
+    const oTransformedPoint = Mandelbrot.transformXY(oEvent.offsetX, oEvent.offsetY, oCurrentTransform);
     const sDebugText2 = `x:${oTransformedPoint.x}, y:${oTransformedPoint.y}`;
     oContext.fillStyle = STROKE_COLOR_NORMAL;
     oContext.fillText(sDebugText1, oEvent.offsetX + 10, oEvent.offsetY + 10);
@@ -470,7 +371,7 @@ let oPreviousMousePosition = {
     y: oOrigin.y
 };
 
-let c = getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
+let c = Mandelbrot.getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
 
 const waitUntilImageLoadedAndStart = function () {
 
