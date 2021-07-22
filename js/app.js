@@ -97,9 +97,6 @@ const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton
             sControlState = CONTROL_STATE.ZOOMED_OUT;
             return;
         }
-    default:
-        sControlState = CONTROL_STATE.VIEW;
-        return;
     }
 
 };
@@ -375,7 +372,7 @@ let c = Mandelbrot.getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
 
 const waitUntilImageLoadedAndStart = function () {
 
-    const fnHandleImageLoaded = e => {
+    const fnHandleImageLoaded = () => {
 
         oImage.removeEventListener('load', fnHandleImageLoaded);
 
