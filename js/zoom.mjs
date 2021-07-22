@@ -2,7 +2,7 @@ const definitions = {
     ZOOM_LENS_RADIUS: 50,
     ZOOM_BUTTON_RADIUS_RATIO: 4,
     ZOOM_OUT_BUTTON_DISTANCE: 120
-}
+};
 
 definitions.ZOOM_BUTTON_RADIUS = definitions.ZOOM_LENS_RADIUS / definitions.ZOOM_BUTTON_RADIUS_RATIO;
 
@@ -18,7 +18,7 @@ class Zoom {
 
         return (Math.sqrt((nTapX - oZoomCenterPoint.x) ** 2 + (nTapY - oZoomCenterPoint.y) ** 2) < definitions.ZOOM_BUTTON_RADIUS);
 
-    };
+    }
 
     static isTapInZoomOutButton (nTapX, nTapY, oZoomCenterPoint) {
 
@@ -32,7 +32,7 @@ class Zoom {
             || (Math.sqrt((nTapX - oZoomCenterPoint.x) ** 2 + (y1 - oZoomCenterPoint.y) ** 2) < definitions.ZOOM_BUTTON_RADIUS)
             || (Math.sqrt((nTapX - oZoomCenterPoint.x) ** 2 + (y2 - oZoomCenterPoint.y) ** 2) < definitions.ZOOM_BUTTON_RADIUS);
 
-    };
+    }
 
     static showZoomButtons (x, y, oContext, sStrokeColor) {
 
@@ -69,7 +69,7 @@ class Zoom {
         drawZoomOutButton(x, y1, oContext);
         drawZoomOutButton(x, y2, oContext);
 
-    };
+    }
 
     static hideZoomButtons (oCanvas) {
 
@@ -77,7 +77,7 @@ class Zoom {
         const nParentWidth = oCanvas.parentNode.clientWidth;
         oContext.clearRect(0, 0, nParentWidth, oCanvas.height);
 
-    };
+    }
 
 }
 
