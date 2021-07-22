@@ -1,9 +1,7 @@
 import { CANVAS_HEIGHT, createButton, createCanvas, createCheckbox, createNumberInput, createSlider, setBlockVisibility } from '../../lib/js/learnhypertext.mjs';
+import { Zoom } from './zoom.mjs';
 
 const VERTICAL_MARGIN = 36;
-const ZOOM_LENS_RADIUS = 50;
-const ZOOM_BUTTON_RADIUS = ZOOM_LENS_RADIUS / 4;
-const ZOOM_OUT_BUTTON_DISTANCE = 120;
 
 const ZOOM_MULTIPLIER = 2;
 
@@ -205,30 +203,11 @@ const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton
 
 };
 
-const isTapInZoomInButton = function (nTapX, nTapY) {
-
-    return (Math.sqrt((nTapX - oTapPoint.x) ** 2 + (nTapY - oTapPoint.y) ** 2) < ZOOM_BUTTON_RADIUS);
-
-};
-
-const isTapInZoomOutButton = function (nTapX, nTapY) {
-
-    const x1 = nTapX - ZOOM_OUT_BUTTON_DISTANCE;
-    const x2 = nTapX + ZOOM_OUT_BUTTON_DISTANCE;
-    const y1 = nTapY - ZOOM_OUT_BUTTON_DISTANCE;
-    const y2 = nTapY + ZOOM_OUT_BUTTON_DISTANCE;
-
-    return (Math.sqrt((x1 - oTapPoint.x) ** 2 + (nTapY - oTapPoint.y) ** 2) < ZOOM_BUTTON_RADIUS)
-        || (Math.sqrt((x2 - oTapPoint.x) ** 2 + (nTapY - oTapPoint.y) ** 2) < ZOOM_BUTTON_RADIUS)
-        || (Math.sqrt((nTapX - oTapPoint.x) ** 2 + (y1 - oTapPoint.y) ** 2) < ZOOM_BUTTON_RADIUS)
-        || (Math.sqrt((nTapX - oTapPoint.x) ** 2 + (y2 - oTapPoint.y) ** 2) < ZOOM_BUTTON_RADIUS);
-
-};
-
 const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) {
 
-    const bIsTapInZoomInButton = isTapInZoomInButton(nTapX, nTapY);
-    const bIsTapInZoomOutButton = isTapInZoomOutButton(nTapX, nTapY);
+    const oZoomControlCenterPoint = oTapPoint;
+    const bIsTapInZoomInButton = Zoom.isTapInZoomInButton(nTapX, nTapY, oZoomControlCenterPoint);
+    const bIsTapInZoomOutButton = Zoom.isTapInZoomOutButton(nTapX, nTapY, oZoomControlCenterPoint);
     updateControlState(bIsTapInZoomInButton, bIsTapInZoomOutButton);
     
     if (sControlState === CONTROL_STATE.VIEW) {
@@ -237,7 +216,8 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
 
     } else if (sControlState === CONTROL_STATE.CHOOSE_ZOOM) {
 
-        showZoomButtons(nTapX, nTapY);
+        const oControlContext = oControlCanvas.getContext('2d');
+        Zoom.showZoomButtons(nTapX, nTapY, oControlContext, STROKE_COLOR_NORMAL);
         oTapPoint = {
             x: nTapX,
             y: nTapY
@@ -265,59 +245,6 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
         oPreviousTapPoint.y = nTapY;
 
     }
-
-};
-
-const drawZoomOutButton = function (x, y) {
-
-    const oContext = oControlCanvas.getContext('2d');
-
-    oContext.beginPath();
-    oContext.arc(x, y, ZOOM_BUTTON_RADIUS, 0, Math.PI * 2);
-    oContext.stroke();
-
-    oContext.beginPath();
-    oContext.moveTo(x - ZOOM_BUTTON_RADIUS * 0.66, y);
-    oContext.lineTo(x + ZOOM_BUTTON_RADIUS * 0.66, y);
-    oContext.stroke();
-
-};
-
-const showZoomButtons = function (x, y) {
-
-    const oContext = oControlCanvas.getContext('2d');
-    oContext.strokeStyle = STROKE_COLOR_NORMAL;
-    oContext.lineWidth = 5;
-
-    // draws circle
-    oContext.beginPath();
-    oContext.arc(x, y, ZOOM_LENS_RADIUS, 0, Math.PI * 2);
-    oContext.stroke();
-
-    // draws zoom in button
-    oContext.lineWidth = 3;
-    oContext.beginPath();
-    oContext.arc(x, y, ZOOM_BUTTON_RADIUS, 0, Math.PI * 2);
-    oContext.stroke();
-
-    oContext.beginPath();
-    oContext.moveTo(x, y - ZOOM_BUTTON_RADIUS * 0.66);
-    oContext.lineTo(x, y + ZOOM_BUTTON_RADIUS * 0.66);
-    oContext.stroke();
-    oContext.moveTo(x - ZOOM_BUTTON_RADIUS * 0.66, y);
-    oContext.lineTo(x + ZOOM_BUTTON_RADIUS * 0.66, y);
-    oContext.stroke();
-
-    // draws zoom out buttons
-    const x1 = x - ZOOM_OUT_BUTTON_DISTANCE;
-    const x2 = x + ZOOM_OUT_BUTTON_DISTANCE;
-    const y1 = y - ZOOM_OUT_BUTTON_DISTANCE;
-    const y2 = y + ZOOM_OUT_BUTTON_DISTANCE;
-
-    drawZoomOutButton(x1, y);
-    drawZoomOutButton(x2, y);
-    drawZoomOutButton(x, y1);
-    drawZoomOutButton(x, y2);
 
 };
 
