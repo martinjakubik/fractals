@@ -212,7 +212,7 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
     
     if (sControlState === CONTROL_STATE.VIEW) {
 
-        hideZoomControl();
+        Zoom.hideZoomButtons(oControlCanvas);
 
     } else if (sControlState === CONTROL_STATE.CHOOSE_ZOOM) {
 
@@ -228,7 +228,7 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
 
     } else if (sControlState === CONTROL_STATE.ZOOMED_IN || sControlState === CONTROL_STATE.ZOOMED_OUT) {
 
-        hideZoomControl();
+        Zoom.hideZoomButtons(oControlCanvas);
         if (sControlState === CONTROL_STATE.ZOOMED_IN) {
             oCurrentTransform.zoom = oCurrentTransform.zoom * ZOOM_MULTIPLIER;
         } else if (sControlState === CONTROL_STATE.ZOOMED_OUT) {
@@ -245,14 +245,6 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
         oPreviousTapPoint.y = nTapY;
 
     }
-
-};
-
-const hideZoomControl = function () {
-
-    const oContext = oControlCanvas.getContext('2d');
-    const nParentWidth = oControlCanvas.parentNode.clientWidth;
-    oContext.clearRect(0, 0, nParentWidth, oControlCanvas.height);
 
 };
 

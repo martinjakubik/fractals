@@ -71,6 +71,14 @@ class Zoom {
 
     };
 
+    static hideZoomButtons (oCanvas) {
+
+        const oContext = oCanvas.getContext('2d');
+        const nParentWidth = oCanvas.parentNode.clientWidth;
+        oContext.clearRect(0, 0, nParentWidth, oCanvas.height);
+
+    };
+
 }
 
 const drawZoomOutButton = function (x, y, oContext) {
