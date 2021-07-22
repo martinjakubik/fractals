@@ -31,7 +31,7 @@ const drawGraphics = function (oTransform, oImageDescription) {
 
     const oGraphicContext = oGraphicCanvas.getContext('2d');
     oGraphicContext.clearRect(0, 0, oGraphicCanvas.width, oGraphicCanvas.height);
-    Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, STROKE_COLOR_NORMAL, nHue, oTapPoint);
+    // Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, STROKE_COLOR_NORMAL, nHue, oTapPoint);
     drawImageOnCanvas(oTransform, oImageDescription);
 
 };
@@ -60,6 +60,7 @@ const drawImagePixelOnCanvas = function (oDestinationCanvas, oDestinationContext
 
     const oTransformedPoint = transformPixelPoint(oDestinationCanvas, x, y, oTransform, oImageDescription);
     const index = (x * 4) + (y * 4) * oImageCanvas.width;
+    const nPixelSize = oCurrentTransform.zoom < 2 ? oCurrentTransform.zoom : oCurrentTransform.zoom - 1;
 
     const rDecimal = oImageDescription.data[index];
     const gDecimal = oImageDescription.data[index + 1];
@@ -67,7 +68,7 @@ const drawImagePixelOnCanvas = function (oDestinationCanvas, oDestinationContext
     const alphaDecimal = oImageDescription.data[index + 3] / 255;
     const sRGBA = `rgba(${rDecimal}, ${gDecimal}, ${bDecimal}, ${alphaDecimal})`;
     oDestinationContext.fillStyle = sRGBA;
-    oDestinationContext.fillRect(oTransformedPoint.x, oTransformedPoint.y, 1, 1);
+    oDestinationContext.fillRect(oTransformedPoint.x, oTransformedPoint.y, nPixelSize, nPixelSize);
 
 };
 
@@ -276,8 +277,16 @@ const onMouseMoveOnCanvas = function (oEvent) {
         return;
     }
 
+    const oEventOffsetX = oEvent.offsetX;
+    const oEventOffsetY = oEvent.offsetY;
+    showDebugInfoBox(oEventOffsetX, oEventOffsetY);
+
+};
+
+const showDebugInfoBox = function (oEventOffsetX, oEventOffsetY) {
+
     const nTextBoxWidth = 120;
-    const nTextBoxHeight = 28;
+    const nTextBoxHeight = 42;
     const oContext = oDebugDrawCanvas.getContext('2d');
 
     oContext.clearRect(oPreviousMousePosition.x + 10, oPreviousMousePosition.y, nTextBoxWidth, nTextBoxHeight);
@@ -295,22 +304,24 @@ const onMouseMoveOnCanvas = function (oEvent) {
     oContext.strokeStyle = STROKE_COLOR_NORMAL;
     oContext.lineWidth = 1;
     oContext.moveTo(oOrigin.x, oOrigin.y);
-    oContext.lineTo(oEvent.offsetX, oEvent.offsetY);
+    oContext.lineTo(oEventOffsetX, oEventOffsetY);
     oContext.closePath();
     oContext.stroke();
 
     oContext.fillStyle = '#000';
-    oContext.fillRect(oEvent.offsetX + 10, oEvent.offsetY, nTextBoxWidth, nTextBoxHeight);
+    oContext.fillRect(oEventOffsetX + 10, oEventOffsetY, nTextBoxWidth, nTextBoxHeight);
 
-    const sDebugText1 = `x:${oEvent.offsetX}, y:${oEvent.offsetY}`;
-    const oTransformedPoint = Mandelbrot.transformXY(oEvent.offsetX, oEvent.offsetY, oCurrentTransform);
+    const sDebugText1 = `x:${oEventOffsetX}, y:${oEventOffsetY}`;
+    const oTransformedPoint = Mandelbrot.transformXY(oEventOffsetX, oEventOffsetY, oCurrentTransform);
     const sDebugText2 = `x:${oTransformedPoint.x}, y:${oTransformedPoint.y}`;
+    const sDebugText3 = `zoom:${oCurrentTransform.zoom}`;
     oContext.fillStyle = STROKE_COLOR_NORMAL;
-    oContext.fillText(sDebugText1, oEvent.offsetX + 10, oEvent.offsetY + 10);
-    oContext.fillText(sDebugText2, oEvent.offsetX + 10, oEvent.offsetY + 24);
+    oContext.fillText(sDebugText1, oEventOffsetX + 10, oEventOffsetY + 10);
+    oContext.fillText(sDebugText2, oEventOffsetX + 10, oEventOffsetY + 24);
+    oContext.fillText(sDebugText3, oEventOffsetX + 10, oEventOffsetY + 38);
 
-    oPreviousMousePosition.x = oEvent.offsetX;
-    oPreviousMousePosition.y = oEvent.offsetY;
+    oPreviousMousePosition.x = oEventOffsetX;
+    oPreviousMousePosition.y = oEventOffsetY;
 
 };
 
