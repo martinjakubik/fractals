@@ -5,7 +5,6 @@ const sizes = {
 };
 
 sizes.ZOOM_IN_BUTTON_RADIUS = sizes.ZOOM_LENS_RADIUS / sizes.ZOOM_IN_BUTTON_RADIUS_RATIO;
-const STROKE_COLOR_HIGHLIGHT = '#8ab';
 class Zoomer {
 
     static tap () {
@@ -79,10 +78,12 @@ class Zoomer {
 
     }
 
-    static onMouseMoveOnCanvas (nPointX, nPointY, oZoomCenterPoint, oContext) {
+    static onMouseMoveOnCanvas (nPointX, nPointY, oZoomCenterPoint, oCanvas, sStrokeColorNormal, sStrokeColorHighlight) {
 
+        const oContext = oCanvas.getContext('2d');
         if (this.isPointInZoomInButton(nPointX, nPointY, oZoomCenterPoint)) {
-            Zoomer.showZoomButtons(nPointX, nPointY, oContext, STROKE_COLOR_HIGHLIGHT);
+            Zoomer.hideZoomButtons(oCanvas);
+            Zoomer.showZoomButtons(oZoomCenterPoint.x, oZoomCenterPoint.y, oContext, sStrokeColorHighlight);
         }
 
     }

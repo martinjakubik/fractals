@@ -2,12 +2,13 @@ import { CANVAS_HEIGHT, createButton, createCanvas, createCheckbox, createDiv, c
 import { Zoomer } from './zoomer.mjs';
 import { Mandelbrot } from './mandelbrot.mjs';
 
+const STROKE_COLOR_DEBUG = '#aaa';
+const STROKE_COLOR_NORMAL = '#aaa';
+const STROKE_COLOR_HIGHLIGHT = '#8ab';
 
 const VERTICAL_MARGIN = 36;
 
 const ZOOM_MULTIPLIER = 2;
-
-const STROKE_COLOR_NORMAL = '#aaa';
 
 const CONTROL_STATE = {
     VIEW: 0,
@@ -31,7 +32,7 @@ const drawGraphics = function (oTransform, oImageDescription) {
 
     const oGraphicContext = oGraphicCanvas.getContext('2d');
     oGraphicContext.clearRect(0, 0, oGraphicCanvas.width, oGraphicCanvas.height);
-    // Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, STROKE_COLOR_NORMAL, nHue, oTapPoint);
+    // Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, STROKE_COLOR_DEBUG, nHue, oTapPoint);
     drawImageOnCanvas(oTransform, oImageDescription);
 
 };
@@ -282,8 +283,7 @@ const createPage = function () {
 
 const onMouseMoveOnCanvas = function (oEvent) {
 
-    const oControlContext = oControlCanvas.getContext('2d');
-    // Zoomer.onMouseMoveOnCanvas(oEvent.offsetX, oEvent.offsetY, oTapPoint, oControlContext);
+    Zoomer.onMouseMoveOnCanvas(oEvent.offsetX, oEvent.offsetY, oTapPoint, oControlCanvas, STROKE_COLOR_NORMAL, STROKE_COLOR_HIGHLIGHT);
 
     if (IS_DEBUG) {
         showDebugInfo(oEvent.offsetX, oEvent.offsetY);
@@ -309,7 +309,7 @@ const drawNewDebugLine = function (fromX, fromY, toX, toY) {
 
     const oContext = oDebugDrawCanvas.getContext('2d');
     oContext.beginPath();
-    oContext.strokeStyle = STROKE_COLOR_NORMAL;
+    oContext.strokeStyle = STROKE_COLOR_DEBUG;
     oContext.lineWidth = 1;
     oContext.moveTo(fromX, fromY);
     oContext.lineTo(toX, toY);
@@ -335,7 +335,7 @@ const drawNewDebugInfoBox = function (fromX, fromY, nWidth, nHeight) {
     const oTransformedPoint = Mandelbrot.transformXY(fromX, fromY, oCurrentTransform);
     const sDebugText2 = `x:${oTransformedPoint.x}, y:${oTransformedPoint.y}`;
     const sDebugText3 = `zoom:${oCurrentTransform.zoom}`;
-    oContext.fillStyle = STROKE_COLOR_NORMAL;
+    oContext.fillStyle = STROKE_COLOR_DEBUG;
     oContext.fillText(sDebugText1, fromX + 10, fromY + 10);
     oContext.fillText(sDebugText2, fromX + 10, fromY + 24);
     oContext.fillText(sDebugText3, fromX + 10, fromY + 38);
