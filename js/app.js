@@ -1,5 +1,5 @@
 import { CANVAS_HEIGHT, createButton, createCanvas, createCheckbox, createNumberInput, createSlider, setBlockVisibility } from '../../lib/js/learnhypertext.mjs';
-import { Zoom } from './zoom.mjs';
+import { Zoomer } from './zoomer.mjs';
 import { Mandelbrot } from './mandelbrot.mjs';
 
 
@@ -106,18 +106,18 @@ const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton
 const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) {
 
     const oZoomControlCenterPoint = oTapPoint;
-    const bIsTapInZoomInButton = Zoom.isTapInZoomInButton(nTapX, nTapY, oZoomControlCenterPoint);
-    const bIsTapInZoomOutButton = Zoom.isTapInZoomOutButton(nTapX, nTapY, oZoomControlCenterPoint);
+    const bIsTapInZoomInButton = Zoomer.isTapInZoomInButton(nTapX, nTapY, oZoomControlCenterPoint);
+    const bIsTapInZoomOutButton = Zoomer.isTapInZoomOutButton(nTapX, nTapY, oZoomControlCenterPoint);
     updateControlState(bIsTapInZoomInButton, bIsTapInZoomOutButton);
 
     if (sControlState === CONTROL_STATE.VIEW) {
 
-        Zoom.hideZoomButtons(oControlCanvas);
+        Zoomer.hideZoomButtons(oControlCanvas);
 
     } else if (sControlState === CONTROL_STATE.CHOOSE_ZOOM) {
 
         const oControlContext = oControlCanvas.getContext('2d');
-        Zoom.showZoomButtons(nTapX, nTapY, oControlContext, STROKE_COLOR_NORMAL);
+        Zoomer.showZoomButtons(nTapX, nTapY, oControlContext, STROKE_COLOR_NORMAL);
         oTapPoint = {
             x: nTapX,
             y: nTapY
@@ -128,7 +128,7 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
 
     } else if (sControlState === CONTROL_STATE.ZOOMED_IN || sControlState === CONTROL_STATE.ZOOMED_OUT) {
 
-        Zoom.hideZoomButtons(oControlCanvas);
+        Zoomer.hideZoomButtons(oControlCanvas);
         if (sControlState === CONTROL_STATE.ZOOMED_IN) {
             oCurrentTransform.zoom = oCurrentTransform.zoom * ZOOM_MULTIPLIER;
         } else if (sControlState === CONTROL_STATE.ZOOMED_OUT) {

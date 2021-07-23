@@ -6,7 +6,7 @@ const definitions = {
 
 definitions.ZOOM_BUTTON_RADIUS = definitions.ZOOM_LENS_RADIUS / definitions.ZOOM_BUTTON_RADIUS_RATIO;
 
-class Zoom {
+class Zoomer {
 
     static tap () {
 
@@ -94,4 +94,4 @@ const drawZoomOutButton = function (x, y, oContext) {
 
 };
 
-export { Zoom };
+export { Zoomer };
