@@ -280,46 +280,71 @@ const onMouseMoveOnCanvas = function (oEvent) {
 
     const oEventOffsetX = oEvent.offsetX;
     const oEventOffsetY = oEvent.offsetY;
-    showDebugInfoBox(oEventOffsetX, oEventOffsetY);
+    showDebugInfo(oEventOffsetX, oEventOffsetY);
 
 };
 
-const showDebugInfoBox = function (oEventOffsetX, oEventOffsetY) {
+const clearOldDebugLine = function (fromX, fromY, toX, toY) {
 
-    const nTextBoxWidth = 120;
-    const nTextBoxHeight = 42;
     const oContext = oDebugDrawCanvas.getContext('2d');
-
-    oContext.clearRect(oPreviousMousePosition.x + 10, oPreviousMousePosition.y, nTextBoxWidth, nTextBoxHeight);
-
     oContext.beginPath();
     oContext.lineWidth = 3;
     oContext.globalCompositeOperation = 'destination-out';
-    oContext.moveTo(oOrigin.x, oOrigin.y);
-    oContext.lineTo(oPreviousMousePosition.x, oPreviousMousePosition.y);
+    oContext.moveTo(fromX, fromY);
+    oContext.lineTo(toX, toY);
     oContext.closePath();
     oContext.stroke();
     oContext.globalCompositeOperation = 'source-over';
 
+};
+
+const drawNewDebugLine = function (fromX, fromY, toX, toY) {
+
+    const oContext = oDebugDrawCanvas.getContext('2d');
     oContext.beginPath();
     oContext.strokeStyle = STROKE_COLOR_NORMAL;
     oContext.lineWidth = 1;
-    oContext.moveTo(oOrigin.x, oOrigin.y);
-    oContext.lineTo(oEventOffsetX, oEventOffsetY);
+    oContext.moveTo(fromX, fromY);
+    oContext.lineTo(toX, toY);
     oContext.closePath();
     oContext.stroke();
 
-    oContext.fillStyle = '#000';
-    oContext.fillRect(oEventOffsetX + 10, oEventOffsetY, nTextBoxWidth, nTextBoxHeight);
+};
 
-    const sDebugText1 = `x:${oEventOffsetX}, y:${oEventOffsetY}`;
-    const oTransformedPoint = Mandelbrot.transformXY(oEventOffsetX, oEventOffsetY, oCurrentTransform);
+const clearOldDebugInfoBox = function (fromX, fromY, nWidth, nHeight) {
+
+    const oContext = oDebugDrawCanvas.getContext('2d');
+    oContext.clearRect(fromX + 10, fromY, nWidth, nHeight);
+
+};
+
+const drawNewDebugInfoBox = function (fromX, fromY, nWidth, nHeight) {
+
+    const oContext = oDebugDrawCanvas.getContext('2d');
+    oContext.fillStyle = '#000';
+    oContext.fillRect(fromX + 10, fromY, nWidth, nHeight);
+
+    const sDebugText1 = `x:${fromX}, y:${fromY}`;
+    const oTransformedPoint = Mandelbrot.transformXY(fromX, fromY, oCurrentTransform);
     const sDebugText2 = `x:${oTransformedPoint.x}, y:${oTransformedPoint.y}`;
     const sDebugText3 = `zoom:${oCurrentTransform.zoom}`;
     oContext.fillStyle = STROKE_COLOR_NORMAL;
-    oContext.fillText(sDebugText1, oEventOffsetX + 10, oEventOffsetY + 10);
-    oContext.fillText(sDebugText2, oEventOffsetX + 10, oEventOffsetY + 24);
-    oContext.fillText(sDebugText3, oEventOffsetX + 10, oEventOffsetY + 38);
+    oContext.fillText(sDebugText1, fromX + 10, fromY + 10);
+    oContext.fillText(sDebugText2, fromX + 10, fromY + 24);
+    oContext.fillText(sDebugText3, fromX + 10, fromY + 38);
+
+};
+
+const showDebugInfo = function (oEventOffsetX, oEventOffsetY) {
+
+    const nTextBoxWidth = 120;
+    const nTextBoxHeight = 42;
+
+    clearOldDebugLine(oOrigin.x, oOrigin.y, oPreviousMousePosition.x, oPreviousMousePosition.y);
+    drawNewDebugLine(oOrigin.x, oOrigin.y, oEventOffsetX, oEventOffsetY);
+
+    clearOldDebugInfoBox(oPreviousMousePosition.x + 10, oPreviousMousePosition.y, nTextBoxWidth, nTextBoxHeight);
+    drawNewDebugInfoBox(oEventOffsetX + 10, oEventOffsetY, nTextBoxWidth, nTextBoxHeight);
 
     oPreviousMousePosition.x = oEventOffsetX;
     oPreviousMousePosition.y = oEventOffsetY;
