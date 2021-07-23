@@ -60,12 +60,21 @@ const drawImagePixelOnCanvas = function (oDestinationCanvas, oDestinationContext
 
     const oTransformedPoint = transformPixelPoint(oDestinationCanvas, x, y, oTransform, oImageDescription);
     const index = (x * 4) + (y * 4) * oImageCanvas.width;
-    const nPixelSize = oCurrentTransform.zoom < 2 ? oCurrentTransform.zoom : oCurrentTransform.zoom - 1;
+    let nPixelSize = oCurrentTransform.zoom < 2 ? oCurrentTransform.zoom : oCurrentTransform.zoom - 1;
 
-    const rDecimal = oImageDescription.data[index];
-    const gDecimal = oImageDescription.data[index + 1];
-    const bDecimal = oImageDescription.data[index + 2];
-    const alphaDecimal = oImageDescription.data[index + 3] / 255;
+    let rDecimal = oImageDescription.data[index];
+    let gDecimal = oImageDescription.data[index + 1];
+    let bDecimal = oImageDescription.data[index + 2];
+    let alphaDecimal = oImageDescription.data[index + 3] / 255;
+
+    if (IS_DEBUG && (alphaDecimal === 0) && (x % 20 === 0) && (y % 20 === 0)) {
+        rDecimal = 255;
+        gDecimal = 255;
+        bDecimal = 255;
+        alphaDecimal = 0.9;
+        nPixelSize = 1;
+    }
+
     const sRGBA = `rgba(${rDecimal}, ${gDecimal}, ${bDecimal}, ${alphaDecimal})`;
     oDestinationContext.fillStyle = sRGBA;
     oDestinationContext.fillRect(oTransformedPoint.x, oTransformedPoint.y, nPixelSize, nPixelSize);
@@ -244,6 +253,7 @@ const createControls = function (oTransform) {
         const sStyle = setBlockVisibility(IS_DEBUG);
         oDebugCanvas.style = sStyle;
         oDebugDrawCanvas.style = sStyle;
+        drawGraphics(oCurrentTransform, oImageDescription);
     };
 
 };
