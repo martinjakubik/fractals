@@ -255,7 +255,7 @@ const createPage = function () {
     const nParentHeight = oPage.parentNode.clientHeight;
 
     oPage.style.width = nParentWidth;
-    oPage.style.height = nParentHeight;
+    oPage.style.height = nParentHeight - 2 * VERTICAL_MARGIN;
 
     const nMarginSide = Math.floor((nParentWidth - oPage.width) / 2);
     const sMarginSide = nMarginSide + "px";
