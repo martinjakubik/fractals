@@ -5,7 +5,7 @@ const sizes = {
 };
 
 sizes.ZOOM_IN_BUTTON_RADIUS = sizes.ZOOM_LENS_RADIUS / sizes.ZOOM_IN_BUTTON_RADIUS_RATIO;
-
+const STROKE_COLOR_HIGHLIGHT = '#8ab';
 class Zoomer {
 
     static tap () {
@@ -14,23 +14,23 @@ class Zoomer {
 
     }
 
-    static isTapInZoomInButton (nTapX, nTapY, oZoomCenterPoint) {
+    static isPointInZoomInButton (nPointX, nPointY, oZoomCenterPoint) {
 
-        return (Math.sqrt((nTapX - oZoomCenterPoint.x) ** 2 + (nTapY - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS);
+        return (Math.sqrt((nPointX - oZoomCenterPoint.x) ** 2 + (nPointY - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS);
 
     }
 
-    static isTapInZoomOutButton (nTapX, nTapY, oZoomCenterPoint) {
+    static isPointInZoomOutButton (nPointX, nPointY, oZoomCenterPoint) {
 
-        const x1 = nTapX - sizes.ZOOM_OUT_BUTTON_DISTANCE;
-        const x2 = nTapX + sizes.ZOOM_OUT_BUTTON_DISTANCE;
-        const y1 = nTapY - sizes.ZOOM_OUT_BUTTON_DISTANCE;
-        const y2 = nTapY + sizes.ZOOM_OUT_BUTTON_DISTANCE;
+        const x1 = nPointX - sizes.ZOOM_OUT_BUTTON_DISTANCE;
+        const x2 = nPointX + sizes.ZOOM_OUT_BUTTON_DISTANCE;
+        const y1 = nPointY - sizes.ZOOM_OUT_BUTTON_DISTANCE;
+        const y2 = nPointY + sizes.ZOOM_OUT_BUTTON_DISTANCE;
 
-        return (Math.sqrt((x1 - oZoomCenterPoint.x) ** 2 + (nTapY - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS)
-            || (Math.sqrt((x2 - oZoomCenterPoint.x) ** 2 + (nTapY - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS)
-            || (Math.sqrt((nTapX - oZoomCenterPoint.x) ** 2 + (y1 - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS)
-            || (Math.sqrt((nTapX - oZoomCenterPoint.x) ** 2 + (y2 - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS);
+        return (Math.sqrt((x1 - oZoomCenterPoint.x) ** 2 + (nPointY - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS)
+            || (Math.sqrt((x2 - oZoomCenterPoint.x) ** 2 + (nPointY - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS)
+            || (Math.sqrt((nPointX - oZoomCenterPoint.x) ** 2 + (y1 - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS)
+            || (Math.sqrt((nPointX - oZoomCenterPoint.x) ** 2 + (y2 - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS);
 
     }
 
@@ -76,6 +76,14 @@ class Zoomer {
         const oContext = oCanvas.getContext('2d');
         const nParentWidth = oCanvas.parentNode.clientWidth;
         oContext.clearRect(0, 0, nParentWidth, oCanvas.height);
+
+    }
+
+    static onMouseMoveOnCanvas (nPointX, nPointY, oZoomCenterPoint, oContext) {
+
+        if (this.isPointInZoomInButton(nPointX, nPointY, oZoomCenterPoint)) {
+            Zoomer.showZoomButtons(nPointX, nPointY, oContext, STROKE_COLOR_HIGHLIGHT);
+        }
 
     }
 

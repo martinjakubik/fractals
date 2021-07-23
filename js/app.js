@@ -115,8 +115,8 @@ const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton
 const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) {
 
     const oZoomControlCenterPoint = oTapPoint;
-    const bIsTapInZoomInButton = Zoomer.isTapInZoomInButton(nTapX, nTapY, oZoomControlCenterPoint);
-    const bIsTapInZoomOutButton = Zoomer.isTapInZoomOutButton(nTapX, nTapY, oZoomControlCenterPoint);
+    const bIsTapInZoomInButton = Zoomer.isPointInZoomInButton(nTapX, nTapY, oZoomControlCenterPoint);
+    const bIsTapInZoomOutButton = Zoomer.isPointInZoomOutButton(nTapX, nTapY, oZoomControlCenterPoint);
     updateControlState(bIsTapInZoomInButton, bIsTapInZoomOutButton);
 
     if (sControlState === CONTROL_STATE.VIEW) {
@@ -282,13 +282,12 @@ const createPage = function () {
 
 const onMouseMoveOnCanvas = function (oEvent) {
 
-    if (!IS_DEBUG) {
-        return;
-    }
+    const oControlContext = oControlCanvas.getContext('2d');
+    // Zoomer.onMouseMoveOnCanvas(oEvent.offsetX, oEvent.offsetY, oTapPoint, oControlContext);
 
-    const oEventOffsetX = oEvent.offsetX;
-    const oEventOffsetY = oEvent.offsetY;
-    showDebugInfo(oEventOffsetX, oEventOffsetY);
+    if (IS_DEBUG) {
+        showDebugInfo(oEvent.offsetX, oEvent.offsetY);
+    }
 
 };
 
