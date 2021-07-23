@@ -1,10 +1,10 @@
-const definitions = {
+const sizes = {
     ZOOM_LENS_RADIUS: 50,
-    ZOOM_BUTTON_RADIUS_RATIO: 4,
+    ZOOM_IN_BUTTON_RADIUS_RATIO: 4,
     ZOOM_OUT_BUTTON_DISTANCE: 120
 };
 
-definitions.ZOOM_BUTTON_RADIUS = definitions.ZOOM_LENS_RADIUS / definitions.ZOOM_BUTTON_RADIUS_RATIO;
+sizes.ZOOM_IN_BUTTON_RADIUS = sizes.ZOOM_LENS_RADIUS / sizes.ZOOM_IN_BUTTON_RADIUS_RATIO;
 
 class Zoomer {
 
@@ -16,21 +16,21 @@ class Zoomer {
 
     static isTapInZoomInButton (nTapX, nTapY, oZoomCenterPoint) {
 
-        return (Math.sqrt((nTapX - oZoomCenterPoint.x) ** 2 + (nTapY - oZoomCenterPoint.y) ** 2) < definitions.ZOOM_BUTTON_RADIUS);
+        return (Math.sqrt((nTapX - oZoomCenterPoint.x) ** 2 + (nTapY - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS);
 
     }
 
     static isTapInZoomOutButton (nTapX, nTapY, oZoomCenterPoint) {
 
-        const x1 = nTapX - definitions.ZOOM_OUT_BUTTON_DISTANCE;
-        const x2 = nTapX + definitions.ZOOM_OUT_BUTTON_DISTANCE;
-        const y1 = nTapY - definitions.ZOOM_OUT_BUTTON_DISTANCE;
-        const y2 = nTapY + definitions.ZOOM_OUT_BUTTON_DISTANCE;
+        const x1 = nTapX - sizes.ZOOM_OUT_BUTTON_DISTANCE;
+        const x2 = nTapX + sizes.ZOOM_OUT_BUTTON_DISTANCE;
+        const y1 = nTapY - sizes.ZOOM_OUT_BUTTON_DISTANCE;
+        const y2 = nTapY + sizes.ZOOM_OUT_BUTTON_DISTANCE;
 
-        return (Math.sqrt((x1 - oZoomCenterPoint.x) ** 2 + (nTapY - oZoomCenterPoint.y) ** 2) < definitions.ZOOM_BUTTON_RADIUS)
-            || (Math.sqrt((x2 - oZoomCenterPoint.x) ** 2 + (nTapY - oZoomCenterPoint.y) ** 2) < definitions.ZOOM_BUTTON_RADIUS)
-            || (Math.sqrt((nTapX - oZoomCenterPoint.x) ** 2 + (y1 - oZoomCenterPoint.y) ** 2) < definitions.ZOOM_BUTTON_RADIUS)
-            || (Math.sqrt((nTapX - oZoomCenterPoint.x) ** 2 + (y2 - oZoomCenterPoint.y) ** 2) < definitions.ZOOM_BUTTON_RADIUS);
+        return (Math.sqrt((x1 - oZoomCenterPoint.x) ** 2 + (nTapY - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS)
+            || (Math.sqrt((x2 - oZoomCenterPoint.x) ** 2 + (nTapY - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS)
+            || (Math.sqrt((nTapX - oZoomCenterPoint.x) ** 2 + (y1 - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS)
+            || (Math.sqrt((nTapX - oZoomCenterPoint.x) ** 2 + (y2 - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS);
 
     }
 
@@ -41,28 +41,28 @@ class Zoomer {
 
         // draws circle
         oContext.beginPath();
-        oContext.arc(x, y, definitions.ZOOM_LENS_RADIUS, 0, Math.PI * 2);
+        oContext.arc(x, y, sizes.ZOOM_LENS_RADIUS, 0, Math.PI * 2);
         oContext.stroke();
 
         // draws zoom in button
         oContext.lineWidth = 3;
         oContext.beginPath();
-        oContext.arc(x, y, definitions.ZOOM_BUTTON_RADIUS, 0, Math.PI * 2);
+        oContext.arc(x, y, sizes.ZOOM_IN_BUTTON_RADIUS, 0, Math.PI * 2);
         oContext.stroke();
 
         oContext.beginPath();
-        oContext.moveTo(x, y - definitions.ZOOM_BUTTON_RADIUS * 0.66);
-        oContext.lineTo(x, y + definitions.ZOOM_BUTTON_RADIUS * 0.66);
+        oContext.moveTo(x, y - sizes.ZOOM_IN_BUTTON_RADIUS * 0.66);
+        oContext.lineTo(x, y + sizes.ZOOM_IN_BUTTON_RADIUS * 0.66);
         oContext.stroke();
-        oContext.moveTo(x - definitions.ZOOM_BUTTON_RADIUS * 0.66, y);
-        oContext.lineTo(x + definitions.ZOOM_BUTTON_RADIUS * 0.66, y);
+        oContext.moveTo(x - sizes.ZOOM_IN_BUTTON_RADIUS * 0.66, y);
+        oContext.lineTo(x + sizes.ZOOM_IN_BUTTON_RADIUS * 0.66, y);
         oContext.stroke();
 
         // draws zoom out buttons
-        const x1 = x - definitions.ZOOM_OUT_BUTTON_DISTANCE;
-        const x2 = x + definitions.ZOOM_OUT_BUTTON_DISTANCE;
-        const y1 = y - definitions.ZOOM_OUT_BUTTON_DISTANCE;
-        const y2 = y + definitions.ZOOM_OUT_BUTTON_DISTANCE;
+        const x1 = x - sizes.ZOOM_OUT_BUTTON_DISTANCE;
+        const x2 = x + sizes.ZOOM_OUT_BUTTON_DISTANCE;
+        const y1 = y - sizes.ZOOM_OUT_BUTTON_DISTANCE;
+        const y2 = y + sizes.ZOOM_OUT_BUTTON_DISTANCE;
 
         drawZoomOutButton(x1, y, oContext);
         drawZoomOutButton(x2, y, oContext);
@@ -84,12 +84,12 @@ class Zoomer {
 const drawZoomOutButton = function (x, y, oContext) {
 
     oContext.beginPath();
-    oContext.arc(x, y, definitions.ZOOM_BUTTON_RADIUS, 0, Math.PI * 2);
+    oContext.arc(x, y, sizes.ZOOM_IN_BUTTON_RADIUS, 0, Math.PI * 2);
     oContext.stroke();
 
     oContext.beginPath();
-    oContext.moveTo(x - definitions.ZOOM_BUTTON_RADIUS * 0.66, y);
-    oContext.lineTo(x + definitions.ZOOM_BUTTON_RADIUS * 0.66, y);
+    oContext.moveTo(x - sizes.ZOOM_IN_BUTTON_RADIUS * 0.66, y);
+    oContext.lineTo(x + sizes.ZOOM_IN_BUTTON_RADIUS * 0.66, y);
     oContext.stroke();
 
 };
