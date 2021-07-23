@@ -1,4 +1,4 @@
-import { CANVAS_HEIGHT, createButton, createCanvas, createCheckbox, createDiv, createNumberInput, createSlider, setBlockVisibility } from '../../lib/js/learnhypertext.mjs';
+import { createButton, createCanvas, createCheckbox, createDiv, createNumberInput, createSlider, setBlockVisibility } from '../../lib/js/learnhypertext.mjs';
 import { Zoomer } from './zoomer.mjs';
 import { Mandelbrot } from './mandelbrot.mjs';
 
