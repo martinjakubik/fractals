@@ -1,4 +1,4 @@
-import { CANVAS_HEIGHT, createButton, createCanvas, createCheckbox, createNumberInput, createSlider, setBlockVisibility } from '../../lib/js/learnhypertext.mjs';
+import { CANVAS_HEIGHT, createButton, createCanvas, createCheckbox, createDiv, createNumberInput, createSlider, setBlockVisibility } from '../../lib/js/learnhypertext.mjs';
 import { Zoomer } from './zoomer.mjs';
 import { Mandelbrot } from './mandelbrot.mjs';
 
@@ -250,14 +250,12 @@ const createControls = function (oTransform) {
 
 const createPage = function () {
 
-    const oPage = document.createElement('div');
-    oPage.id = 'page';
-    document.body.appendChild(oPage);
-
+    const oPage = createDiv('page');
     const nParentWidth = oPage.parentNode.clientWidth;
+    const nParentHeight = oPage.parentNode.clientHeight;
 
     oPage.style.width = nParentWidth;
-    oPage.style.height = CANVAS_HEIGHT;
+    oPage.style.height = nParentHeight;
 
     const nMarginSide = Math.floor((nParentWidth - oPage.width) / 2);
     const sMarginSide = nMarginSide + "px";
