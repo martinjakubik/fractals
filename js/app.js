@@ -283,7 +283,7 @@ const createPage = function () {
 
 const onMouseMoveOnCanvas = function (oEvent) {
 
-    Zoomer.onMouseMoveOnCanvas(oEvent.offsetX, oEvent.offsetY, oTapPoint, oControlCanvas, STROKE_COLOR_NORMAL, STROKE_COLOR_HIGHLIGHT);
+    // Zoomer.onMouseMoveOnCanvas(oEvent.offsetX, oEvent.offsetY, oTapPoint, oControlCanvas, STROKE_COLOR_NORMAL, STROKE_COLOR_HIGHLIGHT);
 
     if (IS_DEBUG) {
         showDebugInfo(oEvent.offsetX, oEvent.offsetY);
