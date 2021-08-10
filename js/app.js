@@ -245,11 +245,13 @@ const createControls = function (oTransform) {
     const oDebugCheckbox = createCheckbox('debug', IS_DEBUG, 'Debug', oControlBar);
 
     oDebugCheckbox.onchange = () => {
+
         IS_DEBUG = oDebugCheckbox.checked;
         const sStyle = setBlockVisibility(IS_DEBUG);
         oDebugCanvas.style = sStyle;
         oDebugDrawCanvas.style = sStyle;
         drawGraphics(oCurrentTransform, oImageDescription);
+
     };
 
 };
@@ -353,7 +355,11 @@ const showDebugInfo = function (oEventOffsetX, oEventOffsetY) {
 
 };
 
-let IS_DEBUG = false;
+const oParams = new URLSearchParams(document.location.search.substring(1));
+const sIsDebug = oParams.get('debug', false);
+const bIsDebug = decodeURI(sIsDebug) === 'true';
+
+let IS_DEBUG = bIsDebug;
 
 const oPage = createPage();
 const oGraphicCanvas = createCanvas('graphicCanvas', '', 0, oPage);
