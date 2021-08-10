@@ -29,6 +29,17 @@ class Mandelbrot {
 
     }
 
+    static getPointFromComplexNumber (c, oTransform) {
+
+        const oPoint = {
+            x: c.real * oTransform.zoom + oTransform.pan.horizontal,
+            y: c.imaginary * oTransform.zoom + oTransform.pan.vertical
+        };
+
+        return oPoint;
+
+    }
+
     static degreeInMandelbrotSet (c, nPrecision) {
 
         let iIncrementalRealComponent = c.real;

@@ -17,17 +17,6 @@ const CONTROL_STATE = {
     ZOOMED_OUT: 3
 };
 
-const getPointFromComplexNumber = function (c, oTransform) {
-
-    const oPoint = {
-        x: c.real * oTransform.zoom + oTransform.pan.horizontal,
-        y: c.imaginary * oTransform.zoom + oTransform.pan.vertical
-    };
-
-    return oPoint;
-
-};
-
 const drawGraphics = function (oTransform, oImageDescription) {
 
     const oGraphicContext = oGraphicCanvas.getContext('2d');
@@ -127,11 +116,6 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
             y: nTapY
         };
         const c = Mandelbrot.getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
-        const nImageLeft = (document.body.clientWidth / 2) - (oImageDescription.width - 2);
-        const p = {
-            x: oTapPoint.x - oCurrentTransform.pan.horizontal - nImageLeft,
-            y: oTapPoint.y - oCurrentTransform.pan.vertical
-        };
         const q = transformPixelPoint(oGraphicCanvas, nTapX, nTapY, oCurrentTransform, oImageDescription);
         setCenterRealInputValue(q.x);
         setCenterImaginaryInputValue(q.y);
@@ -234,7 +218,7 @@ const createControls = function (oTransform) {
                 real: oCenterRealNumberInput.value,
                 imaginary: oCenterImaginaryNumberInput.value
             };
-            oTransform.pan.horizontal = (oGraphicCanvas.width / 2) - getPointFromComplexNumber(c, oTransform).x;
+            oTransform.pan.horizontal = (oGraphicCanvas.width / 2) - Mandelbrot.getPointFromComplexNumber(c, oTransform).x;
             handleDraw(oTransform);
         }
     };
@@ -247,7 +231,7 @@ const createControls = function (oTransform) {
                 real: oCenterRealNumberInput.value,
                 imaginary: oCenterImaginaryNumberInput.value
             };
-            oTransform.pan.vertical = getPointFromComplexNumber(c, oTransform).y;
+            oTransform.pan.vertical = Mandelbrot.getPointFromComplexNumber(c, oTransform).y;
             handleDraw(oTransform);
         }
     };
