@@ -67,13 +67,18 @@ const drawImagePixelOnCanvas = function (oDestinationCanvas, oDestinationContext
     let gDecimal = oImageDescription.data[index + 1];
     let bDecimal = oImageDescription.data[index + 2];
     let alphaDecimal = oImageDescription.data[index + 3] / 255;
+    let nDebugSpacing = 100 / oTransform.zoom;
 
-    if (IS_DEBUG && (alphaDecimal === 0) && (x % 20 === 0) && (y % 20 === 0)) {
+    if (IS_DEBUG && (alphaDecimal === 0) && (x % nDebugSpacing === 0) && (y % nDebugSpacing === 0)) {
         rDecimal = 255;
         gDecimal = 255;
         bDecimal = 255;
         alphaDecimal = 0.9;
         nPixelSize = 1;
+
+        const sDebugText = `${x},${y}`;
+        oDestinationContext.fillStyle = STROKE_COLOR_DEBUG;
+        oDestinationContext.fillText(sDebugText, oTransformedPoint.x + 10, oTransformedPoint.y + 10);
     }
 
     const sRGBA = `rgba(${rDecimal}, ${gDecimal}, ${bDecimal}, ${alphaDecimal})`;
@@ -133,8 +138,13 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
             y: nTapY
         };
         const c = Mandelbrot.getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
-        setCenterRealInputValue(c.real);
-        setCenterImaginaryInputValue(c.imaginary);
+        const nImageLeft = (document.client.width / 2) - (oImageDescription.width - 2);
+        const p = {
+            x: oTapPoint.x - oCurrentTransform.pan.horizontal - nImageLeft,
+            y: oTapPoint.y - oCurrentTransform.pan.vertical
+        };
+        setCenterRealInputValue(p.x);
+        setCenterImaginaryInputValue(p.y);
 
     } else if (sControlState === CONTROL_STATE.ZOOMED_IN || sControlState === CONTROL_STATE.ZOOMED_OUT) {
 
@@ -215,7 +225,7 @@ const createControls = function (oTransform) {
         drawGraphics(oTransform, oImageDescription);
     };
 
-    const oCenterRealNumberInput = createNumberInput('centerreal', 0, 'Center real', oControlBar);
+    const oCenterRealNumberInput = createNumberInput('centerreal', 0, 'flower X', oControlBar);
 
     oCenterRealNumberInput.onkeyup = (oEvent) => {
         if (oEvent.keyCode === 13) {
@@ -228,7 +238,7 @@ const createControls = function (oTransform) {
         }
     };
 
-    const oCenterImaginaryNumberInput = createNumberInput('centerimaginary', 0, 'Imaginary', oControlBar);
+    const oCenterImaginaryNumberInput = createNumberInput('centerimaginary', 0, 'flower Y', oControlBar);
 
     oCenterImaginaryNumberInput.onkeyup = (oEvent) => {
         if (oEvent.keyCode === 13) {
