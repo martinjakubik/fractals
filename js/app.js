@@ -57,8 +57,9 @@ const transformPixelPoint = function (oDestinationCanvas, x, y, oTransform, oIma
 
 };
 
-const drawImagePixelOnCanvas = function (oDestinationCanvas, oDestinationContext, x, y, oTransform, oImageDescription) {
+const drawImagePixelOnCanvas = function (oDestinationCanvas, x, y, oTransform, oImageDescription) {
 
+    const oDestinationContext = oDestinationCanvas.getContext('2d');
     const oTransformedPoint = transformPixelPoint(oDestinationCanvas, x, y, oTransform, oImageDescription);
     const index = (x * 4) + (y * 4) * oImageCanvas.width;
     let nPixelSize = oCurrentTransform.zoom < 2 ? oCurrentTransform.zoom : oCurrentTransform.zoom - 1;
@@ -89,10 +90,9 @@ const drawImagePixelOnCanvas = function (oDestinationCanvas, oDestinationContext
 
 const drawImageOnCanvas = function (oTransform, oImageDescription) {
 
-    const oGraphicContext = oGraphicCanvas.getContext('2d');
     for (let x = 0; x < oImageDescription.width; x++) {
         for (let y = 0; y < oImageDescription.height; y++) {
-            drawImagePixelOnCanvas(oGraphicCanvas, oGraphicContext, x, y, oTransform, oImageDescription);
+            drawImagePixelOnCanvas(oGraphicCanvas, x, y, oTransform, oImageDescription);
         }
     }
 
@@ -138,13 +138,14 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
             y: nTapY
         };
         const c = Mandelbrot.getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
-        const nImageLeft = (document.client.width / 2) - (oImageDescription.width - 2);
+        const nImageLeft = (document.body.clientWidth / 2) - (oImageDescription.width - 2);
         const p = {
             x: oTapPoint.x - oCurrentTransform.pan.horizontal - nImageLeft,
             y: oTapPoint.y - oCurrentTransform.pan.vertical
         };
-        setCenterRealInputValue(p.x);
-        setCenterImaginaryInputValue(p.y);
+        const q = transformPixelPoint(oGraphicCanvas, nTapX, nTapY, oCurrentTransform, oImageDescription);
+        setCenterRealInputValue(q.x);
+        setCenterImaginaryInputValue(q.y);
 
     } else if (sControlState === CONTROL_STATE.ZOOMED_IN || sControlState === CONTROL_STATE.ZOOMED_OUT) {
 
