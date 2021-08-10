@@ -37,23 +37,13 @@ const drawGraphics = function (oTransform, oImageDescription) {
 
 };
 
-const transformPixelPoint = function (oDestinationCanvas, x, y, oTransform, oImageDescription) {
+const drawImageOnCanvas = function (oTransform, oImageDescription) {
 
-    const iDestinationCanvasHorizontalMiddle = oDestinationCanvas.width / 2;
-    const iDestinationCanvasVerticalMiddle = oDestinationCanvas.height / 2;
-
-    const iImageHorizontalMiddle = oImageDescription.width / 2 - oTransform.pan.horizontal;
-    const iImageVerticalMiddle = oImageDescription.height / 2 - oTransform.pan.vertical;
-
-    const iStartX = iDestinationCanvasHorizontalMiddle - iImageHorizontalMiddle * oTransform.zoom;
-    const iStartY = iDestinationCanvasVerticalMiddle - iImageVerticalMiddle * oTransform.zoom;
-
-    const oTransformedPoint = {
-        x: iStartX + x * oTransform.zoom,
-        y: iStartY + y * oTransform.zoom
-    };
-
-    return oTransformedPoint;
+    for (let x = 0; x < oImageDescription.width; x++) {
+        for (let y = 0; y < oImageDescription.height; y++) {
+            drawImagePixelOnCanvas(oGraphicCanvas, x, y, oTransform, oImageDescription);
+        }
+    }
 
 };
 
@@ -88,33 +78,32 @@ const drawImagePixelOnCanvas = function (oDestinationCanvas, x, y, oTransform, o
 
 };
 
-const drawImageOnCanvas = function (oTransform, oImageDescription) {
+const transformPixelPoint = function (oDestinationCanvas, x, y, oTransform, oImageDescription) {
 
-    for (let x = 0; x < oImageDescription.width; x++) {
-        for (let y = 0; y < oImageDescription.height; y++) {
-            drawImagePixelOnCanvas(oGraphicCanvas, x, y, oTransform, oImageDescription);
-        }
-    }
+    const iDestinationCanvasHorizontalMiddle = oDestinationCanvas.width / 2;
+    const iDestinationCanvasVerticalMiddle = oDestinationCanvas.height / 2;
+
+    const iImageHorizontalMiddle = oImageDescription.width / 2 - oTransform.pan.horizontal;
+    const iImageVerticalMiddle = oImageDescription.height / 2 - oTransform.pan.vertical;
+
+    const iStartX = iDestinationCanvasHorizontalMiddle - iImageHorizontalMiddle * oTransform.zoom;
+    const iStartY = iDestinationCanvasVerticalMiddle - iImageVerticalMiddle * oTransform.zoom;
+
+    const oTransformedPoint = {
+        x: iStartX + x * oTransform.zoom,
+        y: iStartY + y * oTransform.zoom
+    };
+
+    return oTransformedPoint;
 
 };
 
-const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton) {
+const onTapCanvas = function (oEvent) {
 
-    switch (sControlState) {
-    case CONTROL_STATE.VIEW:
-        sControlState = CONTROL_STATE.CHOOSE_ZOOM;
-        return;
-    case CONTROL_STATE.ZOOMED_IN:
-    case CONTROL_STATE.CHOOSE_ZOOM:
-        if (bIsTapInZoomInButton) {
-            sControlState = CONTROL_STATE.ZOOMED_IN;
-        } else if (bIsTapInZoomOutButton) {
-            sControlState = CONTROL_STATE.ZOOMED_OUT;
-        } else {
-            sControlState = CONTROL_STATE.VIEW;
-        }
-        return;
-    }
+    const nTapX = oEvent.x;
+    const nTapY = oEvent.y - VERTICAL_MARGIN;
+
+    handleTap(nTapX, nTapY, oCurrentTransform, oImageDescription);
 
 };
 
@@ -169,12 +158,23 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
 
 };
 
-const onTapCanvas = function (oEvent) {
+const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton) {
 
-    const nTapX = oEvent.x;
-    const nTapY = oEvent.y - VERTICAL_MARGIN;
-
-    handleTap(nTapX, nTapY, oCurrentTransform, oImageDescription);
+    switch (sControlState) {
+    case CONTROL_STATE.VIEW:
+        sControlState = CONTROL_STATE.CHOOSE_ZOOM;
+        return;
+    case CONTROL_STATE.ZOOMED_IN:
+    case CONTROL_STATE.CHOOSE_ZOOM:
+        if (bIsTapInZoomInButton) {
+            sControlState = CONTROL_STATE.ZOOMED_IN;
+        } else if (bIsTapInZoomOutButton) {
+            sControlState = CONTROL_STATE.ZOOMED_OUT;
+        } else {
+            sControlState = CONTROL_STATE.VIEW;
+        }
+        return;
+    }
 
 };
 
