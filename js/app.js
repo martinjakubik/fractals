@@ -17,76 +17,6 @@ const CONTROL_STATE = {
     ZOOMED_OUT: 3
 };
 
-const drawGraphics = function (oTransform, oImageDescription) {
-
-    const oGraphicContext = oGraphicCanvas.getContext('2d');
-    oGraphicContext.clearRect(0, 0, oGraphicCanvas.width, oGraphicCanvas.height);
-    // Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, STROKE_COLOR_DEBUG, nHue, oTapPoint);
-    drawImageOnCanvas(oTransform, oImageDescription);
-
-};
-
-const drawImageOnCanvas = function (oTransform, oImageDescription) {
-
-    for (let x = 0; x < oImageDescription.width; x++) {
-        for (let y = 0; y < oImageDescription.height; y++) {
-            drawImagePixelOnCanvas(oGraphicCanvas, x, y, oTransform, oImageDescription);
-        }
-    }
-
-};
-
-const drawImagePixelOnCanvas = function (oDestinationCanvas, x, y, oTransform, oImageDescription) {
-
-    const oDestinationContext = oDestinationCanvas.getContext('2d');
-    const oTransformedPoint = transformPixelPoint(oDestinationCanvas, x, y, oTransform, oImageDescription);
-    const index = (x * 4) + (y * 4) * oImageCanvas.width;
-    let nPixelSize = oCurrentTransform.zoom < 2 ? oCurrentTransform.zoom : oCurrentTransform.zoom - 1;
-
-    let rDecimal = oImageDescription.data[index];
-    let gDecimal = oImageDescription.data[index + 1];
-    let bDecimal = oImageDescription.data[index + 2];
-    let alphaDecimal = oImageDescription.data[index + 3] / 255;
-    let nDebugSpacing = 100 / oTransform.zoom;
-
-    if (IS_DEBUG && (alphaDecimal === 0) && (x % nDebugSpacing === 0) && (y % nDebugSpacing === 0)) {
-        rDecimal = 255;
-        gDecimal = 255;
-        bDecimal = 255;
-        alphaDecimal = 0.9;
-        nPixelSize = 1;
-
-        const sDebugText = `${x},${y}`;
-        oDestinationContext.fillStyle = STROKE_COLOR_DEBUG;
-        oDestinationContext.fillText(sDebugText, oTransformedPoint.x + 10, oTransformedPoint.y + 10);
-    }
-
-    const sRGBA = `rgba(${rDecimal}, ${gDecimal}, ${bDecimal}, ${alphaDecimal})`;
-    oDestinationContext.fillStyle = sRGBA;
-    oDestinationContext.fillRect(oTransformedPoint.x, oTransformedPoint.y, nPixelSize, nPixelSize);
-
-};
-
-const transformPixelPoint = function (oDestinationCanvas, x, y, oTransform, oImageDescription) {
-
-    const iDestinationCanvasHorizontalMiddle = oDestinationCanvas.width / 2;
-    const iDestinationCanvasVerticalMiddle = oDestinationCanvas.height / 2;
-
-    const iImageHorizontalMiddle = oImageDescription.width / 2 - oTransform.pan.horizontal;
-    const iImageVerticalMiddle = oImageDescription.height / 2 - oTransform.pan.vertical;
-
-    const iStartX = iDestinationCanvasHorizontalMiddle - iImageHorizontalMiddle * oTransform.zoom;
-    const iStartY = iDestinationCanvasVerticalMiddle - iImageVerticalMiddle * oTransform.zoom;
-
-    const oTransformedPoint = {
-        x: iStartX + x * oTransform.zoom,
-        y: iStartY + y * oTransform.zoom
-    };
-
-    return oTransformedPoint;
-
-};
-
 const onTapCanvas = function (oEvent) {
 
     const nTapX = oEvent.x;
@@ -159,6 +89,76 @@ const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton
         }
         return;
     }
+
+};
+
+const drawGraphics = function (oTransform, oImageDescription) {
+
+    const oGraphicContext = oGraphicCanvas.getContext('2d');
+    oGraphicContext.clearRect(0, 0, oGraphicCanvas.width, oGraphicCanvas.height);
+    // Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, STROKE_COLOR_DEBUG, nHue, oTapPoint);
+    drawImageOnCanvas(oTransform, oImageDescription);
+
+};
+
+const drawImageOnCanvas = function (oTransform, oImageDescription) {
+
+    for (let x = 0; x < oImageDescription.width; x++) {
+        for (let y = 0; y < oImageDescription.height; y++) {
+            drawImagePixelOnCanvas(oGraphicCanvas, x, y, oTransform, oImageDescription);
+        }
+    }
+
+};
+
+const drawImagePixelOnCanvas = function (oDestinationCanvas, x, y, oTransform, oImageDescription) {
+
+    const oDestinationContext = oDestinationCanvas.getContext('2d');
+    const oTransformedPoint = transformPixelPoint(oDestinationCanvas, x, y, oTransform, oImageDescription);
+    const index = (x * 4) + (y * 4) * oImageCanvas.width;
+    let nPixelSize = oCurrentTransform.zoom < 2 ? oCurrentTransform.zoom : oCurrentTransform.zoom - 1;
+
+    let rDecimal = oImageDescription.data[index];
+    let gDecimal = oImageDescription.data[index + 1];
+    let bDecimal = oImageDescription.data[index + 2];
+    let alphaDecimal = oImageDescription.data[index + 3] / 255;
+    let nDebugSpacing = 100 / oTransform.zoom;
+
+    if (IS_DEBUG && (alphaDecimal === 0) && (x % nDebugSpacing === 0) && (y % nDebugSpacing === 0)) {
+        rDecimal = 255;
+        gDecimal = 255;
+        bDecimal = 255;
+        alphaDecimal = 0.9;
+        nPixelSize = 1;
+
+        const sDebugText = `${x},${y}`;
+        oDestinationContext.fillStyle = STROKE_COLOR_DEBUG;
+        oDestinationContext.fillText(sDebugText, oTransformedPoint.x + 10, oTransformedPoint.y + 10);
+    }
+
+    const sRGBA = `rgba(${rDecimal}, ${gDecimal}, ${bDecimal}, ${alphaDecimal})`;
+    oDestinationContext.fillStyle = sRGBA;
+    oDestinationContext.fillRect(oTransformedPoint.x, oTransformedPoint.y, nPixelSize, nPixelSize);
+
+};
+
+const transformPixelPoint = function (oDestinationCanvas, x, y, oTransform, oImageDescription) {
+
+    const iDestinationCanvasHorizontalMiddle = oDestinationCanvas.width / 2;
+    const iDestinationCanvasVerticalMiddle = oDestinationCanvas.height / 2;
+
+    const iImageHorizontalMiddle = oImageDescription.width / 2 - oTransform.pan.horizontal;
+    const iImageVerticalMiddle = oImageDescription.height / 2 - oTransform.pan.vertical;
+
+    const iStartX = iDestinationCanvasHorizontalMiddle - iImageHorizontalMiddle * oTransform.zoom;
+    const iStartY = iDestinationCanvasVerticalMiddle - iImageVerticalMiddle * oTransform.zoom;
+
+    const oTransformedPoint = {
+        x: iStartX + x * oTransform.zoom,
+        y: iStartY + y * oTransform.zoom
+    };
+
+    return oTransformedPoint;
 
 };
 
