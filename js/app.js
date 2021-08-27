@@ -62,8 +62,8 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
         } else if (sControlState === CONTROL_STATE.ZOOMED_OUT) {
             oCurrentTransform.zoom = oCurrentTransform.zoom / ZOOM_MULTIPLIER;
         }
-        const nHorizontalOffset = oTapPoint.x - oOrigin.x;
-        const nVerticalOffset = oTapPoint.y - oOrigin.y;
+        const nHorizontalOffset = oTapPoint.x - oCanvasCenter.x;
+        const nVerticalOffset = oTapPoint.y - oCanvasCenter.y;
         oCurrentTransform.pan.horizontal = oCurrentTransform.pan.horizontal - nHorizontalOffset;
         oCurrentTransform.pan.vertical = oCurrentTransform.pan.vertical - nVerticalOffset;
         drawGraphics(oCurrentTransform, oImageDescription);
@@ -368,8 +368,8 @@ const showDebugInfo = function (oEventOffsetX, oEventOffsetY) {
     const nTextBoxWidth = 120;
     const nTextBoxHeight = 42;
 
-    clearOldDebugLine(oOrigin.x, oOrigin.y, oPreviousMousePosition.x, oPreviousMousePosition.y);
-    drawNewDebugLine(oOrigin.x, oOrigin.y, oEventOffsetX, oEventOffsetY);
+    clearOldDebugLine(oCanvasCenter.x, oCanvasCenter.y, oPreviousMousePosition.x, oPreviousMousePosition.y);
+    drawNewDebugLine(oCanvasCenter.x, oCanvasCenter.y, oEventOffsetX, oEventOffsetY);
 
     clearOldDebugInfoBox(oPreviousMousePosition.x + 10, oPreviousMousePosition.y, nTextBoxWidth, nTextBoxHeight);
     drawNewDebugInfoBox(oEventOffsetX + 10, oEventOffsetY, nTextBoxWidth, nTextBoxHeight);
@@ -401,7 +401,7 @@ oControlCanvas.addEventListener('click', onTapCanvas);
 const oImageCanvas = createCanvas('imageCanvas', '', 4, oPage);
 oImageCanvas.style = setBlockVisibility(false);
 
-const oOrigin = {
+const oCanvasCenter = {
     x: oGraphicCanvas.width / 2,
     y: oGraphicCanvas.height / 2
 };
@@ -433,8 +433,8 @@ let oTapPoint = {
 };
 
 let oPreviousMousePosition = {
-    x: oOrigin.x,
-    y: oOrigin.y
+    x: oCanvasCenter.x,
+    y: oCanvasCenter.y
 };
 
 let c = Mandelbrot.getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
