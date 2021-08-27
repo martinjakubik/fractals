@@ -62,8 +62,8 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
         } else if (sControlState === CONTROL_STATE.ZOOMED_OUT) {
             oCurrentTransform.zoom = oCurrentTransform.zoom / ZOOM_MULTIPLIER;
         }
-        const nHorizontalOffset = oTapPoint.x - oCanvasCenter.x;
-        const nVerticalOffset = oTapPoint.y - oCanvasCenter.y;
+        const nHorizontalOffset = oTapPoint.x;
+        const nVerticalOffset = oTapPoint.y;
         oCurrentTransform.pan.horizontal = oCurrentTransform.pan.horizontal - nHorizontalOffset;
         oCurrentTransform.pan.vertical = oCurrentTransform.pan.vertical - nVerticalOffset;
         drawGraphics(oCurrentTransform, oImageDescription);
@@ -158,8 +158,8 @@ const transformImagePixelPointToScreen = function (oScreenCanvas, x, y, oTransfo
     const iStartY = iDestinationCanvasVerticalMiddle - iImageVerticalMiddle * oTransform.zoom;
 
     const oTransformedPoint = {
-        x: x + iStartX,
-        y: y + iStartY
+        x: (x + oTransform.pan.horizontal) * oTransform.zoom,
+        y: (y + oTransform.pan.vertical) * oTransform.zoom
     };
 
     return oTransformedPoint;
@@ -171,15 +171,15 @@ const transformScreenPixelPointToImage = function (oScreenCanvas, x, y, oTransfo
     const iDestinationCanvasHorizontalMiddle = oScreenCanvas.width / 2;
     const iDestinationCanvasVerticalMiddle = oScreenCanvas.height / 2;
 
-    const iImageHorizontalMiddle = oImageDescription.width / 2 - oTransform.pan.horizontal;
+    const iImageHorizontalMiddle = oImageDescription.width / 2 + oTransform.pan.horizontal;
     const iImageVerticalMiddle = oImageDescription.height / 2 - oTransform.pan.vertical;
 
     const iStartX = iDestinationCanvasHorizontalMiddle - iImageHorizontalMiddle * oTransform.zoom;
     const iStartY = iDestinationCanvasVerticalMiddle - iImageVerticalMiddle * oTransform.zoom;
 
     const oTransformedPoint = {
-        x: (x * oTransform.zoom) - iStartX,
-        y: (y * oTransform.zoom) - iStartY
+        x: x / oTransform.zoom - oTransform.pan.horizontal,
+        y: y / oTransform.zoom - oTransform.pan.vertical
     };
 
     return oTransformedPoint;
