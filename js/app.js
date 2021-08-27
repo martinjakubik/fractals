@@ -41,12 +41,16 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
 
         const oControlContext = oControlCanvas.getContext('2d');
         Zoomer.showZoomButtons(nTapX, nTapY, oControlContext, STROKE_COLOR_NORMAL);
+        if (IS_DEBUG && nTapX > 600 && nTapX < 640 && nTapY > 456 && nTapY < 496) {
+            nTapX = 623;
+            nTapY = 475;
+        }
         oTapPoint = {
             x: nTapX,
             y: nTapY
         };
         const c = Mandelbrot.getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
-        const q = transformPixelPoint(oGraphicCanvas, nTapX, nTapY, oCurrentTransform, oImageDescription);
+        const q = transformScreenPixelPointToImage(oGraphicCanvas, nTapX, nTapY, oCurrentTransform, oImageDescription);
         setCenterRealInputValue(q.x);
         setCenterImaginaryInputValue(q.y);
 
@@ -114,7 +118,7 @@ const drawImageOnCanvas = function (oTransform, oImageDescription) {
 const drawImagePixelOnCanvas = function (oDestinationCanvas, x, y, oTransform, oImageDescription) {
 
     const oDestinationContext = oDestinationCanvas.getContext('2d');
-    const oTransformedPoint = transformPixelPoint(oDestinationCanvas, x, y, oTransform, oImageDescription);
+    const oTransformedPoint = transformImagePixelPointToScreen(oDestinationCanvas, x, y, oTransform, oImageDescription);
     const index = (x * 4) + (y * 4) * oImageCanvas.width;
     let nPixelSize = oCurrentTransform.zoom < 2 ? oCurrentTransform.zoom : oCurrentTransform.zoom - 1;
 
@@ -142,10 +146,10 @@ const drawImagePixelOnCanvas = function (oDestinationCanvas, x, y, oTransform, o
 
 };
 
-const transformPixelPoint = function (oDestinationCanvas, x, y, oTransform, oImageDescription) {
+const transformImagePixelPointToScreen = function (oScreenCanvas, x, y, oTransform, oImageDescription) {
 
-    const iDestinationCanvasHorizontalMiddle = oDestinationCanvas.width / 2;
-    const iDestinationCanvasVerticalMiddle = oDestinationCanvas.height / 2;
+    const iDestinationCanvasHorizontalMiddle = oScreenCanvas.width / 2;
+    const iDestinationCanvasVerticalMiddle = oScreenCanvas.height / 2;
 
     const iImageHorizontalMiddle = oImageDescription.width / 2 - oTransform.pan.horizontal;
     const iImageVerticalMiddle = oImageDescription.height / 2 - oTransform.pan.vertical;
@@ -154,8 +158,28 @@ const transformPixelPoint = function (oDestinationCanvas, x, y, oTransform, oIma
     const iStartY = iDestinationCanvasVerticalMiddle - iImageVerticalMiddle * oTransform.zoom;
 
     const oTransformedPoint = {
-        x: iStartX + x * oTransform.zoom,
-        y: iStartY + y * oTransform.zoom
+        x: x + iStartX,
+        y: y + iStartY
+    };
+
+    return oTransformedPoint;
+
+};
+
+const transformScreenPixelPointToImage = function (oScreenCanvas, x, y, oTransform, oImageDescription) {
+
+    const iDestinationCanvasHorizontalMiddle = oScreenCanvas.width / 2;
+    const iDestinationCanvasVerticalMiddle = oScreenCanvas.height / 2;
+
+    const iImageHorizontalMiddle = oImageDescription.width / 2 - oTransform.pan.horizontal;
+    const iImageVerticalMiddle = oImageDescription.height / 2 - oTransform.pan.vertical;
+
+    const iStartX = iDestinationCanvasHorizontalMiddle - iImageHorizontalMiddle * oTransform.zoom;
+    const iStartY = iDestinationCanvasVerticalMiddle - iImageVerticalMiddle * oTransform.zoom;
+
+    const oTransformedPoint = {
+        x: (x * oTransform.zoom) - iStartX,
+        y: (y * oTransform.zoom) - iStartY
     };
 
     return oTransformedPoint;
@@ -378,8 +402,8 @@ const oImageCanvas = createCanvas('imageCanvas', '', 4, oPage);
 oImageCanvas.style = setBlockVisibility(false);
 
 const oOrigin = {
-    x: oDebugDrawCanvas.width / 2,
-    y: oDebugDrawCanvas.height / 2
+    x: oGraphicCanvas.width / 2,
+    y: oGraphicCanvas.height / 2
 };
 
 const oImage = new Image();
