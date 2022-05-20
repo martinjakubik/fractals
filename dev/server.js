@@ -12,11 +12,11 @@ let getDefaultIfBlankPath = function (sPath) {
 
     if (process.platform === 'win32') {
         if (sPath === '.\\') {
-            sDefaultPath = '.\\index.html';
+            sDefaultPath = '.\\html\\index.html';
         }
     } else {
         if (sPath === './') {
-            sDefaultPath = './index.html';
+            sDefaultPath = './html/index.html';
         }
     }
 
