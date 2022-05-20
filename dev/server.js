@@ -5,7 +5,7 @@ import * as oPath from 'path';
 
 let sBaseDirectory = '.';
 
-let nPort = 1995;
+let nPort = 1997;
 
 let getDefaultIfBlankPath = function (sPath) {
     let sDefaultPath = sPath;
@@ -21,7 +21,7 @@ let getDefaultIfBlankPath = function (sPath) {
     }
 
     return sDefaultPath;
-}
+};
 
 let getContentType = function (sPath) {
     let sContentType = 'text/plain';
@@ -43,7 +43,7 @@ let getContentType = function (sPath) {
     }
 
     return sContentType;
-}
+};
 
 oHttp.createServer(function (oRequest, oResponse) {
     try {
@@ -60,23 +60,23 @@ oHttp.createServer(function (oRequest, oResponse) {
         console.log(`final path: '${sFinalPath}'; content type: '${sContentType}'`);
 
         let oHeaders =  {
-           'Content-Type': sContentType
+            'Content-Type': sContentType
         };
 
         oResponse.writeHead(200, oHeaders);
         let oFileStream = oFs.createReadStream(sFinalPath);
         oFileStream.pipe(oResponse);
-        oFileStream.on('error', function(e) {
+        oFileStream.on('error', function (e) {
             // assumes the file doesn't exist
             oResponse.writeHead(404);
-            oResponse.end()
+            oResponse.end();
         });
     } catch(e) {
         oResponse.writeHead(500);
 
         // ends the oResponse so browsers don't hang
         oResponse.end();
-        console.log(e.stack)
+        console.log(e.stack);
     }
 
 }).listen(process.env.PORT || nPort);
