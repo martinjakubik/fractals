@@ -48,8 +48,8 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
         } else if (sControlState === CONTROL_STATE.ZOOMED_OUT) {
             oCurrentTransform.zoom = oCurrentTransform.zoom / ZOOM_MULTIPLIER;
         }
-        const nHorizontalOffset = oTapPoint.x;
-        const nVerticalOffset = oTapPoint.y;
+        const nHorizontalOffset = oCanvasCenter.x - oTapPoint.x;
+        const nVerticalOffset = oCanvasCenter.y - oTapPoint.y;
         oCurrentTransform.pan.horizontal = oCurrentTransform.pan.horizontal - nHorizontalOffset;
         oCurrentTransform.pan.vertical = oCurrentTransform.pan.vertical - nVerticalOffset;
         drawGraphics(oCurrentTransform, oImageDescription);
@@ -284,20 +284,11 @@ let oCurrentTransform = {
 
 let sControlState = CONTROL_STATE.VIEW;
 
-let oPreviousTapPoint = {
-    x: oGraphicCanvas.width / 2,
-    y: oGraphicCanvas.height / 2
-};
+let oPreviousTapPoint = oCanvasCenter;
 
-let oTapPoint = {
-    x: oGraphicCanvas.width / 2,
-    y: oGraphicCanvas.height / 2
-};
+let oTapPoint = oCanvasCenter;
 
-let oPreviousMousePosition = {
-    x: oCanvasCenter.x,
-    y: oCanvasCenter.y
-};
+let oPreviousMousePosition = oCanvasCenter;
 
 let c = Mandelbrot.getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
 
