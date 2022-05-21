@@ -16,11 +16,24 @@ const CONTROL_STATE = {
     ZOOMED_OUT: 3
 };
 
+const MAX_PAN_OFFSET = 50;
+
 const onTapCanvas = function (oEvent) {
     const nTapX = oEvent.x;
     const nTapY = oEvent.y - VERTICAL_MARGIN;
 
     handleTap(nTapX, nTapY, oCurrentTransform, oImageDescription);
+};
+
+const getPanOffsetValueFromClickedPoint = function (oClickedPoint) {
+    const nDiffX = (oCanvasCenter.x - oClickedPoint.x);
+    const nDiffY = (oCanvasCenter.y - oClickedPoint.y);
+    const xOffset = Math.abs(nDiffX) < MAX_PAN_OFFSET ? nDiffX : MAX_PAN_OFFSET * Math.abs(nDiffX) / nDiffX;
+    const yOffset = Math.abs(nDiffY) < MAX_PAN_OFFSET ? nDiffY : MAX_PAN_OFFSET * Math.abs(nDiffY) / nDiffY;
+    return {
+        x: xOffset,
+        y: yOffset
+    };
 };
 
 const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) {
@@ -48,8 +61,8 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
         } else if (sControlState === CONTROL_STATE.ZOOMED_OUT) {
             oCurrentTransform.zoom = oCurrentTransform.zoom / ZOOM_MULTIPLIER;
         }
-        const nHorizontalOffset = oCanvasCenter.x - oTapPoint.x;
-        const nVerticalOffset = oCanvasCenter.y - oTapPoint.y;
+        const nHorizontalOffset = getPanOffsetValueFromClickedPoint(oTapPoint).x;
+        const nVerticalOffset = getPanOffsetValueFromClickedPoint(oTapPoint).y;
         oCurrentTransform.pan.horizontal = oCurrentTransform.pan.horizontal - nHorizontalOffset;
         oCurrentTransform.pan.vertical = oCurrentTransform.pan.vertical - nVerticalOffset;
         drawGraphics(oCurrentTransform, oImageDescription);
