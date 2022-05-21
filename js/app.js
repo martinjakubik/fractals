@@ -280,10 +280,10 @@ let nPrecision = 5;
 let nHue = Math.floor(Math.random() * 360);
 let oCurrentTransform = {
     pan: {
-        horizontal: 0,
-        vertical: 0
+        horizontal: oCanvasCenter.x,
+        vertical: oCanvasCenter.y
     },
-    zoom: 1
+    zoom: 100
 };
 
 let sControlState = CONTROL_STATE.VIEW;
