@@ -100,8 +100,8 @@ const drawGraphics = function (oTransform, oImageDescription) {
 
     const oGraphicContext = oGraphicCanvas.getContext('2d');
     oGraphicContext.clearRect(0, 0, oGraphicCanvas.width, oGraphicCanvas.height);
-    // Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, STROKE_COLOR_DEBUG, nHue, oTapPoint);
-    drawImageOnCanvas(oTransform, oImageDescription);
+    Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, STROKE_COLOR_DEBUG, nHue, oTapPoint);
+    // drawImageOnCanvas(oTransform, oImageDescription);
 
 };
 
