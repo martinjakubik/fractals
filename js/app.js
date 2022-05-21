@@ -276,7 +276,7 @@ const oCanvasCenter = {
 
 let oImageDescription = {};
 
-let nPrecision = 5;
+let nPrecision = 85;
 let nHue = Math.floor(Math.random() * 360);
 let oCurrentTransform = {
     pan: {
