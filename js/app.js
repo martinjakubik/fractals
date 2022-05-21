@@ -121,7 +121,7 @@ const createControls = function (oTransform) {
         drawGraphics(oTransform, oImageDescription);
     };
 
-    const oCenterRealNumberInput = createNumberInput('centerreal', 0, 'flower X', oControlBar);
+    const oCenterRealNumberInput = createNumberInput('centerreal', 0, 'image X', oControlBar);
 
     oCenterRealNumberInput.onkeyup = (oEvent) => {
         if (oEvent.keyCode === 13) {
@@ -134,7 +134,7 @@ const createControls = function (oTransform) {
         }
     };
 
-    const oCenterImaginaryNumberInput = createNumberInput('centerimaginary', 0, 'flower Y', oControlBar);
+    const oCenterImaginaryNumberInput = createNumberInput('centerimaginary', 0, 'image Y', oControlBar);
 
     oCenterImaginaryNumberInput.onkeyup = (oEvent) => {
         if (oEvent.keyCode === 13) {
