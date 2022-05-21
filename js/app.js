@@ -39,8 +39,8 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
             y: nTapY
         };
         const c = Mandelbrot.getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
-        setCenterRealInputValue(c.x);
-        setCenterImaginaryInputValue(c.y);
+        setCenterRealInputValue(c.real);
+        setCenterImaginaryInputValue(c.imaginary);
     } else if (sControlState === CONTROL_STATE.ZOOMED_IN || sControlState === CONTROL_STATE.ZOOMED_OUT) {
         Zoomer.hideZoomButtons(oControlCanvas);
         if (sControlState === CONTROL_STATE.ZOOMED_IN) {
