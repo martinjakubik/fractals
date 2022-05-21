@@ -34,10 +34,6 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
     } else if (sControlState === CONTROL_STATE.CHOOSE_ZOOM) {
         const oControlContext = oControlCanvas.getContext('2d');
         Zoomer.showZoomButtons(nTapX, nTapY, oControlContext, STROKE_COLOR_NORMAL);
-        if (IS_DEBUG && nTapX > 600 && nTapX < 640 && nTapY > 456 && nTapY < 496) {
-            nTapX = 623;
-            nTapY = 475;
-        }
         oTapPoint = {
             x: nTapX,
             y: nTapY
