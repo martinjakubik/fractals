@@ -8,19 +8,14 @@ sizes.ZOOM_IN_BUTTON_RADIUS = sizes.ZOOM_LENS_RADIUS / sizes.ZOOM_IN_BUTTON_RADI
 class Zoomer {
 
     static tap () {
-
         console.log('tap');
-
     }
 
     static isPointInZoomInButton (nPointX, nPointY, oZoomCenterPoint) {
-
         return (Math.sqrt((nPointX - oZoomCenterPoint.x) ** 2 + (nPointY - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS);
-
     }
 
     static isPointInZoomOutButton (nPointX, nPointY, oZoomCenterPoint) {
-
         const x1 = nPointX - sizes.ZOOM_OUT_BUTTON_DISTANCE;
         const x2 = nPointX + sizes.ZOOM_OUT_BUTTON_DISTANCE;
         const y1 = nPointY - sizes.ZOOM_OUT_BUTTON_DISTANCE;
@@ -30,11 +25,9 @@ class Zoomer {
             || (Math.sqrt((x2 - oZoomCenterPoint.x) ** 2 + (nPointY - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS)
             || (Math.sqrt((nPointX - oZoomCenterPoint.x) ** 2 + (y1 - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS)
             || (Math.sqrt((nPointX - oZoomCenterPoint.x) ** 2 + (y2 - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS);
-
     }
 
     static showZoomButtons (x, y, oContext, sStrokeColor) {
-
         oContext.strokeStyle = sStrokeColor;
         oContext.lineWidth = 5;
 
@@ -67,31 +60,24 @@ class Zoomer {
         drawZoomOutButton(x2, y, oContext);
         drawZoomOutButton(x, y1, oContext);
         drawZoomOutButton(x, y2, oContext);
-
     }
 
     static hideZoomButtons (oCanvas) {
-
         const oContext = oCanvas.getContext('2d');
         const nParentWidth = oCanvas.parentNode.clientWidth;
         oContext.clearRect(0, 0, nParentWidth, oCanvas.height);
-
     }
 
     static onMouseMoveOnCanvas (nPointX, nPointY, oZoomCenterPoint, oCanvas, sStrokeColorNormal, sStrokeColorHighlight) {
-
         const oContext = oCanvas.getContext('2d');
         if (this.isPointInZoomInButton(nPointX, nPointY, oZoomCenterPoint)) {
             Zoomer.hideZoomButtons(oCanvas);
             Zoomer.showZoomButtons(oZoomCenterPoint.x, oZoomCenterPoint.y, oContext, sStrokeColorHighlight);
         }
-
     }
-
 }
 
 const drawZoomOutButton = function (x, y, oContext) {
-
     oContext.beginPath();
     oContext.arc(x, y, sizes.ZOOM_IN_BUTTON_RADIUS, 0, Math.PI * 2);
     oContext.stroke();
@@ -100,7 +86,6 @@ const drawZoomOutButton = function (x, y, oContext) {
     oContext.moveTo(x - sizes.ZOOM_IN_BUTTON_RADIUS * 0.66, y);
     oContext.lineTo(x + sizes.ZOOM_IN_BUTTON_RADIUS * 0.66, y);
     oContext.stroke();
-
 };
 
 export { Zoomer };

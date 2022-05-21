@@ -1,16 +1,13 @@
 const MANDELBROT_PRECISION_SMALL_VALUE = 5;
 
 class Mandelbrot {
-
     static transformXY (x, y, oTransform) {
-
         const oTransformedXY = {
             x: (x - oTransform.pan.horizontal) / oTransform.zoom,
             y: (y - oTransform.pan.vertical) / oTransform.zoom
         };
 
         return oTransformedXY;
-
     }
 
     static getComplexNumberFromPoint (oPoint, oTransform) {
@@ -18,7 +15,6 @@ class Mandelbrot {
     }
 
     static getComplexNumberFromXY (x, y, oTransform) {
-
         const oTransformedXY = Mandelbrot.transformXY(x, y, oTransform);
         const oComplexNumber = {
             real: oTransformedXY.x,
@@ -26,22 +22,18 @@ class Mandelbrot {
         };
 
         return oComplexNumber;
-
     }
 
     static getPointFromComplexNumber (c, oTransform) {
-
         const oPoint = {
             x: c.real * oTransform.zoom + oTransform.pan.horizontal,
             y: c.imaginary * oTransform.zoom + oTransform.pan.vertical
         };
 
         return oPoint;
-
     }
 
     static degreeInMandelbrotSet (c, nPrecision) {
-
         let iIncrementalRealComponent = c.real;
         let iIncrementalImaginaryComponent = c.imaginary;
 
@@ -57,15 +49,12 @@ class Mandelbrot {
             if (iIncrementalRealComponent * iIncrementalImaginaryComponent > MANDELBROT_PRECISION_SMALL_VALUE) {
                 return j / nPrecision * 100;
             }
-
         }
 
         return 0;
-
     }
 
     static drawMandelbrotSet (oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, sStrokeColor, nHue, oTapPoint) {
-
         const oGraphicContext = oGraphicCanvas.getContext('2d');
         const oDebugContext = oDebugCanvas.getContext('2d');
         const nDebugCanvasWidth = oDebugCanvas.parentNode.clientWidth;
@@ -106,7 +95,6 @@ class Mandelbrot {
                 }
             }
         }
-
     }
 }
 

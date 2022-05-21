@@ -18,27 +18,21 @@ const CONTROL_STATE = {
 };
 
 const onTapCanvas = function (oEvent) {
-
     const nTapX = oEvent.x;
     const nTapY = oEvent.y - VERTICAL_MARGIN;
 
     handleTap(nTapX, nTapY, oCurrentTransform, oImageDescription);
-
 };
 
 const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) {
-
     const oZoomControlCenterPoint = oTapPoint;
     const bIsTapInZoomInButton = Zoomer.isPointInZoomInButton(nTapX, nTapY, oZoomControlCenterPoint);
     const bIsTapInZoomOutButton = Zoomer.isPointInZoomOutButton(nTapX, nTapY, oZoomControlCenterPoint);
     updateControlState(bIsTapInZoomInButton, bIsTapInZoomOutButton);
 
     if (sControlState === CONTROL_STATE.VIEW) {
-
         Zoomer.hideZoomButtons(oControlCanvas);
-
     } else if (sControlState === CONTROL_STATE.CHOOSE_ZOOM) {
-
         const oControlContext = oControlCanvas.getContext('2d');
         Zoomer.showZoomButtons(nTapX, nTapY, oControlContext, STROKE_COLOR_NORMAL);
         if (IS_DEBUG && nTapX > 600 && nTapX < 640 && nTapY > 456 && nTapY < 496) {
@@ -53,9 +47,7 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
         const q = transformScreenPixelPointToImage(oGraphicCanvas, nTapX, nTapY, oCurrentTransform, oImageDescription);
         setCenterRealInputValue(q.x);
         setCenterImaginaryInputValue(q.y);
-
     } else if (sControlState === CONTROL_STATE.ZOOMED_IN || sControlState === CONTROL_STATE.ZOOMED_OUT) {
-
         Zoomer.hideZoomButtons(oControlCanvas);
         if (sControlState === CONTROL_STATE.ZOOMED_IN) {
             oCurrentTransform.zoom = oCurrentTransform.zoom * ZOOM_MULTIPLIER;
@@ -71,13 +63,10 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
 
         oPreviousTapPoint.x = nTapX;
         oPreviousTapPoint.y = nTapY;
-
     }
-
 };
 
 const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton) {
-
     switch (sControlState) {
     case CONTROL_STATE.VIEW:
         sControlState = CONTROL_STATE.CHOOSE_ZOOM;
@@ -93,30 +82,24 @@ const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton
         }
         return;
     }
-
 };
 
 const drawGraphics = function (oTransform, oImageDescription) {
-
     const oGraphicContext = oGraphicCanvas.getContext('2d');
     oGraphicContext.clearRect(0, 0, oGraphicCanvas.width, oGraphicCanvas.height);
     Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, STROKE_COLOR_DEBUG, nHue, oTapPoint);
     // drawImageOnCanvas(oTransform, oImageDescription);
-
 };
 
 const drawImageOnCanvas = function (oTransform, oImageDescription) {
-
     for (let x = 0; x < oImageDescription.width; x++) {
         for (let y = 0; y < oImageDescription.height; y++) {
             drawImagePixelOnCanvas(oGraphicCanvas, x, y, oTransform, oImageDescription);
         }
     }
-
 };
 
 const drawImagePixelOnCanvas = function (oDestinationCanvas, x, y, oTransform, oImageDescription) {
-
     const oDestinationContext = oDestinationCanvas.getContext('2d');
     const oTransformedPoint = transformImagePixelPointToScreen(oDestinationCanvas, x, y, oTransform, oImageDescription);
     const index = (x * 4) + (y * 4) * oImageCanvas.width;
@@ -143,11 +126,9 @@ const drawImagePixelOnCanvas = function (oDestinationCanvas, x, y, oTransform, o
     const sRGBA = `rgba(${rDecimal}, ${gDecimal}, ${bDecimal}, ${alphaDecimal})`;
     oDestinationContext.fillStyle = sRGBA;
     oDestinationContext.fillRect(oTransformedPoint.x, oTransformedPoint.y, nPixelSize, nPixelSize);
-
 };
 
 const transformImagePixelPointToScreen = function (oScreenCanvas, x, y, oTransform, oImageDescription) {
-
     const iDestinationCanvasHorizontalMiddle = oScreenCanvas.width / 2;
     const iDestinationCanvasVerticalMiddle = oScreenCanvas.height / 2;
 
@@ -163,11 +144,9 @@ const transformImagePixelPointToScreen = function (oScreenCanvas, x, y, oTransfo
     };
 
     return oTransformedPoint;
-
 };
 
 const transformScreenPixelPointToImage = function (oScreenCanvas, x, y, oTransform, oImageDescription) {
-
     const iDestinationCanvasHorizontalMiddle = oScreenCanvas.width / 2;
     const iDestinationCanvasVerticalMiddle = oScreenCanvas.height / 2;
 
@@ -183,7 +162,6 @@ const transformScreenPixelPointToImage = function (oScreenCanvas, x, y, oTransfo
     };
 
     return oTransformedPoint;
-
 };
 
 const setCenterRealInputValue = function (nRealValue) {
@@ -215,7 +193,6 @@ const handleDraw = function (oTransform) {
 };
 
 const createControls = function (oTransform) {
-
     const oControlBar = document.createElement('div');
     oControlBar.classList.add('controlBar');
     document.body.appendChild(oControlBar);
@@ -269,19 +246,15 @@ const createControls = function (oTransform) {
     const oDebugCheckbox = createCheckbox('debug', IS_DEBUG, 'Debug', oControlBar);
 
     oDebugCheckbox.onchange = () => {
-
         IS_DEBUG = oDebugCheckbox.checked;
         const sStyle = setBlockVisibility(IS_DEBUG);
         oDebugCanvas.style = sStyle;
         oDebugDrawCanvas.style = sStyle;
         drawGraphics(oCurrentTransform, oImageDescription);
-
     };
-
 };
 
 const createPage = function () {
-
     const oPage = createDiv('page');
     const nParentWidth = oPage.parentNode.clientWidth;
     const nParentHeight = oPage.parentNode.clientHeight;
@@ -299,21 +272,17 @@ const createPage = function () {
     oPage.style.marginBottom = sMarginVertical;
 
     return oPage;
-
 };
 
 const onMouseMoveOnCanvas = function (oEvent) {
-
     // Zoomer.onMouseMoveOnCanvas(oEvent.offsetX, oEvent.offsetY, oTapPoint, oControlCanvas, STROKE_COLOR_NORMAL, STROKE_COLOR_HIGHLIGHT);
 
     if (IS_DEBUG) {
         showDebugInfo(oEvent.offsetX, oEvent.offsetY);
     }
-
 };
 
 const clearOldDebugLine = function (fromX, fromY, toX, toY) {
-
     const oContext = oDebugDrawCanvas.getContext('2d');
     oContext.beginPath();
     oContext.lineWidth = 3;
@@ -323,11 +292,9 @@ const clearOldDebugLine = function (fromX, fromY, toX, toY) {
     oContext.closePath();
     oContext.stroke();
     oContext.globalCompositeOperation = 'source-over';
-
 };
 
 const drawNewDebugLine = function (fromX, fromY, toX, toY) {
-
     const oContext = oDebugDrawCanvas.getContext('2d');
     oContext.beginPath();
     oContext.strokeStyle = STROKE_COLOR_DEBUG;
@@ -336,18 +303,15 @@ const drawNewDebugLine = function (fromX, fromY, toX, toY) {
     oContext.lineTo(toX, toY);
     oContext.closePath();
     oContext.stroke();
-
 };
 
 const clearOldDebugInfoBox = function (fromX, fromY, nWidth, nHeight) {
 
     const oContext = oDebugDrawCanvas.getContext('2d');
     oContext.clearRect(fromX + 10, fromY, nWidth, nHeight);
-
 };
 
 const drawNewDebugInfoBox = function (fromX, fromY, nWidth, nHeight) {
-
     const oContext = oDebugDrawCanvas.getContext('2d');
     oContext.fillStyle = '#000';
     oContext.fillRect(fromX + 10, fromY, nWidth, nHeight);
@@ -360,11 +324,9 @@ const drawNewDebugInfoBox = function (fromX, fromY, nWidth, nHeight) {
     oContext.fillText(sDebugText1, fromX + 10, fromY + 10);
     oContext.fillText(sDebugText2, fromX + 10, fromY + 24);
     oContext.fillText(sDebugText3, fromX + 10, fromY + 38);
-
 };
 
 const showDebugInfo = function (oEventOffsetX, oEventOffsetY) {
-
     const nTextBoxWidth = 120;
     const nTextBoxHeight = 42;
 
@@ -376,7 +338,6 @@ const showDebugInfo = function (oEventOffsetX, oEventOffsetY) {
 
     oPreviousMousePosition.x = oEventOffsetX;
     oPreviousMousePosition.y = oEventOffsetY;
-
 };
 
 const oParams = new URLSearchParams(document.location.search.substring(1));
@@ -440,7 +401,6 @@ let oPreviousMousePosition = {
 let c = Mandelbrot.getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
 
 const waitUntilImageLoadedAndStart = function () {
-
     const fnHandleImageLoaded = () => {
 
         oImage.removeEventListener('load', fnHandleImageLoaded);
@@ -459,18 +419,15 @@ const waitUntilImageLoadedAndStart = function () {
     };
 
     oImage.addEventListener('load', fnHandleImageLoaded);
-
 };
 
 const main = function () {
-
     createControls(oCurrentTransform);
 
     setCenterRealInputValue(c.real);
     setCenterImaginaryInputValue(c.imaginary);
 
     waitUntilImageLoadedAndStart();
-
 };
 
 main();
