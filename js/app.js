@@ -63,8 +63,8 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
         }
         const nHorizontalOffset = getPanOffsetValueFromClickedPoint(oTapPoint).x;
         const nVerticalOffset = getPanOffsetValueFromClickedPoint(oTapPoint).y;
-        oCurrentTransform.pan.horizontal = oCurrentTransform.pan.horizontal - nHorizontalOffset;
-        oCurrentTransform.pan.vertical = oCurrentTransform.pan.vertical - nVerticalOffset;
+        oCurrentTransform.pan.horizontal = oCurrentTransform.pan.horizontal + nHorizontalOffset;
+        oCurrentTransform.pan.vertical = oCurrentTransform.pan.vertical + nVerticalOffset;
         drawGraphics(oCurrentTransform, oImageDescription);
         sControlState = CONTROL_STATE.VIEW;
 
