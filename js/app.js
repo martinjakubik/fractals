@@ -16,8 +16,6 @@ const CONTROL_STATE = {
     ZOOMED_OUT: 3
 };
 
-const MAX_PAN_OFFSET = 50;
-
 const onTapCanvas = function (oEvent) {
     const nTapX = oEvent.x;
     const nTapY = oEvent.y - VERTICAL_MARGIN;
@@ -26,13 +24,9 @@ const onTapCanvas = function (oEvent) {
 };
 
 const getPanOffsetValueFromClickedPoint = function (oClickedPoint) {
-    const nDiffX = (oCanvasCenter.x - oClickedPoint.x);
-    const nDiffY = (oCanvasCenter.y - oClickedPoint.y);
-    const xOffset = Math.abs(nDiffX) < MAX_PAN_OFFSET ? nDiffX : MAX_PAN_OFFSET * Math.abs(nDiffX) / nDiffX;
-    const yOffset = Math.abs(nDiffY) < MAX_PAN_OFFSET ? nDiffY : MAX_PAN_OFFSET * Math.abs(nDiffY) / nDiffY;
     return {
-        x: xOffset,
-        y: yOffset
+        x: oCanvasCenter.x - oClickedPoint.x,
+        y: oCanvasCenter.y - oClickedPoint.y
     };
 };
 
