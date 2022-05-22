@@ -16,6 +16,12 @@ const CONTROL_STATE = {
     ZOOMED_OUT: 3
 };
 
+function round (num, decimalPlaces = 0) {
+    var p = Math.pow(10, decimalPlaces);
+    var n = (num * p) * (1 + Number.EPSILON);
+    return Math.round(n) / p;
+}
+
 const onTapCanvas = function (oEvent) {
     const nTapX = oEvent.x;
     const nTapY = oEvent.y - VERTICAL_MARGIN;
@@ -206,7 +212,7 @@ const drawNewDebugInfoBox = function (fromX, fromY, nWidth, nHeight) {
 
     const sDebugText1 = `x:${fromX}, y:${fromY}`;
     const oTransformedPoint = Mandelbrot.transformXY(fromX, fromY, oCurrentTransform);
-    const sDebugText2 = `x:${oTransformedPoint.x}, y:${oTransformedPoint.y}`;
+    const sDebugText2 = `x:${round(oTransformedPoint.x, 6)}, y:${round(oTransformedPoint.y, 6)}`;
     const sDebugText3 = `zoom:${oCurrentTransform.zoom}`;
     oContext.fillStyle = STROKE_COLOR_DEBUG;
     oContext.fillText(sDebugText1, fromX + 10, fromY + 10);
