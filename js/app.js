@@ -132,7 +132,7 @@ const createControls = function (oTransform) {
                 real: oCenterRealNumberInput.value,
                 imaginary: oCenterImaginaryNumberInput.value
             };
-            oTransform.pan.horizontal = oCanvasCenter.x - Mandelbrot.getPointFromComplexNumber(c, oTransform).x;
+            oTransform.pan.horizontal = oCanvasCenter.x - Mandelbrot.getPointFromComplexNumber(c, oCanvasCenter, oTransform).x;
             handleDraw(oTransform);
         }
     };
@@ -145,7 +145,7 @@ const createControls = function (oTransform) {
                 real: oCenterRealNumberInput.value,
                 imaginary: oCenterImaginaryNumberInput.value
             };
-            oTransform.pan.vertical = oCanvasCenter.y - Mandelbrot.getPointFromComplexNumber(c, oTransform).y;
+            oTransform.pan.vertical = oCanvasCenter.y - Mandelbrot.getPointFromComplexNumber(c, oCanvasCenter, oTransform).y;
             handleDraw(oTransform);
         }
     };

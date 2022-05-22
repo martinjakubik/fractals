@@ -24,10 +24,10 @@ class Mandelbrot {
         return oComplexNumber;
     }
 
-    static getPointFromComplexNumber (c, oTransform) {
+    static getPointFromComplexNumber (c, oCanvasCenter, oTransform) {
         const oPoint = {
-            x: c.real * oTransform.zoom + oTransform.pan.horizontal,
-            y: c.imaginary * oTransform.zoom + oTransform.pan.vertical
+            x: c.real - (oCanvasCenter.x / oTransform.zoom),
+            y: c.imaginary - (oCanvasCenter.y / oTransform.zoom)
         };
 
         return oPoint;
