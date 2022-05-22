@@ -194,34 +194,9 @@ const createPage = function () {
 };
 
 const onMouseMoveOnCanvas = function (oEvent) {
-    // Zoomer.onMouseMoveOnCanvas(oEvent.offsetX, oEvent.offsetY, oTapPoint, oControlCanvas, STROKE_COLOR_NORMAL, STROKE_COLOR_HIGHLIGHT);
-
     if (IS_DEBUG) {
         showDebugInfo(oEvent.offsetX, oEvent.offsetY);
     }
-};
-
-const clearOldDebugLine = function (fromX, fromY, toX, toY) {
-    const oContext = oDebugDrawCanvas.getContext('2d');
-    oContext.beginPath();
-    oContext.lineWidth = 3;
-    oContext.globalCompositeOperation = 'destination-out';
-    oContext.moveTo(fromX, fromY);
-    oContext.lineTo(toX, toY);
-    oContext.closePath();
-    oContext.stroke();
-    oContext.globalCompositeOperation = 'source-over';
-};
-
-const drawNewDebugLine = function (fromX, fromY, toX, toY) {
-    const oContext = oDebugDrawCanvas.getContext('2d');
-    oContext.beginPath();
-    oContext.strokeStyle = STROKE_COLOR_DEBUG;
-    oContext.lineWidth = 1;
-    oContext.moveTo(fromX, fromY);
-    oContext.lineTo(toX, toY);
-    oContext.closePath();
-    oContext.stroke();
 };
 
 const clearOldDebugInfoBox = function (fromX, fromY, nWidth, nHeight) {
@@ -248,9 +223,6 @@ const drawNewDebugInfoBox = function (fromX, fromY, nWidth, nHeight) {
 const showDebugInfo = function (oEventOffsetX, oEventOffsetY) {
     const nTextBoxWidth = 120;
     const nTextBoxHeight = 42;
-
-    clearOldDebugLine(oCanvasCenter.x, oCanvasCenter.y, oPreviousMousePosition.x, oPreviousMousePosition.y);
-    drawNewDebugLine(oCanvasCenter.x, oCanvasCenter.y, oEventOffsetX, oEventOffsetY);
 
     clearOldDebugInfoBox(oPreviousMousePosition.x + 10, oPreviousMousePosition.y, nTextBoxWidth, nTextBoxHeight);
     drawNewDebugInfoBox(oEventOffsetX + 10, oEventOffsetY, nTextBoxWidth, nTextBoxHeight);
