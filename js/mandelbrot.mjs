@@ -54,7 +54,7 @@ class Mandelbrot {
         return 0;
     }
 
-    static drawMandelbrotSet (oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, sStrokeColor, nHue, oTapPoint) {
+    static drawMandelbrotSet (oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, sStrokeColor, nHue, oTapPoint, IS_DEBUG) {
         const oGraphicContext = oGraphicCanvas.getContext('2d');
         const oDebugContext = oDebugCanvas.getContext('2d');
         const nDebugCanvasWidth = oDebugCanvas.parentNode.clientWidth;
@@ -66,17 +66,19 @@ class Mandelbrot {
 
         oDebugContext.clearRect(0, 0, nDebugCanvasWidth, oDebugCanvas.height);
 
-        sDebugText = `precision: ${nPrecision} pan:${(oTransform.pan.horizontal)} zoom: ${oTransform.zoom} pan/zoom:${(oTransform.pan.horizontal / oTransform.zoom)} last click: (${oTapPoint.x}, ${oTapPoint.y}) center point real: ${((oGraphicCanvas.width / 2) - oTransform.pan.horizontal) / oTransform.zoom}`;
-        oDebugContext.fillStyle = sStrokeColor;
-        oDebugContext.fillText(sDebugText, 80, 580);
+        if (IS_DEBUG) {
+            sDebugText = `precision: ${nPrecision} pan:${(oTransform.pan.horizontal)} zoom: ${oTransform.zoom} pan/zoom:${(oTransform.pan.horizontal / oTransform.zoom)} last click: (${oTapPoint.x}, ${oTapPoint.y}) center point real: ${((oGraphicCanvas.width / 2) - oTransform.pan.horizontal) / oTransform.zoom}`;
+            oDebugContext.fillStyle = sStrokeColor;
+            oDebugContext.fillText(sDebugText, 80, 580);
+        }
 
         for (x = 0; x < oGraphicCanvas.width; x++) {
             for (y = 0; y < oGraphicCanvas.height; y++) {
 
                 const c = Mandelbrot.getComplexNumberFromXY(x, y, oTransform);
 
-                // debug
-                if (x % 200 === 0 && y % 200 === 0) {
+                // get debug details every 200 pixels
+                if (IS_DEBUG && x % 200 === 0 && y % 200 === 0) {
                     const sDebugText1 = `x:${x},y:${y}`;
                     const sDebugText2 = `r:${c.real}, i:${c.imaginary}`;
                     oDebugContext.fillStyle = sStrokeColor;

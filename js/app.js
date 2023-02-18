@@ -94,7 +94,7 @@ const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton
 const drawGraphics = function (oTransform) {
     const oGraphicContext = oGraphicCanvas.getContext('2d');
     oGraphicContext.clearRect(0, 0, oGraphicCanvas.width, oGraphicCanvas.height);
-    Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, STROKE_COLOR_DEBUG, nHue, oTapPoint);
+    Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, STROKE_COLOR_DEBUG, nHue, oTapPoint, IS_DEBUG);
 };
 
 const setCenterRealInputValue = function (nRealValue) {
@@ -130,7 +130,7 @@ const createControls = function (oTransform) {
         drawGraphics(oTransform, oImageDescription);
     };
 
-    const oCenterRealNumberInput = createNumberInput('centerreal', 0, 'image X', oControlBar);
+    const oCenterRealNumberInput = createNumberInput('centerreal', c.real, 'center real', oControlBar);
 
     oCenterRealNumberInput.onkeyup = (oEvent) => {
         if (oEvent.keyCode === 13) {
@@ -143,7 +143,7 @@ const createControls = function (oTransform) {
         }
     };
 
-    const oCenterImaginaryNumberInput = createNumberInput('centerimaginary', 0, 'image Y', oControlBar);
+    const oCenterImaginaryNumberInput = createNumberInput('centerimaginary', c.imaginary, 'center imagin', oControlBar);
 
     oCenterImaginaryNumberInput.onkeyup = (oEvent) => {
         if (oEvent.keyCode === 13) {
@@ -264,7 +264,7 @@ let oCurrentTransform = {
         horizontal: oCanvasCenter.x,
         vertical: oCanvasCenter.y
     },
-    zoom: 100
+    zoom: 6400
 };
 
 let sControlState = CONTROL_STATE.VIEW;
@@ -275,7 +275,7 @@ let oTapPoint = oCanvasCenter;
 
 let oPreviousMousePosition = oCanvasCenter;
 
-let c = Mandelbrot.getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
+let c = Mandelbrot.getComplexNumberFromPoint(oCanvasCenter, oCurrentTransform);
 
 const main = function () {
     createControls(oCurrentTransform);
