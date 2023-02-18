@@ -1,0 +1,6 @@
+This oTransform works: {pan: {horizontal: -7800, vertical: 1200}, zoom: 25600}
+
+We are trying to get x, transformed, to equal 0.36
+
+So say x400 = 400:
+(400 - (-7800)) / 25600 = 0.3203125
