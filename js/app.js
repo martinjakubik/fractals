@@ -82,10 +82,21 @@ const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton
     }
 };
 
+const updateStatusCanvas = function (nValue, nMaximumValue) {
+    const nStatus = nValue / nMaximumValue * 100;
+    const oStatusContext = oStatusCanvas.getContext('2d');
+    oStatusContext.fillStyle = '#fff';
+    oStatusContext.fillRect(0, 0, nStatus, 1);
+};
+
 const drawGraphics = function (oTransform) {
+    const oStatusContext = oStatusCanvas.getContext('2d');
+    oStatusContext.fillStyle = '#000';
+    oStatusContext.fillRect(0, 0, 100, 1);
+
     const oGraphicContext = oGraphicCanvas.getContext('2d');
     oGraphicContext.clearRect(0, 0, oGraphicCanvas.width, oGraphicCanvas.height);
-    Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, STROKE_COLOR_DEBUG, nHue, oTapPoint, IS_DEBUG);
+    Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, STROKE_COLOR_DEBUG, nHue, oTapPoint, IS_DEBUG, updateStatusCanvas);
 };
 
 const setCenterRealInputValue = function (nRealValue) {
@@ -164,6 +175,8 @@ const createControls = function (oTransform) {
         oDebugDrawCanvas.style = sStyle;
         drawGraphics(oCurrentTransform, oImageDescription);
     };
+
+    oStatusCanvas = createCanvas('graphicCanvas', '', 0, oControlBar, 100, 1);
 };
 
 const createPage = function () {
@@ -232,6 +245,7 @@ let IS_DEBUG = bIsDebug;
 
 const oPage = createPage();
 const oGraphicCanvas = createCanvas('graphicCanvas', '', 0, oPage);
+let oStatusCanvas;
 
 const oDebugCanvas = createCanvas('debugCanvas', '', 1, oPage);
 oDebugCanvas.style = setBlockVisibility(IS_DEBUG);
