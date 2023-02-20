@@ -29,13 +29,6 @@ const onTapCanvas = function (oEvent) {
     handleTap(nTapX, nTapY, oCurrentTransform, oImageDescription);
 };
 
-const getPanOffsetValueFromClickedPoint = function (oClickedPoint) {
-    return {
-        x: oCanvasCenter.x - oClickedPoint.x,
-        y: oCanvasCenter.y - oClickedPoint.y
-    };
-};
-
 const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) {
     const oZoomControlCenterPoint = oTapPoint;
     const bIsTapInZoomInButton = Zoomer.isPointInZoomInButton(nTapX, nTapY, oZoomControlCenterPoint);
@@ -51,9 +44,9 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
             x: nTapX,
             y: nTapY
         };
-        const c = Mandelbrot.getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
-        setCenterRealInputValue(c.real);
-        setCenterImaginaryInputValue(c.imaginary);
+        const cFromXY = Mandelbrot.getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
+        setCenterRealInputValue(cFromXY.real);
+        setCenterImaginaryInputValue(cFromXY.imaginary);
     } else if (sControlState === CONTROL_STATE.ZOOMED_IN || sControlState === CONTROL_STATE.ZOOMED_OUT) {
         Zoomer.hideZoomButtons(oControlCanvas);
         if (sControlState === CONTROL_STATE.ZOOMED_IN) {
@@ -61,10 +54,8 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
         } else if (sControlState === CONTROL_STATE.ZOOMED_OUT) {
             oCurrentTransform.zoom = oCurrentTransform.zoom / ZOOM_MULTIPLIER;
         }
-        const nHorizontalOffset = getPanOffsetValueFromClickedPoint(oTapPoint).x;
-        const nVerticalOffset = getPanOffsetValueFromClickedPoint(oTapPoint).y;
-        oCurrentTransform.pan.horizontal = oCurrentTransform.pan.horizontal + nHorizontalOffset;
-        oCurrentTransform.pan.vertical = oCurrentTransform.pan.vertical + nVerticalOffset;
+        oCurrentTransform.pan.horizontal = oCurrentTransform.zoom * c.real - oCanvasCenter.x;
+        oCurrentTransform.pan.vertical = oCurrentTransform.zoom * c.imaginary - oCanvasCenter.y;
         drawGraphics(oCurrentTransform, oImageDescription);
         sControlState = CONTROL_STATE.VIEW;
 
@@ -98,11 +89,13 @@ const drawGraphics = function (oTransform) {
 };
 
 const setCenterRealInputValue = function (nRealValue) {
+    c.real = nRealValue;
     const oCenterRealNumberInput = document.getElementById('centerreal');
     oCenterRealNumberInput.value = nRealValue;
 };
 
 const setCenterImaginaryInputValue = function (nImaginaryValue) {
+    c.imaginary = nImaginaryValue;
     const oCenterImaginaryNumberInput = document.getElementById('centerimaginary');
     oCenterImaginaryNumberInput.value = nImaginaryValue;
 };
@@ -138,7 +131,7 @@ const createControls = function (oTransform) {
                 real: oCenterRealNumberInput.value,
                 imaginary: oCenterImaginaryNumberInput.value
             };
-            oTransform.pan.horizontal = oCanvasCenter.x - Mandelbrot.getPointFromComplexNumber(c, oCanvasCenter, oTransform).x;
+            oTransform.pan.horizontal = oTransform.zoom * c.real - oCanvasCenter.x;
             handleDraw(oTransform);
         }
     };
@@ -151,7 +144,7 @@ const createControls = function (oTransform) {
                 real: oCenterRealNumberInput.value,
                 imaginary: oCenterImaginaryNumberInput.value
             };
-            oTransform.pan.vertical = oCanvasCenter.y - Mandelbrot.getPointFromComplexNumber(c, oCanvasCenter, oTransform).y;
+            oTransform.pan.vertical = oTransform.zoom * c.imaginary - oCanvasCenter.y;
             handleDraw(oTransform);
         }
     };

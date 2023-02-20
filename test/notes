@@ -4,3 +4,5 @@ We are trying to get x, transformed, to equal 0.36
 
 So say x400 = 400:
 (400 - (-7800)) / 25600 = 0.3203125
+
+oTransform.pan.horizontal = - (oTransform.zoom * 0.3203125 - x)
