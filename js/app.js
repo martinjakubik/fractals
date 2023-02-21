@@ -218,7 +218,7 @@ const drawNewDebugInfoBox = function (fromX, fromY, nWidth, nHeight) {
 
     const sDebugText1 = `x:${fromX}, y:${fromY}`;
     const oTransformedPoint = Mandelbrot.transformXY(fromX, fromY, oCurrentTransform);
-    const sDebugText2 = `x:${round(oTransformedPoint.x, 6)}, y:${round(oTransformedPoint.y, 6)}`;
+    const sDebugText2 = `r:${round(oTransformedPoint.x, 6)}, i:${round(oTransformedPoint.y, 6)}`;
     const sDebugText3 = `zoom:${oCurrentTransform.zoom}`;
     oContext.fillStyle = STROKE_COLOR_DEBUG;
     oContext.fillText(sDebugText1, fromX + 10, fromY + 10);
@@ -271,7 +271,7 @@ let oCurrentTransform = {
         horizontal: oCanvasCenter.x,
         vertical: oCanvasCenter.y
     },
-    zoom: 6400
+    zoom: 100
 };
 
 let sControlState = CONTROL_STATE.VIEW;
