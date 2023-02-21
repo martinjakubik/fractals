@@ -3,7 +3,7 @@ import { Zoomer } from './zoomer.mjs';
 import { Mandelbrot } from './mandelbrot.mjs';
 
 const STROKE_COLOR_DEBUG = '#aaa';
-const STROKE_COLOR_NORMAL = '#aaa';
+const STROKE_COLOR_NORMAL = 'rgba(250, 240, 240, 0.3)';
 
 const VERTICAL_MARGIN = 36;
 
