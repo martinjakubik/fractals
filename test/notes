@@ -6,3 +6,20 @@ So say x400 = 400:
 (400 - (-7800)) / 25600 = 0.3203125
 
 oTransform.pan.horizontal = - (oTransform.zoom * 0.3203125 - x)
+
+--
+
+(x - oTransform.pan.horizontal) / oTransform.zoom = 0.32
+x800 = 800
+oTransform.zoom = 200
+
+x - oTransform.pan.horizontal = oTransform.zoom * 0.32
+
+-oTransform.pan.horizontal = oTransform.zoom * 0.32 - x
+
+oTransform.pan.horizontal = -(oTransform.zoom * 0.32 - x)
+
+oTransform.pan.horizontal = -(200 * 0.32 - 800)
+
+
+

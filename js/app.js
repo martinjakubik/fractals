@@ -54,8 +54,8 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
         } else if (sControlState === CONTROL_STATE.ZOOMED_OUT) {
             oCurrentTransform.zoom = oCurrentTransform.zoom / ZOOM_MULTIPLIER;
         }
-        oCurrentTransform.pan.horizontal = oCurrentTransform.zoom * c.real - oCanvasCenter.x;
-        oCurrentTransform.pan.vertical = oCurrentTransform.zoom * c.imaginary - oCanvasCenter.y;
+        oCurrentTransform.pan.horizontal = -(oCurrentTransform.zoom * c.real - oCanvasCenter.x);
+        oCurrentTransform.pan.vertical = -(oCurrentTransform.zoom * c.imaginary - oCanvasCenter.y);
         drawGraphics(oCurrentTransform, oImageDescription);
         sControlState = CONTROL_STATE.VIEW;
 
