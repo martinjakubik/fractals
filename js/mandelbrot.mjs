@@ -1,7 +1,4 @@
 const MANDELBROT_PRECISION_SMALL_VALUE = 5;
-const MANDELBROT_PIXEL_SIZE = 4;
-const MANDELBROT_PIXEL_WIDTH = MANDELBROT_PIXEL_SIZE;
-const MANDELBROT_PIXEL_HEIGHT = MANDELBROT_PIXEL_SIZE;
 
 class Mandelbrot {
     static transformXY (x, y, oTransform) {
@@ -57,7 +54,7 @@ class Mandelbrot {
         return 0;
     }
 
-    static drawMandelbrotSet (oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, sStrokeColor, nHue, oTapPoint, IS_DEBUG, fnUpdateStatus) {
+    static drawMandelbrotSet (oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, sStrokeColor, nHue, oTapPoint, nPixelWidth, nPixelHeight, IS_DEBUG, fnUpdateStatus) {
         const oGraphicContext = oGraphicCanvas.getContext('2d');
         const oDebugContext = oDebugCanvas.getContext('2d');
         const nDebugCanvasWidth = oDebugCanvas.parentNode.clientWidth;
@@ -77,8 +74,8 @@ class Mandelbrot {
 
         const nMaxXYValue = oGraphicCanvas.width * oGraphicCanvas.height;
 
-        for (x = 0; x < oGraphicCanvas.width; x = x + MANDELBROT_PIXEL_WIDTH) {
-            for (y = 0; y < oGraphicCanvas.height; y = y + MANDELBROT_PIXEL_HEIGHT) {
+        for (x = 0; x < oGraphicCanvas.width; x = x + nPixelWidth) {
+            for (y = 0; y < oGraphicCanvas.height; y = y + nPixelHeight) {
 
                 fnUpdateStatus(x * oGraphicCanvas.height + y, nMaxXYValue);
 
@@ -97,10 +94,10 @@ class Mandelbrot {
 
                 if (nDegreeInSet === 0) {
                     oGraphicContext.fillStyle = '#000';
-                    oGraphicContext.fillRect(x, y, MANDELBROT_PIXEL_WIDTH, MANDELBROT_PIXEL_HEIGHT);
+                    oGraphicContext.fillRect(x, y, nPixelWidth, nPixelHeight);
                 } else {
                     oGraphicContext.fillStyle = `hsl(${nHue}, 100%, ${nDegreeInSet}%)`;
-                    oGraphicContext.fillRect(x, y, MANDELBROT_PIXEL_WIDTH, MANDELBROT_PIXEL_HEIGHT);
+                    oGraphicContext.fillRect(x, y, nPixelWidth, nPixelHeight);
                 }
             }
         }

@@ -5,6 +5,7 @@ import { Mandelbrot } from './mandelbrot.mjs';
 const FILL_COLOR_EMPTY = '#000';
 const STROKE_COLOR_DEBUG = '#aaa';
 const STROKE_COLOR_NORMAL = 'rgba(250, 240, 240, 0.3)';
+const MANDELBROT_PIXEL_SIZE = 1;
 
 const VERTICAL_MARGIN = 36;
 
@@ -27,10 +28,10 @@ const onTapCanvas = function (oEvent) {
     const nTapX = oEvent.x;
     const nTapY = oEvent.y - VERTICAL_MARGIN;
 
-    handleTap(nTapX, nTapY, oCurrentTransform, oImageDescription);
+    handleTap(nTapX, nTapY, oCurrentTransform);
 };
 
-const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) {
+const handleTap = function (nTapX, nTapY, oCurrentTransform) {
     const oZoomControlCenterPoint = oTapPoint;
     const bIsTapInZoomInButton = Zoomer.isPointInZoomInButton(nTapX, nTapY, oZoomControlCenterPoint);
     const bIsTapInZoomOutButton = Zoomer.isPointInZoomOutButton(nTapX, nTapY, oZoomControlCenterPoint);
@@ -57,7 +58,7 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform, oImageDescription) 
         }
         oCurrentTransform.pan.horizontal = -(oCurrentTransform.zoom * c.real - oCanvasCenter.x);
         oCurrentTransform.pan.vertical = -(oCurrentTransform.zoom * c.imaginary - oCanvasCenter.y);
-        drawGraphics(oCurrentTransform, oImageDescription);
+        drawGraphics(oCurrentTransform, nPixelSize);
         sControlState = CONTROL_STATE.VIEW;
 
         oPreviousTapPoint.x = nTapX;
@@ -100,11 +101,11 @@ const clearStatusBox = function (){
         oStatusBox.removeChild(oStatusBox.firstChild);
     }
 };
-const drawGraphics = function (oTransform) {
+const drawGraphics = function (oTransform, nPixelSize) {
     clearStatusBox();
     const oGraphicContext = oGraphicCanvas.getContext('2d');
     oGraphicContext.clearRect(0, 0, oGraphicCanvas.width, oGraphicCanvas.height);
-    Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, STROKE_COLOR_DEBUG, nHue, oTapPoint, IS_DEBUG, updateStatusBox);
+    Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, STROKE_COLOR_DEBUG, nHue, oTapPoint, nPixelSize, nPixelSize, IS_DEBUG, updateStatusBox);
 };
 
 const setCenterRealInputValue = function (nRealValue) {
@@ -119,8 +120,8 @@ const setCenterImaginaryInputValue = function (nImaginaryValue) {
     oCenterImaginaryNumberInput.value = nImaginaryValue;
 };
 
-const handleDraw = function (oTransform) {
-    drawGraphics(oTransform, oImageDescription);
+const handleDraw = function (oTransform, nPixelSize) {
+    drawGraphics(oTransform, nPixelSize);
 };
 
 const createControls = function (oTransform) {
@@ -132,14 +133,26 @@ const createControls = function (oTransform) {
 
     oPrecisionSlider.onchange = () => {
         nPrecision = oPrecisionSlider.value;
-        drawGraphics(oTransform, oImageDescription);
+        drawGraphics(oTransform, nPixelSize);
     };
 
     const oHueSlider = createSlider('hue', '0', '359', nHue, 'Hue', null, oControlBar);
 
     oHueSlider.onchange = () => {
         nHue = oHueSlider.value;
-        drawGraphics(oTransform, oImageDescription);
+        drawGraphics(oTransform, nPixelSize);
+    };
+
+    const oPixelSizeSlider = createSlider('pixelSize', '1', '4', nPixelSize, 'Pixel Size', null, oControlBar);
+
+    oPixelSizeSlider.onchange = () => {
+        const parsed = parseInt(oPixelSizeSlider.value, 10);
+        if (isNaN(parsed)) {
+            nPixelSize = 1;
+        } else {
+            nPixelSize = parsed;
+        }
+        drawGraphics(oTransform, nPixelSize);
     };
 
     const oCenterRealNumberInput = createNumberInput('centerreal', c.real, 'center real', oControlBar);
@@ -184,7 +197,7 @@ const createControls = function (oTransform) {
         const sStyle = setBlockVisibility(IS_DEBUG);
         oDebugCanvas.style = sStyle;
         oDebugDrawCanvas.style = sStyle;
-        drawGraphics(oCurrentTransform, oImageDescription);
+        drawGraphics(oCurrentTransform, nPixelSize);
     };
 
     oStatusBox = createDiv('statusBox', oControlBar);
@@ -272,10 +285,9 @@ const oCanvasCenter = {
     y: oGraphicCanvas.height / 2
 };
 
-let oImageDescription = {};
-
 let nPrecision = 85;
 let nHue = Math.floor(Math.random() * 360);
+let nPixelSize = MANDELBROT_PIXEL_SIZE;
 let oCurrentTransform = {
     pan: {
         horizontal: oCanvasCenter.x,
@@ -300,7 +312,7 @@ const main = function () {
     setCenterRealInputValue(c.real);
     setCenterImaginaryInputValue(c.imaginary);
 
-    drawGraphics(oCurrentTransform, oImageDescription);
+    drawGraphics(oCurrentTransform, nPixelSize);
 };
 
 main();
