@@ -2,7 +2,7 @@ import { createButton, createCanvas, createCheckbox, createDiv, createNumberInpu
 import { Zoomer } from './zoomer.mjs';
 import { Mandelbrot } from './mandelbrot.mjs';
 
-const STROKE_COLOR_EMPTY = '#000';
+const FILL_COLOR_EMPTY = '#000';
 const STROKE_COLOR_DEBUG = '#aaa';
 const STROKE_COLOR_NORMAL = 'rgba(250, 240, 240, 0.3)';
 
@@ -92,7 +92,7 @@ const updateStatusCanvas = function (nValue, nMaximumValue) {
 
 const drawGraphics = function (oTransform) {
     const oStatusContext = oStatusCanvas.getContext('2d');
-    oStatusContext.fillStyle = STROKE_COLOR_EMPTY;
+    oStatusContext.fillStyle = FILL_COLOR_EMPTY;
     oStatusContext.fillRect(0, 0, 100, 1);
 
     const oGraphicContext = oGraphicCanvas.getContext('2d');
@@ -207,14 +207,13 @@ const onMouseMoveOnCanvas = function (oEvent) {
 };
 
 const clearOldDebugInfoBox = function (fromX, fromY, nWidth, nHeight) {
-
     const oContext = oDebugDrawCanvas.getContext('2d');
     oContext.clearRect(fromX + 10, fromY, nWidth, nHeight);
 };
 
 const drawNewDebugInfoBox = function (fromX, fromY, nWidth, nHeight) {
     const oContext = oDebugDrawCanvas.getContext('2d');
-    oContext.fillStyle = '#000';
+    oContext.fillStyle = FILL_COLOR_EMPTY;
     oContext.fillRect(fromX + 10, fromY, nWidth, nHeight);
 
     const sDebugText1 = `x:${fromX}, y:${fromY}`;
