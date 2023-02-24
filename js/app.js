@@ -171,6 +171,9 @@ const createControls = function (oTransform) {
 
     oDebugCheckbox.onchange = () => {
         IS_DEBUG = oDebugCheckbox.checked;
+        const oParams = new URLSearchParams(document.location.search);
+        oParams.set('debug', IS_DEBUG);
+        document.location.search = oParams.toString();
         const sStyle = setBlockVisibility(IS_DEBUG);
         oDebugCanvas.style = sStyle;
         oDebugDrawCanvas.style = sStyle;
