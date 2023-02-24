@@ -2,6 +2,7 @@ import { createButton, createCanvas, createCheckbox, createDiv, createNumberInpu
 import { Zoomer } from './zoomer.mjs';
 import { Mandelbrot } from './mandelbrot.mjs';
 
+const STROKE_COLOR_EMPTY = '#000';
 const STROKE_COLOR_DEBUG = '#aaa';
 const STROKE_COLOR_NORMAL = 'rgba(250, 240, 240, 0.3)';
 
@@ -91,7 +92,7 @@ const updateStatusCanvas = function (nValue, nMaximumValue) {
 
 const drawGraphics = function (oTransform) {
     const oStatusContext = oStatusCanvas.getContext('2d');
-    oStatusContext.fillStyle = '#000';
+    oStatusContext.fillStyle = STROKE_COLOR_EMPTY;
     oStatusContext.fillRect(0, 0, 100, 1);
 
     const oGraphicContext = oGraphicCanvas.getContext('2d');
