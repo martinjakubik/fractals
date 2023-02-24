@@ -1,4 +1,7 @@
 const MANDELBROT_PRECISION_SMALL_VALUE = 5;
+const MANDELBROT_PIXEL_SIZE = 4;
+const MANDELBROT_PIXEL_WIDTH = MANDELBROT_PIXEL_SIZE;
+const MANDELBROT_PIXEL_HEIGHT = MANDELBROT_PIXEL_SIZE;
 
 class Mandelbrot {
     static transformXY (x, y, oTransform) {
@@ -74,8 +77,8 @@ class Mandelbrot {
 
         const nMaxXYValue = oGraphicCanvas.width * oGraphicCanvas.height;
 
-        for (x = 0; x < oGraphicCanvas.width; x++) {
-            for (y = 0; y < oGraphicCanvas.height; y++) {
+        for (x = 0; x < oGraphicCanvas.width; x = x + MANDELBROT_PIXEL_WIDTH) {
+            for (y = 0; y < oGraphicCanvas.height; y = y + MANDELBROT_PIXEL_HEIGHT) {
 
                 fnUpdateStatus(x * oGraphicCanvas.height + y, nMaxXYValue);
 
@@ -94,10 +97,10 @@ class Mandelbrot {
 
                 if (nDegreeInSet === 0) {
                     oGraphicContext.fillStyle = '#000';
-                    oGraphicContext.fillRect(x, y, 1, 1);
+                    oGraphicContext.fillRect(x, y, MANDELBROT_PIXEL_WIDTH, MANDELBROT_PIXEL_HEIGHT);
                 } else {
                     oGraphicContext.fillStyle = `hsl(${nHue}, 100%, ${nDegreeInSet}%)`;
-                    oGraphicContext.fillRect(x, y, 1, 1);
+                    oGraphicContext.fillRect(x, y, MANDELBROT_PIXEL_WIDTH, MANDELBROT_PIXEL_HEIGHT);
                 }
             }
         }
