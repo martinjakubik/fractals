@@ -237,7 +237,7 @@ const showDebugInfo = function (oEventOffsetX, oEventOffsetY) {
     oPreviousMousePosition.y = oEventOffsetY;
 };
 
-const oParams = new URLSearchParams(document.location.search.substring(1));
+const oParams = new URLSearchParams(document.location.search);
 const sIsDebug = oParams.get('debug', false);
 const bIsDebug = decodeURI(sIsDebug) === 'true';
 
