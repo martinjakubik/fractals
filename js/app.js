@@ -85,7 +85,7 @@ const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton
 const updateStatusCanvas = function (nValue, nMaximumValue) {
     const nStatus = nValue / nMaximumValue * 100;
     const oStatusContext = oStatusCanvas.getContext('2d');
-    oStatusContext.fillStyle = '#fff';
+    oStatusContext.fillStyle = STROKE_COLOR_NORMAL;
     oStatusContext.fillRect(0, 0, nStatus, 1);
 };
 
