@@ -72,10 +72,12 @@ class Mandelbrot {
             oDebugContext.fillText(sDebugText, 80, 580);
         }
 
+        const nMaxXYValue = oGraphicCanvas.width * oGraphicCanvas.height;
+
         for (x = 0; x < oGraphicCanvas.width; x++) {
             for (y = 0; y < oGraphicCanvas.height; y++) {
 
-                fnUpdateStatus((x + 1) * (y + 1), oGraphicCanvas.width * oGraphicCanvas.height);
+                fnUpdateStatus(x * oGraphicCanvas.height + y, nMaxXYValue);
 
                 const c = Mandelbrot.getComplexNumberFromXY(x, y, oTransform);
 

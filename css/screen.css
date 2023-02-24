@@ -18,3 +18,14 @@ div.controlBar {
     width: 100%;
     box-sizing: border-box;
 }
+
+
+div#statusBox {
+    display: flex;
+}
+
+div#statusBox>div {
+    background-color: aqua;
+    height: 10px;
+    width: 10px;
+}
