@@ -1,4 +1,4 @@
-import { createButton, createCanvas, createCheckbox, createDiv, createNumberInput, createSlider, setBlockVisibility } from '../../lib/js/learnhypertext.mjs';
+import { createButton, createCanvas, createCheckbox, createDiv, createNumberInput, createSlider, setBlockVisibility } from './learnhypertext.mjs';
 import { Zoomer } from './zoomer.mjs';
 import { Mandelbrot } from './mandelbrot.mjs';
 
@@ -18,7 +18,7 @@ const CONTROL_STATE = {
     ZOOMED_OUT: 3
 };
 
-function round (num, decimalPlaces = 0) {
+function round(num, decimalPlaces = 0) {
     var p = Math.pow(10, decimalPlaces);
     var n = (num * p) * (1 + Number.EPSILON);
     return Math.round(n) / p;
@@ -68,25 +68,25 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform) {
 
 const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton) {
     switch (sControlState) {
-    case CONTROL_STATE.VIEW:
-        sControlState = CONTROL_STATE.CHOOSE_ZOOM;
-        return;
-    case CONTROL_STATE.ZOOMED_IN:
-    case CONTROL_STATE.CHOOSE_ZOOM:
-        if (bIsTapInZoomInButton) {
-            sControlState = CONTROL_STATE.ZOOMED_IN;
-        } else if (bIsTapInZoomOutButton) {
-            sControlState = CONTROL_STATE.ZOOMED_OUT;
-        } else {
-            sControlState = CONTROL_STATE.VIEW;
-        }
-        return;
+        case CONTROL_STATE.VIEW:
+            sControlState = CONTROL_STATE.CHOOSE_ZOOM;
+            return;
+        case CONTROL_STATE.ZOOMED_IN:
+        case CONTROL_STATE.CHOOSE_ZOOM:
+            if (bIsTapInZoomInButton) {
+                sControlState = CONTROL_STATE.ZOOMED_IN;
+            } else if (bIsTapInZoomOutButton) {
+                sControlState = CONTROL_STATE.ZOOMED_OUT;
+            } else {
+                sControlState = CONTROL_STATE.VIEW;
+            }
+            return;
     }
 };
 
 const updateStatusBox = function (nValue, nMaximumValue) {
     const nStatus = nValue / nMaximumValue * 100;
-    if(shouldUpdateStatus(nStatus)) {
+    if (shouldUpdateStatus(nStatus)) {
         createDiv(`status${nStatus}`, oStatusBox);
         console.log(nStatus);
     }
@@ -96,7 +96,7 @@ const shouldUpdateStatus = function (nStatus) {
     return nStatus - Math.floor(nStatus) < 0.00001;
 };
 
-const clearStatusBox = function (){
+const clearStatusBox = function () {
     while (oStatusBox.firstChild) {
         oStatusBox.removeChild(oStatusBox.firstChild);
     }
