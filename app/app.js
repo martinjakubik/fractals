@@ -25,8 +25,8 @@ function round (num, decimalPlaces = 0) {
 }
 
 const onTapCanvas = function (oEvent) {
-    const nTapX = oEvent.x;
-    const nTapY = oEvent.y - VERTICAL_MARGIN;
+    const nTapX = oEvent.offsetX;
+    const nTapY = oEvent.offsetY;
 
     handleTap(nTapX, nTapY, oCurrentTransform);
 };
@@ -109,7 +109,7 @@ const handleDraw = function (oTransform, nPixelSize) {
 const createControls = function (oTransform) {
     const oControlBar = document.createElement('div');
     oControlBar.classList.add('controlBar');
-    document.body.appendChild(oControlBar);
+    appBox.appendChild(oControlBar);
 
     const oPrecisionSlider = createSlider('precision', '0', '1000', nPrecision, 'Precision', null, oControlBar);
 
@@ -183,8 +183,8 @@ const createControls = function (oTransform) {
     };
 };
 
-const createPage = function () {
-    const oPage = createDiv('page');
+const createPage = function (oParent) {
+    const oPage = createDiv('page', oParent);
     const nParentWidth = oPage.parentNode.clientWidth;
     const nParentHeight = oPage.parentNode.clientHeight;
 
@@ -240,13 +240,40 @@ const showDebugInfo = function (oEventOffsetX, oEventOffsetY) {
     oPreviousMousePosition.y = oEventOffsetY;
 };
 
+let appBox;
+
+const makeAppBox = function () {
+    appBox = document.getElementById('app');
+    if (!appBox) {
+        const oContainer = document.getElementById('container');
+        let oParentElement = document.getElementsByTagName('body');
+        if (oContainer) {
+            oParentElement = oContainer;
+        }
+        appBox = createDiv('app', oParentElement);
+        const nParentWidth = appBox.parentNode.clientWidth;
+        const nParentHeight = document.body.clientHeight;
+
+        appBox.style.width = nParentWidth + 'px';
+        appBox.style.height = (nParentHeight - 2 * VERTICAL_MARGIN) + 'px';
+
+        const nMarginSide = Math.floor((nParentWidth - appBox.width) / 2);
+        const sMarginSide = nMarginSide + "px";
+
+        appBox.style.marginLeft = sMarginSide;
+        appBox.style.marginRight = sMarginSide;
+    }
+};
+
 const oParams = new URLSearchParams(document.location.search);
 const sIsDebug = oParams.get('debug', false);
 const bIsDebug = decodeURI(sIsDebug) === 'true';
 
 let IS_DEBUG = bIsDebug;
 
-const oPage = createPage();
+makeAppBox();
+const oPage = createPage(appBox);
+
 const oGraphicCanvas = createCanvas('graphicCanvas', '', 0, oPage);
 
 const oDebugCanvas = createCanvas('debugCanvas', '', 1, oPage);
