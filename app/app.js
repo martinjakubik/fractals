@@ -246,7 +246,7 @@ const makeAppBox = function () {
     appBox = document.getElementById('app');
     if (!appBox) {
         const oContainer = document.getElementById('container');
-        let oParentElement = document.getElementsByTagName('body');
+        let oParentElement = document.body;
         if (oContainer) {
             oParentElement = oContainer;
         }
