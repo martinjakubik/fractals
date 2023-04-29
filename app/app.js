@@ -18,7 +18,7 @@ const CONTROL_STATE = {
     ZOOMED_OUT: 3
 };
 
-function round(num, decimalPlaces = 0) {
+function round (num, decimalPlaces = 0) {
     var p = Math.pow(10, decimalPlaces);
     var n = (num * p) * (1 + Number.EPSILON);
     return Math.round(n) / p;
@@ -68,19 +68,19 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform) {
 
 const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton) {
     switch (sControlState) {
-        case CONTROL_STATE.VIEW:
-            sControlState = CONTROL_STATE.CHOOSE_ZOOM;
-            return;
-        case CONTROL_STATE.ZOOMED_IN:
-        case CONTROL_STATE.CHOOSE_ZOOM:
-            if (bIsTapInZoomInButton) {
-                sControlState = CONTROL_STATE.ZOOMED_IN;
-            } else if (bIsTapInZoomOutButton) {
-                sControlState = CONTROL_STATE.ZOOMED_OUT;
-            } else {
-                sControlState = CONTROL_STATE.VIEW;
-            }
-            return;
+    case CONTROL_STATE.VIEW:
+        sControlState = CONTROL_STATE.CHOOSE_ZOOM;
+        return;
+    case CONTROL_STATE.ZOOMED_IN:
+    case CONTROL_STATE.CHOOSE_ZOOM:
+        if (bIsTapInZoomInButton) {
+            sControlState = CONTROL_STATE.ZOOMED_IN;
+        } else if (bIsTapInZoomOutButton) {
+            sControlState = CONTROL_STATE.ZOOMED_OUT;
+        } else {
+            sControlState = CONTROL_STATE.VIEW;
+        }
+        return;
     }
 };
 
