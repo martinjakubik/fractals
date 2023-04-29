@@ -3,42 +3,46 @@ import * as oUrl from 'url';
 import * as oFs from 'fs';
 import * as oPath from 'path';
 
-let sBaseDirectory = '.';
+let sBaseDirectory = './app';
 
 let nPort = 1997;
 
 let getDefaultIfBlankPath = function (sPath) {
-    let sDefaultPath = sPath;
+    let sResponsePath = sPath;
 
     if (process.platform === 'win32') {
-        if (sPath === '.\\') {
-            sDefaultPath = '.\\html\\index.html';
+        if (sPath === '\\') {
+            sResponsePath = sBaseDirectory + '\\index.html';
+        } else {
+            sResponsePath = sBaseDirectory + sPath;
         }
     } else {
-        if (sPath === './') {
-            sDefaultPath = './html/index.html';
+        if (sPath === '/') {
+            sResponsePath = sBaseDirectory + '/index.html';
+        } else {
+            sResponsePath = sBaseDirectory + sPath;
         }
     }
 
-    return sDefaultPath;
+    return sResponsePath;
 };
 
 let getContentType = function (sPath) {
     let sContentType = 'text/plain';
 
-    if (process.platform === 'win32' && sPath === '.\\index.html') {
+    if (process.platform === 'win32' && sPath === sBaseDirectory + '\\index.html') {
         sContentType = 'text/html';
-    } else if (sPath === './index.html') {
+    } else if (sPath === sBaseDirectory + '/index.html') {
         sContentType = 'text/html';
-    } else if (sPath.includes('/css/')) {
+    } else if (sPath.includes('.css')) {
         sContentType = 'text/css';
-    } else if (sPath.includes('/html/')) {
+    } else if (sPath.includes('.html')) {
         sContentType = 'text/html';
     } else if (sPath.includes('/resources/')) {
         sContentType = 'image/png';
     } else if (process.platform === 'win32' && sPath.includes('\\resources\\')) {
         sContentType = 'image/png';
-    } else if (sPath.includes('/js/')) {
+    } else if (sPath.includes('.js') || sPath.includes('.mjs')) {
         sContentType = 'application/javascript';
     }
 
@@ -52,7 +56,7 @@ oHttp.createServer(function (oRequest, oResponse) {
         let sPath = oRequestUrl.pathname;
 
         // need to use oPath.normalize so people can't access directories underneath sBaseDirectory
-        let sFSPath = sBaseDirectory + oPath.normalize(sPath);
+        let sFSPath = oPath.normalize(sPath);
 
         let sFinalPath = getDefaultIfBlankPath(sFSPath);
         let sContentType = getContentType(sFinalPath);
