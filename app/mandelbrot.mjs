@@ -54,7 +54,7 @@ class Mandelbrot {
         return 0;
     }
 
-    static drawMandelbrotSet (oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, sStrokeColor, nHue, oTapPoint, nPixelWidth, nPixelHeight, IS_DEBUG, fnUpdateStatus) {
+    static drawMandelbrotSet (oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, sStrokeColor, nHue, oTapPoint, nPixelWidth, nPixelHeight, IS_DEBUG) {
         const oGraphicContext = oGraphicCanvas.getContext('2d');
         const oDebugContext = oDebugCanvas.getContext('2d');
         const nDebugCanvasWidth = oDebugCanvas.parentNode.clientWidth;
@@ -76,9 +76,6 @@ class Mandelbrot {
 
         for (x = 0; x < oGraphicCanvas.width; x = x + nPixelWidth) {
             for (y = 0; y < oGraphicCanvas.height; y = y + nPixelHeight) {
-
-                fnUpdateStatus(x * oGraphicCanvas.height + y, nMaxXYValue);
-
                 const c = Mandelbrot.getComplexNumberFromXY(x, y, oTransform);
 
                 // get debug details every 200 pixels

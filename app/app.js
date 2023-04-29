@@ -84,28 +84,10 @@ const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton
     }
 };
 
-const updateStatusBox = function (nValue, nMaximumValue) {
-    const nStatus = nValue / nMaximumValue * 100;
-    if (shouldUpdateStatus(nStatus)) {
-        createDiv(`status${nStatus}`, oStatusBox);
-        console.log(nStatus);
-    }
-};
-
-const shouldUpdateStatus = function (nStatus) {
-    return nStatus - Math.floor(nStatus) < 0.00001;
-};
-
-const clearStatusBox = function () {
-    while (oStatusBox.firstChild) {
-        oStatusBox.removeChild(oStatusBox.firstChild);
-    }
-};
 const drawGraphics = function (oTransform, nPixelSize) {
-    clearStatusBox();
     const oGraphicContext = oGraphicCanvas.getContext('2d');
     oGraphicContext.clearRect(0, 0, oGraphicCanvas.width, oGraphicCanvas.height);
-    Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, STROKE_COLOR_DEBUG, nHue, oTapPoint, nPixelSize, nPixelSize, IS_DEBUG, updateStatusBox);
+    Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, STROKE_COLOR_DEBUG, nHue, oTapPoint, nPixelSize, nPixelSize, IS_DEBUG);
 };
 
 const setCenterRealInputValue = function (nRealValue) {
@@ -199,8 +181,6 @@ const createControls = function (oTransform) {
         oDebugDrawCanvas.style = sStyle;
         drawGraphics(oCurrentTransform, nPixelSize);
     };
-
-    oStatusBox = createDiv('statusBox', oControlBar);
 };
 
 const createPage = function () {
@@ -268,7 +248,6 @@ let IS_DEBUG = bIsDebug;
 
 const oPage = createPage();
 const oGraphicCanvas = createCanvas('graphicCanvas', '', 0, oPage);
-let oStatusBox;
 
 const oDebugCanvas = createCanvas('debugCanvas', '', 1, oPage);
 oDebugCanvas.style = setBlockVisibility(IS_DEBUG);
