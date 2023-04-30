@@ -3,9 +3,9 @@ import { Zoomer } from './zoomer.mjs';
 import { Mandelbrot } from './mandelbrot.mjs';
 import { bgColors, fgColors } from './palette.mjs';
 
-const FILL_COLOR_EMPTY = bgColors[0]; /* color */
-const STROKE_COLOR_NORMAL = fgColors[1]; /* color */
-const STROKE_COLOR_DEBUG = fgColors[2]; /* color */
+const FILL_COLOR_EMPTY = bgColors[0];
+const STROKE_COLOR_NORMAL = fgColors[1];
+const STROKE_COLOR_DEBUG = fgColors[2];
 const MANDELBROT_PIXEL_SIZE = 1;
 
 const VERTICAL_MARGIN = 36;

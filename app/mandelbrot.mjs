@@ -92,11 +92,11 @@ class Mandelbrot {
                 const nDegreeInSet = Mandelbrot.degreeInMandelbrotSet(c, nPrecision);
 
                 if (nDegreeInSet === 0) {
-                    oGraphicContext.fillStyle = bgColors[1]; /* color */
+                    oGraphicContext.fillStyle = bgColors[1];
                     oGraphicContext.fillRect(x, y, nPixelWidth, nPixelHeight);
                 } else {
                     const nLightness = bLightMode ? 100 - nDegreeInSet : nDegreeInSet;
-                    oGraphicContext.fillStyle = `hsl(${nHue}, 100%, ${nLightness}%)`; /* color */
+                    oGraphicContext.fillStyle = `hsl(${nHue}, 100%, ${nLightness}%)`;
                     oGraphicContext.fillRect(x, y, nPixelWidth, nPixelHeight);
                 }
             }

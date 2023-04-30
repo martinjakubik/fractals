@@ -1,15 +1,15 @@
 body {
     margin: 0 0 0 0;
-    background-color: var(--bg-0-color); /* color */
+    background-color: var(--bg-0-color);
 }
 
 label {
     font-family: var(--font-0-family);
-    color: var(--text-2-fg-color); /* color */
+    color: var(--text-2-fg-color);
 }
 
 div.controlBar {
-    background-color: var(--bg-2-color); /* color */
+    background-color: var(--bg-2-color);
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     position: absolute;
