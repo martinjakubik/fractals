@@ -227,7 +227,7 @@ const oCanvasCenter = {
 };
 
 let nPrecision = 85;
-let nHue = Math.floor(Math.random() * 360);
+let nHue = 192;
 let nPixelSize = MANDELBROT_PIXEL_SIZE;
 let oCurrentTransform = {
     pan: {
