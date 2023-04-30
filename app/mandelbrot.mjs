@@ -1,4 +1,4 @@
-import { bLightMode, bgColors } from "./palette.mjs";
+import { palette } from "./palette.mjs";
 
 const MANDELBROT_PRECISION_SMALL_VALUE = 5;
 
@@ -56,7 +56,7 @@ class Mandelbrot {
         return 0;
     }
 
-    static drawMandelbrotSet (oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, sStrokeColor, nHue, oTapPoint, nPixelWidth, nPixelHeight, IS_DEBUG) {
+    static drawMandelbrotSet (oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, sStrokeColor, nHue, THEME, oTapPoint, nPixelWidth, nPixelHeight, IS_DEBUG) {
         const oGraphicContext = oGraphicCanvas.getContext('2d');
         const oDebugContext = oDebugCanvas.getContext('2d');
         const nDebugCanvasWidth = oDebugCanvas.parentNode.clientWidth;
@@ -92,10 +92,10 @@ class Mandelbrot {
                 const nDegreeInSet = Mandelbrot.degreeInMandelbrotSet(c, nPrecision);
 
                 if (nDegreeInSet === 0) {
-                    oGraphicContext.fillStyle = bgColors[1];
+                    oGraphicContext.fillStyle = palette[THEME].bgColors[1];
                     oGraphicContext.fillRect(x, y, nPixelWidth, nPixelHeight);
                 } else {
-                    const nLightness = bLightMode ? 100 - nDegreeInSet : nDegreeInSet;
+                    const nLightness = palette[THEME].lightMode ? 100 - nDegreeInSet : nDegreeInSet;
                     oGraphicContext.fillStyle = `hsl(${nHue}, 100%, ${nLightness}%)`;
                     oGraphicContext.fillRect(x, y, nPixelWidth, nPixelHeight);
                 }

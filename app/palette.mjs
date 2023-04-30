@@ -1,12 +1,29 @@
-const bLightMode = false;
+const palette = [];
 
-const bgColors = [];
-bgColors[0] = '#000000';
-bgColors[1] = '#000000';
+palette[0] = {
+    lightMode: false,
+    bgColors: [
+        '#000000',
+        '#000000'
+    ],
+    fgColors: [
+        '#ffffff',
+        'rgba(250, 240, 240, 0.3)',
+        '#aaaaaa'
+    ]
+};
 
-const fgColors = [];
-fgColors[0] = '#ffffff';
-fgColors[1] = 'rgba(250, 240, 240, 0.3)';
-fgColors[2] = '#aaaaaa';
+palette[1] = {
+    lightMode: true,
+    bgColors: [
+        '#ffffff',
+        '#ffffff'
+    ],
+    fgColors: [
+        '#ffffff',
+        'rgba(50, 40, 40, 0.3)',
+        '#aaaaaa'
+    ]
+};
 
-export {bLightMode, bgColors, fgColors};
+export { palette };

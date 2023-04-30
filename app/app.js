@@ -1,11 +1,12 @@
 import { createButton, createCanvas, createCheckbox, createDiv, createNumberInput, createSlider, setBlockVisibility } from './learnhypertext.mjs';
 import { Zoomer } from './zoomer.mjs';
 import { Mandelbrot } from './mandelbrot.mjs';
-import { bgColors, fgColors } from './palette.mjs';
+import { palette } from './palette.mjs';
 
-const FILL_COLOR_EMPTY = bgColors[0];
-const STROKE_COLOR_NORMAL = fgColors[1];
-const STROKE_COLOR_DEBUG = fgColors[2];
+const THEME = 1;
+const FILL_COLOR_EMPTY = palette[THEME].bgColors[0];
+const STROKE_COLOR_NORMAL = palette[THEME].fgColors[1];
+const STROKE_COLOR_DEBUG = palette[THEME].fgColors[2];
 const MANDELBROT_PIXEL_SIZE = 1;
 
 const VERTICAL_MARGIN = 36;
@@ -88,7 +89,7 @@ const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton
 const drawGraphics = function (oTransform, nPixelSize) {
     const oGraphicContext = oGraphicCanvas.getContext('2d');
     oGraphicContext.clearRect(0, 0, oGraphicCanvas.width, oGraphicCanvas.height);
-    Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, STROKE_COLOR_DEBUG, nHue, oTapPoint, nPixelSize, nPixelSize, IS_DEBUG);
+    Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, STROKE_COLOR_DEBUG, nHue, THEME, oTapPoint, nPixelSize, nPixelSize, IS_DEBUG);
 };
 
 const setCenterRealInputValue = function (nRealValue) {
