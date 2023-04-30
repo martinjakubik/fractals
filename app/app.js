@@ -3,7 +3,7 @@ import { Zoomer } from './zoomer.mjs';
 import { Mandelbrot } from './mandelbrot.mjs';
 import { palette } from './palette.mjs';
 
-const THEME = 1;
+const THEME = 0;
 const FILL_COLOR_EMPTY = palette[THEME].bgColors[0];
 const STROKE_COLOR_NORMAL = palette[THEME].fgColors[1];
 const STROKE_COLOR_DEBUG = palette[THEME].fgColors[2];
