@@ -227,7 +227,7 @@ const oCanvasCenter = {
 };
 
 let nPrecision = 85;
-const aHues = [34, 192];
+const aHues = [34, 192, 322];
 let nHue = aHues[Math.floor(Math.random() * aHues.length)];
 let nPixelSize = MANDELBROT_PIXEL_SIZE;
 let oCurrentTransform = {
