@@ -56,38 +56,17 @@ class Mandelbrot {
         return 0;
     }
 
-    static drawMandelbrotSet (oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, sStrokeColor, nHue, THEME, oTapPoint, nPixelWidth, nPixelHeight, IS_DEBUG) {
+    static drawMandelbrotSet (oTransform, nPrecision, oGraphicCanvas, nHue, THEME, oTapPoint, nPixelWidth, nPixelHeight) {
         const oGraphicContext = oGraphicCanvas.getContext('2d');
-        const oDebugContext = oDebugCanvas.getContext('2d');
-        const nDebugCanvasWidth = oDebugCanvas.parentNode.clientWidth;
 
         let x = 0;
         let y = 0;
-        let sDebugText = '';
-        oDebugContext.font = '8pt sans-serif';
-
-        oDebugContext.clearRect(0, 0, nDebugCanvasWidth, oDebugCanvas.height);
-
-        if (IS_DEBUG) {
-            sDebugText = `precision: ${nPrecision} pan:${(oTransform.pan.horizontal)} zoom: ${oTransform.zoom} pan/zoom:${(oTransform.pan.horizontal / oTransform.zoom)} last click: (${oTapPoint.x}, ${oTapPoint.y}) center point real: ${((oGraphicCanvas.width / 2) - oTransform.pan.horizontal) / oTransform.zoom}`;
-            oDebugContext.fillStyle = sStrokeColor;
-            oDebugContext.fillText(sDebugText, 80, 580);
-        }
 
         const nMaxXYValue = oGraphicCanvas.width * oGraphicCanvas.height;
 
         for (x = 0; x < oGraphicCanvas.width; x = x + nPixelWidth) {
             for (y = 0; y < oGraphicCanvas.height; y = y + nPixelHeight) {
                 const c = Mandelbrot.getComplexNumberFromXY(x, y, oTransform);
-
-                // get debug details every 200 pixels
-                if (IS_DEBUG && x % 200 === 0 && y % 200 === 0) {
-                    const sDebugText1 = `x:${x},y:${y}`;
-                    const sDebugText2 = `r:${c.real}, i:${c.imaginary}`;
-                    oDebugContext.fillStyle = sStrokeColor;
-                    oDebugContext.fillText(sDebugText1, x, y + 8);
-                    oDebugContext.fillText(sDebugText2, x, y + 22);
-                }
 
                 const nDegreeInSet = Mandelbrot.degreeInMandelbrotSet(c, nPrecision);
 

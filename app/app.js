@@ -49,8 +49,8 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform) {
             y: nTapY
         };
         const cFromXY = Mandelbrot.getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
-        setCenterRealInputValue(cFromXY.real);
-        setCenterImaginaryInputValue(cFromXY.imaginary);
+        c.real = cFromXY.real;
+        c.imaginary = cFromXY.imaginary;
     } else if (sControlState === CONTROL_STATE.ZOOMED_IN || sControlState === CONTROL_STATE.ZOOMED_OUT) {
         Zoomer.hideZoomButtons(oControlCanvas);
         if (sControlState === CONTROL_STATE.ZOOMED_IN) {
@@ -89,23 +89,7 @@ const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton
 const drawGraphics = function (oTransform, nPixelSize) {
     const oGraphicContext = oGraphicCanvas.getContext('2d');
     oGraphicContext.clearRect(0, 0, oGraphicCanvas.width, oGraphicCanvas.height);
-    Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, oDebugCanvas, STROKE_COLOR_DEBUG, nHue, THEME, oTapPoint, nPixelSize, nPixelSize, IS_DEBUG);
-};
-
-const setCenterRealInputValue = function (nRealValue) {
-    c.real = nRealValue;
-    const oCenterRealNumberInput = document.getElementById('centerreal');
-    oCenterRealNumberInput.value = nRealValue;
-};
-
-const setCenterImaginaryInputValue = function (nImaginaryValue) {
-    c.imaginary = nImaginaryValue;
-    const oCenterImaginaryNumberInput = document.getElementById('centerimaginary');
-    oCenterImaginaryNumberInput.value = nImaginaryValue;
-};
-
-const handleDraw = function (oTransform, nPixelSize) {
-    drawGraphics(oTransform, nPixelSize);
+    Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, nHue, THEME, oTapPoint, nPixelSize, nPixelSize);
 };
 
 const createControls = function (oTransform) {
@@ -137,51 +121,6 @@ const createControls = function (oTransform) {
             nPixelSize = parsed;
         }
         drawGraphics(oTransform, nPixelSize);
-    };
-
-    const oCenterRealNumberInput = createNumberInput('centerreal', c.real, 'center real', oControlBar);
-
-    oCenterRealNumberInput.onkeyup = (oEvent) => {
-        if (oEvent.keyCode === 13) {
-            const c = {
-                real: oCenterRealNumberInput.value,
-                imaginary: oCenterImaginaryNumberInput.value
-            };
-            oTransform.pan.horizontal = oTransform.zoom * c.real - oCanvasCenter.x;
-            handleDraw(oTransform);
-        }
-    };
-
-    const oCenterImaginaryNumberInput = createNumberInput('centerimaginary', c.imaginary, 'center imagin', oControlBar);
-
-    oCenterImaginaryNumberInput.onkeyup = (oEvent) => {
-        if (oEvent.keyCode === 13) {
-            const c = {
-                real: oCenterRealNumberInput.value,
-                imaginary: oCenterImaginaryNumberInput.value
-            };
-            oTransform.pan.vertical = oTransform.zoom * c.imaginary - oCanvasCenter.y;
-            handleDraw(oTransform);
-        }
-    };
-
-    const oDrawButton = createButton('draw', 'Draw', oControlBar);
-
-    oDrawButton.onclick = () => {
-        handleDraw(oTransform);
-    };
-
-    const oDebugCheckbox = createCheckbox('debug', IS_DEBUG, 'Debug', oControlBar);
-
-    oDebugCheckbox.onchange = () => {
-        IS_DEBUG = oDebugCheckbox.checked;
-        const oParams = new URLSearchParams(document.location.search);
-        oParams.set('debug', IS_DEBUG);
-        document.location.search = oParams.toString();
-        const sStyle = setBlockVisibility(IS_DEBUG);
-        oDebugCanvas.style = sStyle;
-        oDebugDrawCanvas.style = sStyle;
-        drawGraphics(oCurrentTransform, nPixelSize);
     };
 };
 
@@ -278,12 +217,6 @@ const oPage = createPage(appBox);
 
 const oGraphicCanvas = createCanvas('graphicCanvas', '', 0, oPage);
 
-const oDebugCanvas = createCanvas('debugCanvas', '', 1, oPage);
-oDebugCanvas.style = setBlockVisibility(IS_DEBUG);
-
-const oDebugDrawCanvas = createCanvas('debugDrawCanvas', '', 2, oPage);
-oDebugDrawCanvas.style = setBlockVisibility(IS_DEBUG);
-
 const oControlCanvas = createCanvas('controlCanvas', '', 3, oPage);
 oControlCanvas.addEventListener('mousemove', onMouseMoveOnCanvas);
 oControlCanvas.addEventListener('click', onTapCanvas);
@@ -316,9 +249,6 @@ let c = Mandelbrot.getComplexNumberFromPoint(oCanvasCenter, oCurrentTransform);
 
 const main = function () {
     createControls(oCurrentTransform);
-
-    setCenterRealInputValue(c.real);
-    setCenterImaginaryInputValue(c.imaginary);
 
     drawGraphics(oCurrentTransform, nPixelSize);
 };
