@@ -1,3 +1,5 @@
+import { bLightMode, bgColors } from "./palette.mjs";
+
 const MANDELBROT_PRECISION_SMALL_VALUE = 5;
 
 class Mandelbrot {
@@ -90,10 +92,11 @@ class Mandelbrot {
                 const nDegreeInSet = Mandelbrot.degreeInMandelbrotSet(c, nPrecision);
 
                 if (nDegreeInSet === 0) {
-                    oGraphicContext.fillStyle = '#000';
+                    oGraphicContext.fillStyle = bgColors[1]; /* color */
                     oGraphicContext.fillRect(x, y, nPixelWidth, nPixelHeight);
                 } else {
-                    oGraphicContext.fillStyle = `hsl(${nHue}, 100%, ${nDegreeInSet}%)`;
+                    const nLightness = bLightMode ? 100 - nDegreeInSet : nDegreeInSet;
+                    oGraphicContext.fillStyle = `hsl(${nHue}, 100%, ${nLightness}%)`; /* color */
                     oGraphicContext.fillRect(x, y, nPixelWidth, nPixelHeight);
                 }
             }

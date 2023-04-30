@@ -1,15 +1,15 @@
 body {
     margin: 0 0 0 0;
-    background-color: black;
+    background-color: var(--bg-0-color); /* color */
 }
 
 label {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: #aaa;
+    font-family: var(--font-0-family);
+    color: var(--text-2-fg-color); /* color */
 }
 
 div.controlBar {
-    background-color: dimgrey;
+    background-color: var(--bg-2-color); /* color */
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     position: absolute;
@@ -18,3 +18,34 @@ div.controlBar {
     width: 100%;
     box-sizing: border-box;
 }
+
+:root {
+    --bg-0-color: rgb(0, 0, 0);
+    --bg-0-inverted-color: rgb(255, 255, 255);
+    --bg-1-color: rgb(0, 0, 0);
+    --bg-2-color: rgb(105, 105, 105);
+    --bg-3-color: rgb(165, 165, 165);
+    --text-0-fg-color: rgb(255, 255, 255);
+    --text-1-fg-color: rgba(250, 240, 240, 0.3);
+    --text-0-inverted-fg-color: rgb(80, 0, 31);
+    --text-1-inverted-fg-color: rgb(0, 0, 0);
+    --text-2-fg-color: rgb(170, 170, 170);
+    --font-0-family: normal helvetica-w01-roman, helvetica-w02-roman, helvetica-lt-w10-roman, sans-serif;
+    --copy-column-width: 520px;
+    --gradient1-g0-color: rgb(255, 255, 255);
+    --gradient1-g1-color: rgb(234, 234, 234);
+    --gradient1-g2-color: rgb(218, 218, 218);
+    --gradient1-g3-color: rgb(202, 202, 202);
+    --gradient1-g4-color: rgb(186, 186, 186);
+    --gradient1-g5-color: rgb(160, 160, 160);
+    --gradient1-g6-color: rgb(144, 144, 144);
+    --gradient1-g7-color: rgb(128, 128, 128);
+    --gradient1-g8-color: rgb(112, 112, 112);
+    --gradient1-g9-color: rgb(96, 96, 96);
+    --gradient1-g10-color: rgb(80, 80, 80);
+    --gradient1-g11-color: rgb(64, 64, 64);
+    --gradient1-g12-color: rgb(48, 48, 48);
+    --gradient1-g13-color: rgb(32, 32, 32);
+    --gradient1-g14-color: rgb(16, 16, 16);
+    --gradient1-g15-color: rgb(0, 0, 0);
+  }
