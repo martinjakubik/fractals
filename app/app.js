@@ -156,7 +156,7 @@ const createPage = function (oParent) {
     const nParentHeight = oPage.parentNode.clientHeight;
 
     oPage.style.width = nParentWidth;
-    // oPage.style.height = nParentHeight - 2 * VERTICAL_MARGIN;
+    oPage.style.height = nParentHeight - 2 * VERTICAL_MARGIN;
 
     const nMarginSide = Math.floor((nParentWidth - oPage.width) / 2);
     const sMarginSide = nMarginSide + "px";
@@ -164,8 +164,8 @@ const createPage = function (oParent) {
 
     oPage.style.marginLeft = sMarginSide;
     oPage.style.marginRight = sMarginSide;
-    // oPage.style.marginTop = sMarginVertical;
-    // oPage.style.marginBottom = sMarginVertical;
+    oPage.style.marginTop = sMarginVertical;
+    oPage.style.marginBottom = sMarginVertical;
 
     return oPage;
 };
