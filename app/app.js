@@ -9,6 +9,8 @@ const STROKE_COLOR_NORMAL = palette[THEME].fgColors[1];
 const STROKE_COLOR_DEBUG = palette[THEME].fgColors[2];
 const MANDELBROT_PIXEL_SIZE = 1;
 
+const MEDIA_QUERY_MOBILE_MAX_WIDTH = 600;
+
 const MONTHS_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 const formatDecimal = function (n) {
@@ -156,15 +158,22 @@ const createPage = function (oParent) {
     const nParentHeight = oPage.parentNode.clientHeight;
 
     oPage.style.width = nParentWidth;
-    oPage.style.height = nParentHeight - 2 * VERTICAL_MARGIN;
+    let nMarginTop = VERTICAL_MARGIN;
+    if (nParentWidth < MEDIA_QUERY_MOBILE_MAX_WIDTH) {
+        oPage.style.height = nParentHeight - 2.5 * VERTICAL_MARGIN;
+        nMarginTop = 0;
+    } else {
+        oPage.style.height = nParentHeight - 2 * VERTICAL_MARGIN;
+    }
 
     const nMarginSide = Math.floor((nParentWidth - oPage.width) / 2);
     const sMarginSide = nMarginSide + "px";
     const sMarginVertical = VERTICAL_MARGIN + "px";
+    const sMarginTop = nMarginTop + "px";
 
     oPage.style.marginLeft = sMarginSide;
     oPage.style.marginRight = sMarginSide;
-    oPage.style.marginTop = sMarginVertical;
+    oPage.style.marginTop = sMarginTop;
     oPage.style.marginBottom = sMarginVertical;
 
     return oPage;
