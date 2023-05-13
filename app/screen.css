@@ -1,6 +1,7 @@
 label {
     font-family: var(--font-0-family);
     color: var(--text-0-inverted-fg-color);
+    margin: 0 0 0 10px;
 }
 
 div.controlBar {
@@ -8,6 +9,23 @@ div.controlBar {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
 width: 100%;
+}
+
+button.screenshot {
+    background-color: var(--bg-0-color);
+    border-color: var(--text-1-fg-color);
+    font-family: var(--font-0-family);
+    font-size: 12px;
+}
+
+button.screenshot:hover {
+    background-color: var(--bg-0-inverted-color);
+    border-color: var(--text-1-inverted-fg-color);
+}
+
+button.screenshot:active {
+    background-color: var(--bg-0-color);
+    border-color: var(--text-1-inverted-fg-color);
 }
 
 :root {

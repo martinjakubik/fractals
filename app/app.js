@@ -9,6 +9,21 @@ const STROKE_COLOR_NORMAL = palette[THEME].fgColors[1];
 const STROKE_COLOR_DEBUG = palette[THEME].fgColors[2];
 const MANDELBROT_PIXEL_SIZE = 1;
 
+const MONTHS_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+const formatDecimal = function (n) {
+    return `${n < 0 ? '-' : '+'}${Math.abs(Math.floor(n * 1000) / 1000)}`;
+};
+
+const getNowKey = function () {
+    const oNow = new Date();
+    const sMonth = MONTHS_SHORT[oNow.getUTCMonth()];
+    const sRealFloor = formatDecimal(c.real);
+    const sImagFloor = formatDecimal(c.imaginary);
+    const sNowLabel = `${sMonth}.${oNow.getDate()}-real${sRealFloor}-imag${sImagFloor}-zoom${Math.floor(oCurrentTransform.zoom)}`;
+    return sNowLabel;
+};
+
 const VERTICAL_MARGIN = 36;
 
 const ZOOM_MULTIPLIER = 2;
@@ -122,6 +137,17 @@ const createControls = function (oTransform) {
         }
         drawGraphics(oTransform, nPixelSize);
     };
+
+    const oScreenshotButton = createButton('screenshot', 'screenshot', oControlBar);
+    oScreenshotButton.onclick = () => {
+        const sKey = getNowKey();
+        const a = document.createElement('a');
+        a.href = oGraphicCanvas.toDataURL('image/png', 1);
+        a.download = `fractals-${sKey}.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    };
 };
 
 const createPage = function (oParent) {
@@ -130,7 +156,7 @@ const createPage = function (oParent) {
     const nParentHeight = oPage.parentNode.clientHeight;
 
     oPage.style.width = nParentWidth;
-    oPage.style.height = nParentHeight - 2 * VERTICAL_MARGIN;
+    // oPage.style.height = nParentHeight - 2 * VERTICAL_MARGIN;
 
     const nMarginSide = Math.floor((nParentWidth - oPage.width) / 2);
     const sMarginSide = nMarginSide + "px";
@@ -138,8 +164,8 @@ const createPage = function (oParent) {
 
     oPage.style.marginLeft = sMarginSide;
     oPage.style.marginRight = sMarginSide;
-    oPage.style.marginTop = sMarginVertical;
-    oPage.style.marginBottom = sMarginVertical;
+    // oPage.style.marginTop = sMarginVertical;
+    // oPage.style.marginBottom = sMarginVertical;
 
     return oPage;
 };
