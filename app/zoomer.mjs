@@ -68,7 +68,7 @@ class Zoomer {
         oContext.strokeStyle = sStrokeColor;
         oContext.lineWidth = 5;
 
-        drawZoomOutButton(x, y, oContext, sStrokeColor)
+        drawZoomOutButton(x, y, oContext, sStrokeColor);
 
         const x1 = x - sizes.PERIPHERAL_BUTTON_DISTANCE;
         const x2 = x + sizes.PERIPHERAL_BUTTON_DISTANCE;
