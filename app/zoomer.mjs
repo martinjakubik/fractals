@@ -4,23 +4,39 @@ const sizes = {
     PERIPHERAL_BUTTON_DISTANCE: 120
 };
 
-sizes.ZOOM_IN_BUTTON_RADIUS = sizes.CENTRAL_LENS_RADIUS / sizes.CENTRAL_BUTTON_RADIUS_RATIO;
+sizes.CENTRAL_BUTTON_RADIUS = sizes.CENTRAL_LENS_RADIUS / sizes.CENTRAL_BUTTON_RADIUS_RATIO;
 class Zoomer {
 
-    static isPointInZoomInButton(nPointX, nPointY, oZoomCenterPoint) {
-        return (Math.sqrt((nPointX - oZoomCenterPoint.x) ** 2 + (nPointY - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS);
+    static isPointInZoomInButton(nPointX, nPointY, bAltKeyPressed, oZoomCenterPoint) {
+        if (bAltKeyPressed) {
+            return this.isPointInPeripheralButton(nPointX, nPointY, oZoomCenterPoint);
+        } else {
+            return this.isPointInCentralButton(nPointX, nPointY, oZoomCenterPoint);
+        }
     }
 
-    static isPointInZoomOutButton(nPointX, nPointY, oZoomCenterPoint) {
+    static isPointInZoomOutButton(nPointX, nPointY, bAltKeyPressed, oZoomCenterPoint) {
+        if (bAltKeyPressed) {
+            return this.isPointInCentralButton(nPointX, nPointY, oZoomCenterPoint);
+        } else {
+            return this.isPointInPeripheralButton(nPointX, nPointY, oZoomCenterPoint);
+        }
+    }
+
+    static isPointInCentralButton(nPointX, nPointY, oZoomCenterPoint) {
+        return (Math.sqrt((nPointX - oZoomCenterPoint.x) ** 2 + (nPointY - oZoomCenterPoint.y) ** 2) < sizes.CENTRAL_BUTTON_RADIUS);
+    }
+
+    static isPointInPeripheralButton(nPointX, nPointY, oZoomCenterPoint) {
         const x1 = nPointX - sizes.PERIPHERAL_BUTTON_DISTANCE;
         const x2 = nPointX + sizes.PERIPHERAL_BUTTON_DISTANCE;
         const y1 = nPointY - sizes.PERIPHERAL_BUTTON_DISTANCE;
         const y2 = nPointY + sizes.PERIPHERAL_BUTTON_DISTANCE;
 
-        return (Math.sqrt((x1 - oZoomCenterPoint.x) ** 2 + (nPointY - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS)
-            || (Math.sqrt((x2 - oZoomCenterPoint.x) ** 2 + (nPointY - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS)
-            || (Math.sqrt((nPointX - oZoomCenterPoint.x) ** 2 + (y1 - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS)
-            || (Math.sqrt((nPointX - oZoomCenterPoint.x) ** 2 + (y2 - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS);
+        return (Math.sqrt((x1 - oZoomCenterPoint.x) ** 2 + (nPointY - oZoomCenterPoint.y) ** 2) < sizes.CENTRAL_BUTTON_RADIUS)
+            || (Math.sqrt((x2 - oZoomCenterPoint.x) ** 2 + (nPointY - oZoomCenterPoint.y) ** 2) < sizes.CENTRAL_BUTTON_RADIUS)
+            || (Math.sqrt((nPointX - oZoomCenterPoint.x) ** 2 + (y1 - oZoomCenterPoint.y) ** 2) < sizes.CENTRAL_BUTTON_RADIUS)
+            || (Math.sqrt((nPointX - oZoomCenterPoint.x) ** 2 + (y2 - oZoomCenterPoint.y) ** 2) < sizes.CENTRAL_BUTTON_RADIUS);
     }
 
     static showZoomButtons(x, y, bAltKeyPressed, oContext, sStrokeColor) {
@@ -90,26 +106,26 @@ const drawZoomInButton = function (x, y, oContext) {
     // draws zoom in button
     oContext.lineWidth = 3;
     oContext.beginPath();
-    oContext.arc(x, y, sizes.ZOOM_IN_BUTTON_RADIUS, 0, Math.PI * 2);
+    oContext.arc(x, y, sizes.CENTRAL_BUTTON_RADIUS, 0, Math.PI * 2);
     oContext.stroke();
 
     oContext.beginPath();
-    oContext.moveTo(x, y - sizes.ZOOM_IN_BUTTON_RADIUS * 0.66);
-    oContext.lineTo(x, y + sizes.ZOOM_IN_BUTTON_RADIUS * 0.66);
+    oContext.moveTo(x, y - sizes.CENTRAL_BUTTON_RADIUS * 0.66);
+    oContext.lineTo(x, y + sizes.CENTRAL_BUTTON_RADIUS * 0.66);
     oContext.stroke();
-    oContext.moveTo(x - sizes.ZOOM_IN_BUTTON_RADIUS * 0.66, y);
-    oContext.lineTo(x + sizes.ZOOM_IN_BUTTON_RADIUS * 0.66, y);
+    oContext.moveTo(x - sizes.CENTRAL_BUTTON_RADIUS * 0.66, y);
+    oContext.lineTo(x + sizes.CENTRAL_BUTTON_RADIUS * 0.66, y);
     oContext.stroke();
 }
 
 const drawZoomOutButton = function (x, y, oContext) {
     oContext.beginPath();
-    oContext.arc(x, y, sizes.ZOOM_IN_BUTTON_RADIUS, 0, Math.PI * 2);
+    oContext.arc(x, y, sizes.CENTRAL_BUTTON_RADIUS, 0, Math.PI * 2);
     oContext.stroke();
 
     oContext.beginPath();
-    oContext.moveTo(x - sizes.ZOOM_IN_BUTTON_RADIUS * 0.66, y);
-    oContext.lineTo(x + sizes.ZOOM_IN_BUTTON_RADIUS * 0.66, y);
+    oContext.moveTo(x - sizes.CENTRAL_BUTTON_RADIUS * 0.66, y);
+    oContext.lineTo(x + sizes.CENTRAL_BUTTON_RADIUS * 0.66, y);
     oContext.stroke();
 };
 
