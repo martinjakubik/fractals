@@ -7,15 +7,11 @@ const sizes = {
 sizes.ZOOM_IN_BUTTON_RADIUS = sizes.ZOOM_LENS_RADIUS / sizes.ZOOM_IN_BUTTON_RADIUS_RATIO;
 class Zoomer {
 
-    static tap () {
-        console.log('tap');
-    }
-
-    static isPointInZoomInButton (nPointX, nPointY, oZoomCenterPoint) {
+    static isPointInZoomInButton(nPointX, nPointY, oZoomCenterPoint) {
         return (Math.sqrt((nPointX - oZoomCenterPoint.x) ** 2 + (nPointY - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS);
     }
 
-    static isPointInZoomOutButton (nPointX, nPointY, oZoomCenterPoint) {
+    static isPointInZoomOutButton(nPointX, nPointY, oZoomCenterPoint) {
         const x1 = nPointX - sizes.ZOOM_OUT_BUTTON_DISTANCE;
         const x2 = nPointX + sizes.ZOOM_OUT_BUTTON_DISTANCE;
         const y1 = nPointY - sizes.ZOOM_OUT_BUTTON_DISTANCE;
@@ -27,7 +23,7 @@ class Zoomer {
             || (Math.sqrt((nPointX - oZoomCenterPoint.x) ** 2 + (y2 - oZoomCenterPoint.y) ** 2) < sizes.ZOOM_IN_BUTTON_RADIUS);
     }
 
-    static showZoomButtons (x, y, oContext, sStrokeColor) {
+    static showZoomButtons(x, y, oContext, sStrokeColor) {
         oContext.strokeStyle = sStrokeColor;
         oContext.lineWidth = 5;
 
@@ -62,13 +58,13 @@ class Zoomer {
         drawZoomOutButton(x, y2, oContext);
     }
 
-    static hideZoomButtons (oCanvas) {
+    static hideZoomButtons(oCanvas) {
         const oContext = oCanvas.getContext('2d');
         const nParentWidth = oCanvas.parentNode.clientWidth;
         oContext.clearRect(0, 0, nParentWidth, oCanvas.height);
     }
 
-    static onMouseMoveOnCanvas (nPointX, nPointY, oZoomCenterPoint, oCanvas, sStrokeColorNormal, sStrokeColorHighlight) {
+    static onMouseMoveOnCanvas(nPointX, nPointY, oZoomCenterPoint, oCanvas, sStrokeColorNormal, sStrokeColorHighlight) {
         const oContext = oCanvas.getContext('2d');
         if (this.isPointInZoomInButton(nPointX, nPointY, oZoomCenterPoint)) {
             Zoomer.hideZoomButtons(oCanvas);
