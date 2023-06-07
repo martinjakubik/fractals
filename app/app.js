@@ -59,13 +59,14 @@ const onTapCanvas = function (oEvent) {
 
 const handleTap = function (nTapX, nTapY, bAltKeyPressed, oCurrentTransform) {
     const oZoomControlCenterPoint = oTapPoint;
-    const bIsTapInZoomInButton = Zoomer.isPointInZoomInButton(nTapX, nTapY, bAltKeyPressed, oZoomControlCenterPoint);
-    const bIsTapInZoomOutButton = Zoomer.isPointInZoomOutButton(nTapX, nTapY, bAltKeyPressed, oZoomControlCenterPoint);
+    const bIsTapInZoomInButton = Zoomer.isPointInZoomInButton(nTapX, nTapY, bZoomerDisplayedRecto, oZoomControlCenterPoint);
+    const bIsTapInZoomOutButton = Zoomer.isPointInZoomOutButton(nTapX, nTapY, bZoomerDisplayedRecto, oZoomControlCenterPoint);
     updateControlState(bIsTapInZoomInButton, bIsTapInZoomOutButton);
 
     if (sControlState === CONTROL_STATE.VIEW) {
         Zoomer.hideZoomButtons(oControlCanvas);
     } else if (sControlState === CONTROL_STATE.CHOOSE_ZOOM) {
+        bZoomerDisplayedRecto = !bAltKeyPressed;
         const oControlContext = oControlCanvas.getContext('2d');
         Zoomer.showZoomButtons(nTapX, nTapY, bAltKeyPressed, oControlContext, STROKE_COLOR_NORMAL);
         oTapPoint = {
@@ -281,6 +282,7 @@ let oCurrentTransform = {
 };
 
 let sControlState = CONTROL_STATE.VIEW;
+let bZoomerDisplayedRecto = true;
 
 let oPreviousTapPoint = oCanvasCenter;
 

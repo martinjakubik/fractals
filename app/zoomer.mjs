@@ -7,20 +7,12 @@ const sizes = {
 sizes.CENTRAL_BUTTON_RADIUS = sizes.CENTRAL_LENS_RADIUS / sizes.CENTRAL_BUTTON_RADIUS_RATIO;
 class Zoomer {
 
-    static isPointInZoomInButton(nPointX, nPointY, bAltKeyPressed, oZoomCenterPoint) {
-        if (bAltKeyPressed) {
-            return this.isPointInPeripheralButton(nPointX, nPointY, oZoomCenterPoint);
-        } else {
-            return this.isPointInCentralButton(nPointX, nPointY, oZoomCenterPoint);
-        }
+    static isPointInZoomInButton(nPointX, nPointY, bZoomerDisplayedRecto, oZoomCenterPoint) {
+        return bZoomerDisplayedRecto ? this.isPointInCentralButton(nPointX, nPointY, oZoomCenterPoint) : this.isPointInPeripheralButton(nPointX, nPointY, oZoomCenterPoint);
     }
 
-    static isPointInZoomOutButton(nPointX, nPointY, bAltKeyPressed, oZoomCenterPoint) {
-        if (bAltKeyPressed) {
-            return this.isPointInCentralButton(nPointX, nPointY, oZoomCenterPoint);
-        } else {
-            return this.isPointInPeripheralButton(nPointX, nPointY, oZoomCenterPoint);
-        }
+    static isPointInZoomOutButton(nPointX, nPointY, bZoomerDisplayedRecto, oZoomCenterPoint) {
+        return bZoomerDisplayedRecto ? this.isPointInPeripheralButton(nPointX, nPointY, oZoomCenterPoint) : this.isPointInCentralButton(nPointX, nPointY, oZoomCenterPoint);
     }
 
     static isPointInCentralButton(nPointX, nPointY, oZoomCenterPoint) {
@@ -90,9 +82,10 @@ class Zoomer {
 
     static onMouseMoveOnCanvas(nPointX, nPointY, oZoomCenterPoint, oCanvas, sStrokeColorNormal, sStrokeColorHighlight) {
         const oContext = oCanvas.getContext('2d');
-        if (this.isPointInZoomInButton(nPointX, nPointY, oZoomCenterPoint)) {
+        const bZoomerDisplayedRecto = true;
+        if (this.isPointInZoomInButton(nPointX, nPointY, bZoomerDisplayedRecto, oZoomCenterPoint)) {
             Zoomer.hideZoomButtons(oCanvas);
-            Zoomer.showZoomButtons(oZoomCenterPoint.x, oZoomCenterPoint.y, oContext, sStrokeColorHighlight);
+            Zoomer.showZoomButtons(oZoomCenterPoint.x, oZoomCenterPoint.y, !bZoomerDisplayedRecto, oContext, sStrokeColorHighlight);
         }
     }
 }
