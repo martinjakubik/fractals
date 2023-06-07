@@ -42,7 +42,7 @@ const CONTROL_STATE = {
     ZOOMED_OUT: 3
 };
 
-function round (num, decimalPlaces = 0) {
+function round(num, decimalPlaces = 0) {
     var p = Math.pow(10, decimalPlaces);
     var n = (num * p) * (1 + Number.EPSILON);
     return Math.round(n) / p;
@@ -52,10 +52,12 @@ const onTapCanvas = function (oEvent) {
     const nTapX = oEvent.offsetX;
     const nTapY = oEvent.offsetY;
 
-    handleTap(nTapX, nTapY, oCurrentTransform);
+    const bAltKeyPressed = oEvent.altKey ?? false;
+
+    handleTap(nTapX, nTapY, bAltKeyPressed, oCurrentTransform);
 };
 
-const handleTap = function (nTapX, nTapY, oCurrentTransform) {
+const handleTap = function (nTapX, nTapY, bAltKeyPressed, oCurrentTransform) {
     const oZoomControlCenterPoint = oTapPoint;
     const bIsTapInZoomInButton = Zoomer.isPointInZoomInButton(nTapX, nTapY, oZoomControlCenterPoint);
     const bIsTapInZoomOutButton = Zoomer.isPointInZoomOutButton(nTapX, nTapY, oZoomControlCenterPoint);
@@ -65,7 +67,7 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform) {
         Zoomer.hideZoomButtons(oControlCanvas);
     } else if (sControlState === CONTROL_STATE.CHOOSE_ZOOM) {
         const oControlContext = oControlCanvas.getContext('2d');
-        Zoomer.showZoomButtons(nTapX, nTapY, oControlContext, STROKE_COLOR_NORMAL);
+        Zoomer.showZoomButtons(nTapX, nTapY, bAltKeyPressed, oControlContext, STROKE_COLOR_NORMAL);
         oTapPoint = {
             x: nTapX,
             y: nTapY
@@ -92,19 +94,19 @@ const handleTap = function (nTapX, nTapY, oCurrentTransform) {
 
 const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton) {
     switch (sControlState) {
-    case CONTROL_STATE.VIEW:
-        sControlState = CONTROL_STATE.CHOOSE_ZOOM;
-        return;
-    case CONTROL_STATE.ZOOMED_IN:
-    case CONTROL_STATE.CHOOSE_ZOOM:
-        if (bIsTapInZoomInButton) {
-            sControlState = CONTROL_STATE.ZOOMED_IN;
-        } else if (bIsTapInZoomOutButton) {
-            sControlState = CONTROL_STATE.ZOOMED_OUT;
-        } else {
-            sControlState = CONTROL_STATE.VIEW;
-        }
-        return;
+        case CONTROL_STATE.VIEW:
+            sControlState = CONTROL_STATE.CHOOSE_ZOOM;
+            return;
+        case CONTROL_STATE.ZOOMED_IN:
+        case CONTROL_STATE.CHOOSE_ZOOM:
+            if (bIsTapInZoomInButton) {
+                sControlState = CONTROL_STATE.ZOOMED_IN;
+            } else if (bIsTapInZoomOutButton) {
+                sControlState = CONTROL_STATE.ZOOMED_OUT;
+            } else {
+                sControlState = CONTROL_STATE.VIEW;
+            }
+            return;
     }
 };
 
