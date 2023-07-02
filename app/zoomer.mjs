@@ -7,19 +7,19 @@ const sizes = {
 sizes.CENTRAL_BUTTON_RADIUS = sizes.CENTRAL_LENS_RADIUS / sizes.CENTRAL_BUTTON_RADIUS_RATIO;
 class Zoomer {
 
-    static isPointInZoomInButton(nPointX, nPointY, bZoomerDisplayedRecto, oZoomCenterPoint) {
+    static isPointInZoomInButton (nPointX, nPointY, bZoomerDisplayedRecto, oZoomCenterPoint) {
         return bZoomerDisplayedRecto ? this.isPointInCentralButton(nPointX, nPointY, oZoomCenterPoint) : this.isPointInPeripheralButton(nPointX, nPointY, oZoomCenterPoint);
     }
 
-    static isPointInZoomOutButton(nPointX, nPointY, bZoomerDisplayedRecto, oZoomCenterPoint) {
+    static isPointInZoomOutButton (nPointX, nPointY, bZoomerDisplayedRecto, oZoomCenterPoint) {
         return bZoomerDisplayedRecto ? this.isPointInPeripheralButton(nPointX, nPointY, oZoomCenterPoint) : this.isPointInCentralButton(nPointX, nPointY, oZoomCenterPoint);
     }
 
-    static isPointInCentralButton(nPointX, nPointY, oZoomCenterPoint) {
+    static isPointInCentralButton (nPointX, nPointY, oZoomCenterPoint) {
         return (Math.sqrt((nPointX - oZoomCenterPoint.x) ** 2 + (nPointY - oZoomCenterPoint.y) ** 2) < sizes.CENTRAL_BUTTON_RADIUS);
     }
 
-    static isPointInPeripheralButton(nPointX, nPointY, oZoomCenterPoint) {
+    static isPointInPeripheralButton (nPointX, nPointY, oZoomCenterPoint) {
         const x1 = nPointX - sizes.PERIPHERAL_BUTTON_DISTANCE;
         const x2 = nPointX + sizes.PERIPHERAL_BUTTON_DISTANCE;
         const y1 = nPointY - sizes.PERIPHERAL_BUTTON_DISTANCE;
@@ -31,7 +31,7 @@ class Zoomer {
             || (Math.sqrt((nPointX - oZoomCenterPoint.x) ** 2 + (y2 - oZoomCenterPoint.y) ** 2) < sizes.CENTRAL_BUTTON_RADIUS);
     }
 
-    static showZoomButtons(x, y, bAltKeyPressed, oContext, sStrokeColor) {
+    static showZoomButtons (x, y, bAltKeyPressed, oContext, sStrokeColor) {
         if (bAltKeyPressed) {
             this.showVersoZoomButtons(x, y, oContext, sStrokeColor);
         } else {
@@ -39,11 +39,11 @@ class Zoomer {
         }
     }
 
-    static showRectoZoomButtons(x, y, oContext, sStrokeColor) {
+    static showRectoZoomButtons (x, y, oContext, sStrokeColor) {
         oContext.strokeStyle = sStrokeColor;
         oContext.lineWidth = 5;
 
-        drawZoomInButton(x, y, oContext, sStrokeColor)
+        drawZoomInButton(x, y, oContext, sStrokeColor);
 
         const x1 = x - sizes.PERIPHERAL_BUTTON_DISTANCE;
         const x2 = x + sizes.PERIPHERAL_BUTTON_DISTANCE;
@@ -56,7 +56,7 @@ class Zoomer {
         drawZoomOutButton(x, y2, oContext);
     }
 
-    static showVersoZoomButtons(x, y, oContext, sStrokeColor) {
+    static showVersoZoomButtons (x, y, oContext, sStrokeColor) {
         oContext.strokeStyle = sStrokeColor;
         oContext.lineWidth = 5;
 
@@ -74,13 +74,13 @@ class Zoomer {
 
     }
 
-    static hideZoomButtons(oCanvas) {
+    static hideZoomButtons (oCanvas) {
         const oContext = oCanvas.getContext('2d');
         const nParentWidth = oCanvas.parentNode.clientWidth;
         oContext.clearRect(0, 0, nParentWidth, oCanvas.height);
     }
 
-    static onMouseMoveOnCanvas(nPointX, nPointY, oZoomCenterPoint, oCanvas, sStrokeColorNormal, sStrokeColorHighlight) {
+    static onMouseMoveOnCanvas (nPointX, nPointY, oZoomCenterPoint, oCanvas, sStrokeColorNormal, sStrokeColorHighlight) {
         const oContext = oCanvas.getContext('2d');
         const bZoomerDisplayedRecto = true;
         if (this.isPointInZoomInButton(nPointX, nPointY, bZoomerDisplayedRecto, oZoomCenterPoint)) {
@@ -109,7 +109,7 @@ const drawZoomInButton = function (x, y, oContext) {
     oContext.moveTo(x - sizes.CENTRAL_BUTTON_RADIUS * 0.66, y);
     oContext.lineTo(x + sizes.CENTRAL_BUTTON_RADIUS * 0.66, y);
     oContext.stroke();
-}
+};
 
 const drawZoomOutButton = function (x, y, oContext) {
     oContext.beginPath();
