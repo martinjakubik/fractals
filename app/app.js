@@ -1,12 +1,10 @@
-import { createButton, createCanvas, createCheckbox, createDiv, createNumberInput, createSlider, setBlockVisibility } from './learnhypertext.mjs';
+import { createButton, createCanvas, createDiv, createSlider } from './learnhypertext.mjs';
 import { Zoomer } from './zoomer.mjs';
 import { Mandelbrot } from './mandelbrot.mjs';
 import { palette } from './palette.mjs';
 
 const THEME = 0;
-const FILL_COLOR_EMPTY = palette[THEME].bgColors[0];
 const STROKE_COLOR_NORMAL = palette[THEME].fgColors[1];
-const STROKE_COLOR_DEBUG = palette[THEME].fgColors[2];
 const MANDELBROT_PIXEL_SIZE = 1;
 
 const MEDIA_QUERY_MOBILE_MAX_WIDTH = 480;
@@ -42,11 +40,11 @@ const CONTROL_STATE = {
     ZOOMED_OUT: 3
 };
 
-function round(num, decimalPlaces = 0) {
+const round = function (num, decimalPlaces = 0) {
     var p = Math.pow(10, decimalPlaces);
     var n = (num * p) * (1 + Number.EPSILON);
     return Math.round(n) / p;
-}
+};
 
 const onTapCanvas = function (oEvent) {
     const nTapX = oEvent.offsetX;
@@ -95,19 +93,19 @@ const handleTap = function (nTapX, nTapY, bAltKeyPressed, oCurrentTransform) {
 
 const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton) {
     switch (sControlState) {
-        case CONTROL_STATE.VIEW:
-            sControlState = CONTROL_STATE.CHOOSE_ZOOM;
-            return;
-        case CONTROL_STATE.ZOOMED_IN:
-        case CONTROL_STATE.CHOOSE_ZOOM:
-            if (bIsTapInZoomInButton) {
-                sControlState = CONTROL_STATE.ZOOMED_IN;
-            } else if (bIsTapInZoomOutButton) {
-                sControlState = CONTROL_STATE.ZOOMED_OUT;
-            } else {
-                sControlState = CONTROL_STATE.VIEW;
-            }
-            return;
+    case CONTROL_STATE.VIEW:
+        sControlState = CONTROL_STATE.CHOOSE_ZOOM;
+        return;
+    case CONTROL_STATE.ZOOMED_IN:
+    case CONTROL_STATE.CHOOSE_ZOOM:
+        if (bIsTapInZoomInButton) {
+            sControlState = CONTROL_STATE.ZOOMED_IN;
+        } else if (bIsTapInZoomOutButton) {
+            sControlState = CONTROL_STATE.ZOOMED_OUT;
+        } else {
+            sControlState = CONTROL_STATE.VIEW;
+        }
+        return;
     }
 };
 
@@ -187,43 +185,6 @@ const createPage = function (oParent) {
     return oPage;
 };
 
-const onMouseMoveOnCanvas = function (oEvent) {
-    if (IS_DEBUG) {
-        showDebugInfo(oEvent.offsetX, oEvent.offsetY);
-    }
-};
-
-const clearOldDebugInfoBox = function (fromX, fromY, nWidth, nHeight) {
-    const oContext = oDebugDrawCanvas.getContext('2d');
-    oContext.clearRect(fromX + 10, fromY, nWidth, nHeight);
-};
-
-const drawNewDebugInfoBox = function (fromX, fromY, nWidth, nHeight) {
-    const oContext = oDebugDrawCanvas.getContext('2d');
-    oContext.fillStyle = FILL_COLOR_EMPTY;
-    oContext.fillRect(fromX + 10, fromY, nWidth, nHeight);
-
-    const sDebugText1 = `x:${fromX}, y:${fromY}`;
-    const oTransformedPoint = Mandelbrot.transformXY(fromX, fromY, oCurrentTransform);
-    const sDebugText2 = `r:${round(oTransformedPoint.x, 6)}, i:${round(oTransformedPoint.y, 6)}`;
-    const sDebugText3 = `zoom:${oCurrentTransform.zoom}`;
-    oContext.fillStyle = STROKE_COLOR_DEBUG;
-    oContext.fillText(sDebugText1, fromX + 10, fromY + 10);
-    oContext.fillText(sDebugText2, fromX + 10, fromY + 24);
-    oContext.fillText(sDebugText3, fromX + 10, fromY + 38);
-};
-
-const showDebugInfo = function (oEventOffsetX, oEventOffsetY) {
-    const nTextBoxWidth = 120;
-    const nTextBoxHeight = 42;
-
-    clearOldDebugInfoBox(oPreviousMousePosition.x + 10, oPreviousMousePosition.y, nTextBoxWidth, nTextBoxHeight);
-    drawNewDebugInfoBox(oEventOffsetX + 10, oEventOffsetY, nTextBoxWidth, nTextBoxHeight);
-
-    oPreviousMousePosition.x = oEventOffsetX;
-    oPreviousMousePosition.y = oEventOffsetY;
-};
-
 let appBox;
 
 const makeAppBox = function () {
@@ -249,19 +210,12 @@ const makeAppBox = function () {
     }
 };
 
-const oParams = new URLSearchParams(document.location.search);
-const sIsDebug = oParams.get('debug', false);
-const bIsDebug = decodeURI(sIsDebug) === 'true';
-
-let IS_DEBUG = bIsDebug;
-
 makeAppBox();
 const oPage = createPage(appBox);
 
 const oGraphicCanvas = createCanvas('graphicCanvas', '', 0, oPage);
 
 const oControlCanvas = createCanvas('controlCanvas', '', 3, oPage);
-oControlCanvas.addEventListener('mousemove', onMouseMoveOnCanvas);
 oControlCanvas.addEventListener('click', onTapCanvas);
 
 const oCanvasCenter = {
@@ -287,8 +241,6 @@ let bZoomerDisplayedRecto = true;
 let oPreviousTapPoint = oCanvasCenter;
 
 let oTapPoint = oCanvasCenter;
-
-let oPreviousMousePosition = oCanvasCenter;
 
 let c = Mandelbrot.getComplexNumberFromPoint(oCanvasCenter, oCurrentTransform);
 
