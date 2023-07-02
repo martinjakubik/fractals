@@ -25,5 +25,8 @@
   "homepage": "https://github.com/martinjakubik/fractals#readme",
   "dependencies": {
     "learnhypertext": "^1.2.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.44.0"
   }
 }
