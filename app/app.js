@@ -40,12 +40,6 @@ const CONTROL_STATE = {
     ZOOMED_OUT: 3
 };
 
-const round = function (num, decimalPlaces = 0) {
-    var p = Math.pow(10, decimalPlaces);
-    var n = (num * p) * (1 + Number.EPSILON);
-    return Math.round(n) / p;
-};
-
 const onTapCanvas = function (oEvent) {
     const nTapX = oEvent.offsetX;
     const nTapY = oEvent.offsetY;
