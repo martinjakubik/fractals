@@ -56,7 +56,7 @@ class Mandelbrot {
         return 0;
     }
 
-    static drawMandelbrotSet (oTransform, nPrecision, oGraphicCanvas, nHue, THEME, oTapPoint, nPixelWidth, nPixelHeight) {
+    static drawMandelbrotSet (oTransform, nPrecision, oGraphicCanvas, nHue, THEME, nPixelWidth, nPixelHeight) {
         const oGraphicContext = oGraphicCanvas.getContext('2d');
 
         let x = 0;

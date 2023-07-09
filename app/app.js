@@ -107,7 +107,7 @@ const drawGraphics = function (oTransform, nPixelSize) {
     const oGraphicContext = oGraphicCanvas.getContext('2d');
     oGraphicContext.clearRect(0, 0, oGraphicCanvas.width, oGraphicCanvas.height);
     const oStartTime = Date.now();
-    Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, nHue, THEME, oTapPoint, nPixelSize, nPixelSize);
+    Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, nHue, THEME, nPixelSize, nPixelSize);
     const oEndTime = Date.now();
     console.log(`drawing took ${oEndTime - oStartTime} milliseconds`);
 };
