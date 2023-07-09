@@ -62,8 +62,6 @@ class Mandelbrot {
         let x = 0;
         let y = 0;
 
-        const nMaxXYValue = oGraphicCanvas.width * oGraphicCanvas.height;
-
         for (x = 0; x < oGraphicCanvas.width; x = x + nPixelWidth) {
             for (y = 0; y < oGraphicCanvas.height; y = y + nPixelHeight) {
                 const c = Mandelbrot.getComplexNumberFromXY(x, y, oTransform);
