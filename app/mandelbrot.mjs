@@ -56,14 +56,14 @@ class Mandelbrot {
         return 0;
     }
 
-    static drawMandelbrotSet (oTransform, nPrecision, oGraphicCanvas, nHue, THEME, nPixelWidth, nPixelHeight) {
-        const oGraphicContext = oGraphicCanvas.getContext('2d');
+    static drawMandelbrotSet (oTransform, nPrecision, oTile, oGraphicContext, nHue, THEME, nPixelWidth, nPixelHeight) {
+        let x;
+        let y;
+        let nMaxX = oTile.x + oTile.width;
+        let nMaxY = oTile.y + oTile.height;
 
-        let x = 0;
-        let y = 0;
-
-        for (x = 0; x < oGraphicCanvas.width; x = x + nPixelWidth) {
-            for (y = 0; y < oGraphicCanvas.height; y = y + nPixelHeight) {
+        for (x = oTile.x; x < nMaxX; x = x + nPixelWidth) {
+            for (y = oTile.y; y < nMaxY; y = y + nPixelHeight) {
                 const c = Mandelbrot.getComplexNumberFromXY(x, y, oTransform);
 
                 const nDegreeInSet = Mandelbrot.degreeInMandelbrotSet(c, nPrecision);
