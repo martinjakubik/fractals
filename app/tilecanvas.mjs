@@ -2,6 +2,7 @@ class TileCanvas {
 
     static divideLength (nLength, nDivisor) {
         const aLengths = [];
+        if (nDivisor === 0) return aLengths;
         if (nLength <= 1) {
             aLengths.push(nLength);
         } else {
