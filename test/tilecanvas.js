@@ -46,8 +46,15 @@ QUnit.test('divide by 3', assert => {
 });
 
 QUnit.test('get tiles 2x2', assert => {
-    const expected = T.tilesA;
+    const expected = T.tiles2x2;
     const actual = TileCanvas.getTiles(2, 2, 20, 20);
+
+    assert.deepEqual(actual, expected);
+});
+
+QUnit.test('get tiles 3x3', assert => {
+    const expected = T.tiles3x3;
+    const actual = TileCanvas.getTiles(3, 3, 30, 30);
 
     assert.deepEqual(actual, expected);
 });
