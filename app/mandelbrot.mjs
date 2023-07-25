@@ -64,19 +64,23 @@ class Mandelbrot {
 
         for (x = oTile.x; x < nMaxX; x = x + nPixelWidth) {
             for (y = oTile.y; y < nMaxY; y = y + nPixelHeight) {
-                const c = Mandelbrot.getComplexNumberFromXY(x, y, oTransform);
-
-                const nDegreeInSet = Mandelbrot.degreeInMandelbrotSet(c, nPrecision);
-
-                if (nDegreeInSet === 0) {
-                    oGraphicContext.fillStyle = palette[THEME].bgColors[1];
-                    oGraphicContext.fillRect(x, y, nPixelWidth, nPixelHeight);
-                } else {
-                    const nLightness = palette[THEME].lightMode ? 100 - nDegreeInSet : nDegreeInSet;
-                    oGraphicContext.fillStyle = `hsl(${nHue}, 100%, ${nLightness}%)`;
-                    oGraphicContext.fillRect(x, y, nPixelWidth, nPixelHeight);
-                }
+                this.drawMandelbrotPoint(x, y, oTransform, nPrecision, oGraphicContext, nHue, THEME, nPixelHeight, nPixelHeight);
             }
+        }
+    }
+
+    static drawMandelbrotPoint (x, y, oTransform, nPrecision, oGraphicContext, nHue, THEME, nPixelWidth, nPixelHeight) {
+        const c = Mandelbrot.getComplexNumberFromXY(x, y, oTransform);
+
+        const nDegreeInSet = Mandelbrot.degreeInMandelbrotSet(c, nPrecision);
+
+        if (nDegreeInSet === 0) {
+            oGraphicContext.fillStyle = palette[THEME].bgColors[1];
+            oGraphicContext.fillRect(x, y, nPixelWidth, nPixelHeight);
+        } else {
+            const nLightness = palette[THEME].lightMode ? 100 - nDegreeInSet : nDegreeInSet;
+            oGraphicContext.fillStyle = `hsl(${nHue}, 100%, ${nLightness}%)`;
+            oGraphicContext.fillRect(x, y, nPixelWidth, nPixelHeight);
         }
     }
 }
