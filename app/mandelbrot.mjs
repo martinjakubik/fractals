@@ -58,7 +58,7 @@ class Mandelbrot {
     }
 
     static drawMandelbrotSet (oTransform, nPrecision, oGraphicCanvas, nHue, THEME, nPixelWidth, nPixelHeight) {
-        let aTiles = TileCanvas.getTiles(2, 2, oGraphicCanvas.width, oGraphicCanvas.height);
+        let aTiles = TileCanvas.getTiles(3, 3, oGraphicCanvas.width, oGraphicCanvas.height);
         const oGraphicContext = oGraphicCanvas.getContext('2d');
         aTiles.forEach(oTile => this.drawMandelbrotTile(oTile, oTransform, nPrecision, oGraphicContext, nHue, THEME, nPixelHeight, nPixelWidth));
     }
