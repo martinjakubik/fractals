@@ -103,51 +103,11 @@ const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton
     }
 };
 
-const divideLength = function (nLength, nDivisor) {
-    const aLengths = [];
-    if (nLength <= 1) {
-        aLengths.push(nLength);
-    } else {
-        const nDividedLength = nLength / nDivisor;
-        const nFloorDividedLength = Math.floor(nDividedLength);
-        const nLength1 = nFloorDividedLength < nDividedLength ? nFloorDividedLength + 1 : nFloorDividedLength;
-        const nLength2 = nFloorDividedLength;
-        aLengths.push(nLength1, nLength2);
-    }
-    return aLengths;
-};
-
 const drawGraphics = function (oTransform, nPixelSize) {
     const oGraphicContext = oGraphicCanvas.getContext('2d');
     oGraphicContext.clearRect(0, 0, oGraphicCanvas.width, oGraphicCanvas.height);
     const oStartTime = Date.now();
-    const aTileWidths = divideLength(oGraphicCanvas.width, 2);
-    const aTileHeights = divideLength(oGraphicCanvas.height, 2);
-    const aTiles = [{
-        x: 0,
-        y: 0,
-        width: aTileWidths[0],
-        height: aTileHeights[0]
-    }, {
-        x: aTileWidths[0] + 1,
-        y: 0,
-        width: aTileWidths[1],
-        height: aTileHeights[0]
-    }, {
-        x: 0,
-        y: aTileHeights[0] + 1,
-        width: aTileWidths[0],
-        height: aTileHeights[1]
-    }, {
-        x: aTileWidths[0] + 1,
-        y: aTileHeights[0] + 1,
-        width: aTileWidths[1],
-        height: aTileHeights[1]
-    }];
-    Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, aTiles[0], oGraphicContext, nHue, THEME, nPixelSize, nPixelSize);
-    Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, aTiles[1], oGraphicContext, nHue, THEME, nPixelSize, nPixelSize);
-    Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, aTiles[2], oGraphicContext, nHue, THEME, nPixelSize, nPixelSize);
-    Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, aTiles[3], oGraphicContext, nHue, THEME, nPixelSize, nPixelSize);
+    Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, nHue, THEME, nPixelSize, nPixelSize);
     const oEndTime = Date.now();
     console.log(`drawing took ${oEndTime - oStartTime} milliseconds`);
 };

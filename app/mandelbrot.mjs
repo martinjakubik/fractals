@@ -1,4 +1,5 @@
 import { palette } from "./palette.mjs";
+import { TileCanvas } from "./tilecanvas.mjs";
 
 const MANDELBROT_PRECISION_SMALL_VALUE = 5;
 
@@ -56,7 +57,13 @@ class Mandelbrot {
         return 0;
     }
 
-    static drawMandelbrotSet (oTransform, nPrecision, oTile, oGraphicContext, nHue, THEME, nPixelWidth, nPixelHeight) {
+    static drawMandelbrotSet (oTransform, nPrecision, oGraphicCanvas, nHue, THEME, nPixelWidth, nPixelHeight) {
+        let aTiles = TileCanvas.getTiles(oGraphicCanvas.width, oGraphicCanvas.height);
+        const oGraphicContext = oGraphicCanvas.getContext('2d');
+        aTiles.forEach(oTile => this.drawMandelbrotTile(oTile, oTransform, nPrecision, oGraphicContext, nHue, THEME, nPixelHeight, nPixelWidth));
+    }
+
+    static drawMandelbrotTile (oTile, oTransform, nPrecision, oGraphicContext, nHue, THEME, nPixelHeight, nPixelWidth) {
         let x;
         let y;
         let nMaxX = oTile.x + oTile.width;
