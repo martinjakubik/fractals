@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "postinstall": "node postinstall.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "qunit",
     "start": "node dev/server.js"
   },
   "repository": {
