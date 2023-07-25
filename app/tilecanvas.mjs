@@ -14,9 +14,9 @@ class TileCanvas {
         return aLengths;
     }
 
-    static getTiles (canvasWidth, canvasHeight) {
-        const tileWidths = this.divideLength(canvasWidth, 2);
-        const tileHeights = this.divideLength(canvasHeight, 2);
+    static getTiles (nAcrossCount, nDownCount, canvasWidth, canvasHeight) {
+        const tileWidths = this.divideLength(canvasWidth, nAcrossCount);
+        const tileHeights = this.divideLength(canvasHeight, nDownCount);
         return [{
             x: 0,
             y: 0,
