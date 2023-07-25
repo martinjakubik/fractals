@@ -23,27 +23,26 @@ class TileCanvas {
     static getTiles (nAcrossCount, nDownCount, canvasWidth, canvasHeight) {
         const tileWidths = this.divideLength(canvasWidth, nAcrossCount);
         const tileHeights = this.divideLength(canvasHeight, nDownCount);
-        return [{
-            x: 0,
-            y: 0,
-            width: tileWidths[0],
-            height: tileHeights[0]
-        }, {
-            x: tileWidths[0] + 1,
-            y: 0,
-            width: tileWidths[1],
-            height: tileHeights[0]
-        }, {
-            x: 0,
-            y: tileHeights[0] + 1,
-            width: tileWidths[0],
-            height: tileHeights[1]
-        }, {
-            x: tileWidths[0] + 1,
-            y: tileHeights[0] + 1,
-            width: tileWidths[1],
-            height: tileHeights[1]
-        }];
+        let aTiles = [];
+        for (let nDownIndex = 0; nDownIndex < nDownCount; nDownIndex++) {
+            for (let nAcrossIndex = 0; nAcrossIndex < nAcrossCount; nAcrossIndex++) {
+                let x = 0;
+                let y = 0;
+                for (let nAcrossCount = 0; nAcrossCount < nAcrossIndex; nAcrossCount++) {
+                    x = x + tileWidths[nAcrossCount];
+                }
+                for (let nDownCount = 0; nDownCount < nDownIndex; nDownCount++) {
+                    y = y + tileHeights[nDownCount];
+                }
+                aTiles.push({
+                    x: x + (x === 0 ? 0 : 1),
+                    y: y + (y === 0 ? 0 : 1),
+                    width: tileWidths[nAcrossIndex],
+                    height: tileHeights[nDownIndex]
+                });
+            }
+        }
+        return aTiles;
     }
 }
 
