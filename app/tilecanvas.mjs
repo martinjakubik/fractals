@@ -20,6 +20,11 @@ class TileCanvas {
         return aLengths;
     }
 
+    static isMiddle (index, count) {
+        let bIsMiddle = false;
+        return bIsMiddle;
+    }
+
     static getTiles (nAcrossCount, nDownCount, canvasWidth, canvasHeight) {
         const tileWidths = this.divideLength(canvasWidth, nAcrossCount);
         const tileHeights = this.divideLength(canvasHeight, nDownCount);
@@ -28,17 +33,19 @@ class TileCanvas {
             for (let nAcrossIndex = 0; nAcrossIndex < nAcrossCount; nAcrossIndex++) {
                 let x = 0;
                 let y = 0;
-                for (let nAcrossCount = 0; nAcrossCount < nAcrossIndex; nAcrossCount++) {
-                    x = x + tileWidths[nAcrossCount];
+                for (let nAcrossCursor = 0; nAcrossCursor < nAcrossIndex; nAcrossCursor++) {
+                    x = x + tileWidths[nAcrossCursor];
                 }
-                for (let nDownCount = 0; nDownCount < nDownIndex; nDownCount++) {
-                    y = y + tileHeights[nDownCount];
+                for (let nDownCursor = 0; nDownCursor < nDownIndex; nDownCursor++) {
+                    y = y + tileHeights[nDownCursor];
                 }
+                const bIsMiddle = this.isMiddle(nAcrossIndex, nAcrossCount) && this.isMiddle(nDownIndex, nDownCount);
                 aTiles.push({
                     x: x,
                     y: y,
                     width: tileWidths[nAcrossIndex],
-                    height: tileHeights[nDownIndex]
+                    height: tileHeights[nDownIndex],
+                    isMiddle: bIsMiddle
                 });
             }
         }

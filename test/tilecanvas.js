@@ -5,6 +5,34 @@ import * as T from './tiletest.js';
 
 QUnit.module('tileCanvas');
 
+QUnit.test('is 1 middle of 1', assert => {
+    const expected = false;
+    const actual = TileCanvas.isMiddle(1, 1);
+
+    assert.equal(actual, expected);
+});
+
+QUnit.test('is 1 middle of 2', assert => {
+    const expected = false;
+    const actual = TileCanvas.isMiddle(1, 2);
+
+    assert.equal(actual, expected);
+});
+
+QUnit.test('is 1 middle of 3', assert => {
+    const expected = false;
+    const actual = TileCanvas.isMiddle(1, 3);
+
+    assert.equal(actual, expected);
+});
+
+QUnit.test('is 2 middle of 3', assert => {
+    const expected = true;
+    const actual = TileCanvas.isMiddle(2, 3);
+
+    assert.equal(actual, expected);
+});
+
 QUnit.test('divide by 1', assert => {
     const expectedArray = [1];
     const actualArray = TileCanvas.divideLength(1, 1);
