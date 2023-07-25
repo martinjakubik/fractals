@@ -11,7 +11,7 @@ QUnit.test('divide by 1', assert => {
     const expected = true;
     const actual = intArrayEqual(expectedArray, actualArray);
 
-    assert.equal(actual, expected);
+    assert.equal(actual, expected, `actual [${actualArray}], expected [${expectedArray}]`);
 });
 
 QUnit.test('divide by 2', assert => {
@@ -22,7 +22,7 @@ QUnit.test('divide by 2', assert => {
     const expected = true;
     const actual = intArrayEqual(expectedArray, actualArray);
 
-    assert.equal(actual, expected);
+    assert.equal(actual, expected, `actual [${actualArray}], expected [${expectedArray}]`);
 });
 
 QUnit.test('divide by 0', assert => {
@@ -33,5 +33,16 @@ QUnit.test('divide by 0', assert => {
     const expected = true;
     const actual = intArrayEqual(expectedArray, actualArray);
 
-    assert.equal(actual, expected);
+    assert.equal(actual, expected, `actual [${actualArray}], expected [${expectedArray}]`);
+});
+
+QUnit.test('divide by 3', assert => {
+
+    const expectedArray = [2, 2, 2];
+    const actualArray = TileCanvas.divideLength(6, 3);
+
+    const expected = true;
+    const actual = intArrayEqual(expectedArray, actualArray);
+
+    assert.equal(actual, expected, `actual [${actualArray}], expected [${expectedArray}]`);
 });

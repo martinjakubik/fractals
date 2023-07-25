@@ -9,8 +9,13 @@ class TileCanvas {
             const nDividedLength = nLength / nDivisor;
             const nFloorDividedLength = Math.floor(nDividedLength);
             const nLength1 = nFloorDividedLength < nDividedLength ? nFloorDividedLength + 1 : nFloorDividedLength;
-            const nLength2 = nFloorDividedLength;
-            aLengths.push(nLength1, nLength2);
+            let nNextLength = nFloorDividedLength;
+            let nReconstitutedLength = nLength1;
+            aLengths.push(nLength1);
+            while (nReconstitutedLength < nLength) {
+                aLengths.push(nNextLength);
+                nReconstitutedLength = nReconstitutedLength + nNextLength;
+            }
         }
         return aLengths;
     }
