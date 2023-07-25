@@ -35,8 +35,8 @@ class TileCanvas {
                     y = y + tileHeights[nDownCount];
                 }
                 aTiles.push({
-                    x: x + (x === 0 ? 0 : 1),
-                    y: y + (y === 0 ? 0 : 1),
+                    x: x,
+                    y: y,
                     width: tileWidths[nAcrossIndex],
                     height: tileHeights[nDownIndex]
                 });
