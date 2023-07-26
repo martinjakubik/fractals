@@ -101,7 +101,7 @@ class Mandelbrot {
             oGraphicContext.fillStyle = palette[THEME].bgColors[1];
             oGraphicContext.fillRect(x, y, nPixelWidth, nPixelHeight);
         } else {
-            const nLightness = palette[THEME].lightMode ? 100 - nDegreeInSet : nDegreeInSet;
+            const nLightness = palette[THEME].lightMode ? (100 - nDegreeInSet) : nDegreeInSet;
             oGraphicContext.fillStyle = `hsl(${nHue}, 100%, ${nLightness}%)`;
             oGraphicContext.fillRect(x, y, nPixelWidth, nPixelHeight);
         }
