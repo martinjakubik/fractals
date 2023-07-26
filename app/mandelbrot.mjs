@@ -68,10 +68,26 @@ class Mandelbrot {
         let y;
         let nMaxX = oTile.x + oTile.width;
         let nMaxY = oTile.y + oTile.height;
+        let nTilePixelWidth;
+        let nTilePixelHeight;
+        if (oTile.isMiddle === true) {
+            nTilePixelWidth = nPixelWidth;
+            nTilePixelHeight = nPixelHeight;
+        } else {
+            nTilePixelWidth = nPixelWidth * 4;
+            nTilePixelHeight = nPixelHeight * 4;
+        }
 
-        for (x = oTile.x; x < nMaxX; x = x + nPixelWidth) {
-            for (y = oTile.y; y < nMaxY; y = y + nPixelHeight) {
-                this.drawMandelbrotPoint(x, y, oTransform, nPrecision, oGraphicContext, nHue, THEME, nPixelHeight, nPixelHeight);
+        for (x = oTile.x; x < nMaxX; x = x + nTilePixelWidth) {
+            for (y = oTile.y; y < nMaxY; y = y + nTilePixelHeight) {
+                if (oTile.isMiddle === true) {
+                    nTilePixelWidth = nPixelWidth;
+                    nTilePixelHeight = nPixelHeight;
+                } else {
+                    nTilePixelWidth = nPixelWidth * 4;
+                    nTilePixelHeight = nPixelHeight * 4;
+                }
+                this.drawMandelbrotPoint(x, y, oTransform, nPrecision, oGraphicContext, nHue, THEME, nTilePixelWidth, nTilePixelHeight);
             }
         }
     }

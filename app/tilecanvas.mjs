@@ -57,7 +57,6 @@ class TileCanvas {
                     height: tileHeights[nDownIndex],
                     isMiddle: bIsMiddle
                 });
-                console.log(`down index: '${nDownIndex}'; across index: '${nAcrossIndex}'; is middle: '${bIsMiddle}'`);
             }
         }
         return aTiles;
