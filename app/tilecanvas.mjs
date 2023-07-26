@@ -21,8 +21,18 @@ class TileCanvas {
     }
 
     static isMiddle (index, count) {
-        let bIsMiddle = false;
-        return bIsMiddle;
+        if (count === 0) return false;
+        if (count < 3) return false;
+        let nCountHalfCeiling = Math.floor(count / 2);
+        let bIsEven = (count / 2) === nCountHalfCeiling;
+        let nOddOffset = bIsEven ? 0 : 1;
+        if (!bIsEven && ((nCountHalfCeiling + nOddOffset) === index)) {
+            return true;
+        }
+        if (bIsEven && (nCountHalfCeiling === index || (nCountHalfCeiling + 1) === index)) {
+            return true;
+        }
+        return false;
     }
 
     static getTiles (nAcrossCount, nDownCount, canvasWidth, canvasHeight) {
@@ -39,7 +49,7 @@ class TileCanvas {
                 for (let nDownCursor = 0; nDownCursor < nDownIndex; nDownCursor++) {
                     y = y + tileHeights[nDownCursor];
                 }
-                const bIsMiddle = this.isMiddle(nAcrossIndex, nAcrossCount) && this.isMiddle(nDownIndex, nDownCount);
+                const bIsMiddle = this.isMiddle(nAcrossIndex + 1, nAcrossCount) && this.isMiddle(nDownIndex + 1, nDownCount);
                 aTiles.push({
                     x: x,
                     y: y,
@@ -47,6 +57,7 @@ class TileCanvas {
                     height: tileHeights[nDownIndex],
                     isMiddle: bIsMiddle
                 });
+                console.log(`down index: '${nDownIndex}'; across index: '${nAcrossIndex}'; is middle: '${bIsMiddle}'`);
             }
         }
         return aTiles;

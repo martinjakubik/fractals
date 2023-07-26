@@ -12,23 +12,79 @@ QUnit.test('is 1 middle of 1', assert => {
     assert.equal(actual, expected);
 });
 
-QUnit.test('is 1 middle of 2', assert => {
+QUnit.test('1 not middle of 2', assert => {
     const expected = false;
     const actual = TileCanvas.isMiddle(1, 2);
 
     assert.equal(actual, expected);
 });
 
-QUnit.test('is 1 middle of 3', assert => {
+QUnit.test('1 not middle of 3', assert => {
     const expected = false;
     const actual = TileCanvas.isMiddle(1, 3);
 
     assert.equal(actual, expected);
 });
 
-QUnit.test('is 2 middle of 3', assert => {
+QUnit.test('2 is middle of 3', assert => {
     const expected = true;
     const actual = TileCanvas.isMiddle(2, 3);
+
+    assert.equal(actual, expected);
+});
+
+QUnit.test('3 is middle of 5', assert => {
+    const expected = true;
+    const actual = TileCanvas.isMiddle(3, 5);
+
+    assert.equal(actual, expected);
+});
+
+QUnit.test('2 not middle of 5', assert => {
+    const expected = false;
+    const actual = TileCanvas.isMiddle(2, 5);
+
+    assert.equal(actual, expected);
+});
+
+QUnit.test('0 not middle of 1', assert => {
+    const expected = false;
+    const actual = TileCanvas.isMiddle(0, 1);
+
+    assert.equal(actual, expected);
+});
+
+QUnit.test('0 not middle of 0', assert => {
+    const expected = false;
+    const actual = TileCanvas.isMiddle(0, 0);
+
+    assert.equal(actual, expected);
+});
+
+QUnit.test('-2 not middle of -3', assert => {
+    const expected = false;
+    const actual = TileCanvas.isMiddle(-2, -3);
+
+    assert.equal(actual, expected);
+});
+
+QUnit.test('-2 not middle of 3', assert => {
+    const expected = false;
+    const actual = TileCanvas.isMiddle(-2, 3);
+
+    assert.equal(actual, expected);
+});
+
+QUnit.test('3 is middle of 6', assert => {
+    const expected = true;
+    const actual = TileCanvas.isMiddle(3, 6);
+
+    assert.equal(actual, expected);
+});
+
+QUnit.test('4 is middle of 6', assert => {
+    const expected = true;
+    const actual = TileCanvas.isMiddle(4, 6);
 
     assert.equal(actual, expected);
 });
