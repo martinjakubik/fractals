@@ -60,7 +60,15 @@ class Mandelbrot {
     static drawMandelbrotSet (oTransform, nPrecision, oGraphicCanvas, nHue, THEME, nPixelWidth, nPixelHeight) {
         let aTiles = TileCanvas.getTiles(3, 3, oGraphicCanvas.width, oGraphicCanvas.height);
         const oGraphicContext = oGraphicCanvas.getContext('2d');
-        aTiles.forEach(oTile => this.drawMandelbrotTile(oTile, oTransform, nPrecision, oGraphicContext, nHue, THEME, nPixelHeight, nPixelWidth));
+        aTiles.forEach(oTile => {
+            let nTilePixelWidth = nPixelWidth;
+            let nTilePixelHeight = nPixelHeight;
+            if (oTile.isMiddle != true) {
+                nTilePixelWidth = nTilePixelWidth * 4;
+                nTilePixelHeight = nTilePixelHeight * 4;
+            }
+            this.drawMandelbrotTile(oTile, oTransform, nPrecision, oGraphicContext, nHue, THEME, nTilePixelHeight, nTilePixelWidth);
+        });
     }
 
     static drawMandelbrotTile (oTile, oTransform, nPrecision, oGraphicContext, nHue, THEME, nPixelHeight, nPixelWidth) {
@@ -68,26 +76,10 @@ class Mandelbrot {
         let y;
         let nMaxX = oTile.x + oTile.width;
         let nMaxY = oTile.y + oTile.height;
-        let nTilePixelWidth;
-        let nTilePixelHeight;
-        if (oTile.isMiddle === true) {
-            nTilePixelWidth = nPixelWidth;
-            nTilePixelHeight = nPixelHeight;
-        } else {
-            nTilePixelWidth = nPixelWidth * 4;
-            nTilePixelHeight = nPixelHeight * 4;
-        }
 
-        for (x = oTile.x; x < nMaxX; x = x + nTilePixelWidth) {
-            for (y = oTile.y; y < nMaxY; y = y + nTilePixelHeight) {
-                if (oTile.isMiddle === true) {
-                    nTilePixelWidth = nPixelWidth;
-                    nTilePixelHeight = nPixelHeight;
-                } else {
-                    nTilePixelWidth = nPixelWidth * 4;
-                    nTilePixelHeight = nPixelHeight * 4;
-                }
-                this.drawMandelbrotPoint(x, y, oTransform, nPrecision, oGraphicContext, nHue, THEME, nTilePixelWidth, nTilePixelHeight);
+        for (x = oTile.x; x < nMaxX; x = x + nPixelWidth) {
+            for (y = oTile.y; y < nMaxY; y = y + nPixelHeight) {
+                this.drawMandelbrotPoint(x, y, oTransform, nPrecision, oGraphicContext, nHue, THEME, nPixelWidth, nPixelHeight);
             }
         }
     }
