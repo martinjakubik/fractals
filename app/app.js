@@ -63,13 +63,6 @@ const onMouseUp = function (oEvent) {
     handleEndMove(nMouseX, nMouseY, oCurrentTransform);
 };
 
-const cancelRefreshDrawing = function () {
-    aRefreshTimeoutIds.forEach(nRefreshTimeoutId => {
-        clearTimeout(nRefreshTimeoutId);
-    });
-    aRefreshTimeoutIds.length = 0;
-};
-
 const handleTap = function (nTapX, nTapY, bAltKeyPressed, oCurrentTransform) {
     const oZoomControlCenterPoint = oTapPoint;
     const bIsTapInZoomInButton = Zoomer.isPointInZoomInButton(nTapX, nTapY, bZoomerDisplayedRecto, oZoomControlCenterPoint);
@@ -137,6 +130,13 @@ const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton
         }
         return;
     }
+};
+
+const cancelRefreshDrawing = function () {
+    aRefreshTimeoutIds.forEach(nRefreshTimeoutId => {
+        clearTimeout(nRefreshTimeoutId);
+    });
+    aRefreshTimeoutIds.length = 0;
 };
 
 const drawGraphics = function (oTransform, nPixelSize) {
