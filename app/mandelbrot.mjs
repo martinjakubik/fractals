@@ -57,8 +57,8 @@ class Mandelbrot {
         return 0;
     }
 
-    static refreshDrawing (oTile, oTransform, nPrecision, oGraphicContext, nHue, THEME, nPixelHeight, nPixelWidth, nMilliseconds) {
-        return setTimeout(() => this.drawMandelbrotTile(oTile, oTransform, nPrecision, oGraphicContext, nHue, THEME, nPixelHeight, nPixelWidth), nMilliseconds);
+    static refreshDrawing (oTile, oTransform, nPrecision, oGraphicContext, nHue, THEME, nPixelWidth, nPixelHeight, nMilliseconds) {
+        return setTimeout(() => this.drawMandelbrotTile(oTile, oTransform, nPrecision, oGraphicContext, nHue, THEME, nPixelWidth, nPixelHeight), nMilliseconds);
     }
 
     static drawMandelbrotSet (oTransform, nPrecision, oGraphicCanvas, nHue, THEME, nPixelWidth, nPixelHeight) {
@@ -70,7 +70,7 @@ class Mandelbrot {
             let nTilePixelWidth = nPixelWidth;
             let nTilePixelHeight = nPixelHeight;
             if (oTile.isMiddle != true) {
-                nRefreshTimeoutId = this.refreshDrawing(oTile, oTransform, nPrecision, oGraphicContext, nHue, THEME, nPixelHeight, nPixelWidth, 4000);
+                nRefreshTimeoutId = this.refreshDrawing(oTile, oTransform, nPrecision, oGraphicContext, nHue, THEME, nPixelWidth, nPixelHeight, 4000);
                 nTilePixelWidth = nTilePixelWidth * 4;
                 nTilePixelHeight = nTilePixelHeight * 4;
             }
@@ -81,7 +81,7 @@ class Mandelbrot {
         return nRefreshTimeoutId;
     }
 
-    static drawMandelbrotTile (oTile, oTransform, nPrecision, oGraphicContext, nHue, THEME, nPixelHeight, nPixelWidth) {
+    static drawMandelbrotTile (oTile, oTransform, nPrecision, oGraphicContext, nHue, THEME, nPixelWidth, nPixelHeight) {
         let x;
         let y;
         let nMaxX = oTile.x + oTile.width;
