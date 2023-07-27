@@ -49,6 +49,20 @@ const onTapCanvas = function (oEvent) {
     handleTap(nTapX, nTapY, bAltKeyPressed, oCurrentTransform);
 };
 
+const onMouseDown = function (oEvent) {
+    const nMouseX = oEvent.offsetX;
+    const nMouseY = oEvent.offsetY;
+
+    handleStartMove(nMouseX, nMouseY);
+};
+
+const onMouseUp = function (oEvent) {
+    const nMouseX = oEvent.offsetX;
+    const nMouseY = oEvent.offsetY;
+
+    handleEndMove(nMouseX, nMouseY, oCurrentTransform);
+};
+
 const cancelRefreshDrawing = function () {
     aRefreshTimeoutIds.forEach(nRefreshTimeoutId => {
         clearTimeout(nRefreshTimeoutId);
@@ -91,6 +105,20 @@ const handleTap = function (nTapX, nTapY, bAltKeyPressed, oCurrentTransform) {
         oPreviousTapPoint.x = nTapX;
         oPreviousTapPoint.y = nTapY;
     }
+};
+
+const handleStartMove = function (nMouseX, nMouseY) {
+    oPositionBeforeMouseMove = {
+        horizontal: nMouseX,
+        vertical: nMouseY
+    };
+};
+
+const handleEndMove = function (nMouseX, nMouseY, oCurrentTransform) {
+    oCurrentTransform.pan.horizontal = oPositionBeforeMouseMove.horizontal - nMouseX;
+    oCurrentTransform.pan.vertical = oPositionBeforeMouseMove.vertical - nMouseY;
+    cancelRefreshDrawing();
+    drawGraphics(oCurrentTransform, nPixelSize);
 };
 
 const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton) {
@@ -225,6 +253,8 @@ const oGraphicCanvas = createCanvas('graphicCanvas', '', 0, oPage);
 
 const oControlCanvas = createCanvas('controlCanvas', '', 3, oPage);
 oControlCanvas.addEventListener('click', onTapCanvas);
+oControlCanvas.addEventListener('mousedown', onMouseDown);
+oControlCanvas.addEventListener('mouseup', onMouseUp);
 
 const oCanvasCenter = {
     x: oGraphicCanvas.width / 2,
@@ -235,6 +265,10 @@ let nPrecision = 85;
 const aHues = [34, 192, 322];
 let nHue = aHues[Math.floor(Math.random() * aHues.length)];
 let nPixelSize = MANDELBROT_PIXEL_SIZE;
+let oPositionBeforeMouseMove = {
+    horizontal: oCanvasCenter.x,
+    vertical: oCanvasCenter.y
+};
 let oCurrentTransform = {
     pan: {
         horizontal: oCanvasCenter.x,
