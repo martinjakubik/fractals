@@ -114,13 +114,10 @@ const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton
 const drawGraphics = function (oTransform, nPixelSize) {
     const oGraphicContext = oGraphicCanvas.getContext('2d');
     oGraphicContext.clearRect(0, 0, oGraphicCanvas.width, oGraphicCanvas.height);
-    const oStartTime = Date.now();
     let nRefreshTimeoutId = Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, nHue, THEME, nPixelSize, nPixelSize);
     if (nRefreshTimeoutId > -1) {
         aRefreshTimeoutIds.push(nRefreshTimeoutId);
     }
-    const oEndTime = Date.now();
-    console.log(`drawing took ${oEndTime - oStartTime} milliseconds`);
 };
 
 const createControls = function (oTransform) {
