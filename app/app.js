@@ -118,8 +118,8 @@ const handleEndMove = function (nMouseX, nMouseY, oCurrentTransform) {
     if (!isDrag(oPositionBeforeMouseMove.horizontal, oPositionBeforeMouseMove.vertical, nMouseX, nMouseY)) {
         return;
     }
-    oCurrentTransform.pan.horizontal = oPositionBeforeMouseMove.horizontal + nMouseX / oCurrentTransform.zoom;
-    oCurrentTransform.pan.vertical = oPositionBeforeMouseMove.vertical + nMouseY / oCurrentTransform.zoom;
+    oCurrentTransform.pan.horizontal = oCurrentTransform.pan.horizontal - (oPositionBeforeMouseMove.horizontal - nMouseX);
+    oCurrentTransform.pan.vertical = oCurrentTransform.pan.vertical - (oPositionBeforeMouseMove.vertical - nMouseY);
     cancelRefreshDrawing();
     drawGraphics(oCurrentTransform, nPixelSize);
 };
