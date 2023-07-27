@@ -60,15 +60,18 @@ class Mandelbrot {
     static drawMandelbrotSet (oTransform, nPrecision, oGraphicCanvas, nHue, THEME, nPixelWidth, nPixelHeight) {
         let aTiles = TileCanvas.getTiles(3, 3, oGraphicCanvas.width, oGraphicCanvas.height);
         const oGraphicContext = oGraphicCanvas.getContext('2d');
+        let nRefreshTimeoutId = -1;
         aTiles.forEach(oTile => {
             let nTilePixelWidth = nPixelWidth;
             let nTilePixelHeight = nPixelHeight;
             if (oTile.isMiddle != true) {
+                nRefreshTimeoutId = setTimeout(() => this.drawMandelbrotTile(oTile, oTransform, nPrecision, oGraphicContext, nHue, THEME, nPixelHeight, nPixelWidth), 4000);
                 nTilePixelWidth = nTilePixelWidth * 4;
                 nTilePixelHeight = nTilePixelHeight * 4;
             }
             this.drawMandelbrotTile(oTile, oTransform, nPrecision, oGraphicContext, nHue, THEME, nTilePixelHeight, nTilePixelWidth);
         });
+        return nRefreshTimeoutId;
     }
 
     static drawMandelbrotTile (oTile, oTransform, nPrecision, oGraphicContext, nHue, THEME, nPixelHeight, nPixelWidth) {

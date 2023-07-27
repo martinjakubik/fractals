@@ -49,6 +49,13 @@ const onTapCanvas = function (oEvent) {
     handleTap(nTapX, nTapY, bAltKeyPressed, oCurrentTransform);
 };
 
+const cancelRefreshDrawing = function () {
+    aRefreshTimeoutIds.forEach(nRefreshTimeoutId => {
+        clearTimeout(nRefreshTimeoutId);
+    });
+    aRefreshTimeoutIds.length = 0;
+};
+
 const handleTap = function (nTapX, nTapY, bAltKeyPressed, oCurrentTransform) {
     const oZoomControlCenterPoint = oTapPoint;
     const bIsTapInZoomInButton = Zoomer.isPointInZoomInButton(nTapX, nTapY, bZoomerDisplayedRecto, oZoomControlCenterPoint);
@@ -77,6 +84,7 @@ const handleTap = function (nTapX, nTapY, bAltKeyPressed, oCurrentTransform) {
         }
         oCurrentTransform.pan.horizontal = -(oCurrentTransform.zoom * c.real - oCanvasCenter.x);
         oCurrentTransform.pan.vertical = -(oCurrentTransform.zoom * c.imaginary - oCanvasCenter.y);
+        cancelRefreshDrawing();
         drawGraphics(oCurrentTransform, nPixelSize);
         sControlState = CONTROL_STATE.VIEW;
 
@@ -107,7 +115,10 @@ const drawGraphics = function (oTransform, nPixelSize) {
     const oGraphicContext = oGraphicCanvas.getContext('2d');
     oGraphicContext.clearRect(0, 0, oGraphicCanvas.width, oGraphicCanvas.height);
     const oStartTime = Date.now();
-    Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, nHue, THEME, nPixelSize, nPixelSize);
+    let nRefreshTimeoutId = Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, nHue, THEME, nPixelSize, nPixelSize);
+    if (nRefreshTimeoutId > -1) {
+        aRefreshTimeoutIds.push(nRefreshTimeoutId);
+    }
     const oEndTime = Date.now();
     console.log(`drawing took ${oEndTime - oStartTime} milliseconds`);
 };
@@ -121,6 +132,7 @@ const createControls = function (oTransform) {
 
     oPrecisionSlider.onchange = () => {
         nPrecision = oPrecisionSlider.value;
+        cancelRefreshDrawing();
         drawGraphics(oTransform, nPixelSize);
     };
 
@@ -128,6 +140,7 @@ const createControls = function (oTransform) {
 
     oHueSlider.onchange = () => {
         nHue = oHueSlider.value;
+        cancelRefreshDrawing();
         drawGraphics(oTransform, nPixelSize);
     };
 
@@ -140,6 +153,7 @@ const createControls = function (oTransform) {
         } else {
             nPixelSize = parsed;
         }
+        cancelRefreshDrawing();
         drawGraphics(oTransform, nPixelSize);
     };
 
@@ -240,6 +254,8 @@ let oPreviousTapPoint = oCanvasCenter;
 let oTapPoint = oCanvasCenter;
 
 let c = Mandelbrot.getComplexNumberFromPoint(oCanvasCenter, oCurrentTransform);
+
+let aRefreshTimeoutIds = [];
 
 const main = function () {
     createControls(oCurrentTransform);
