@@ -40,6 +40,10 @@ const CONTROL_STATE = {
     ZOOMED_OUT: 3
 };
 
+const isDrag = function (x1, y1, x2, y2) {
+    return (Math.abs(x1 - x2) > 1 || Math.abs(y1 - y2) > 1);
+};
+
 const onTapCanvas = function (oEvent) {
     const nTapX = oEvent.offsetX;
     const nTapY = oEvent.offsetY;
@@ -64,6 +68,9 @@ const onMouseUp = function (oEvent) {
 };
 
 const handleTap = function (nTapX, nTapY, bAltKeyPressed, oCurrentTransform) {
+    if (isDrag(oPositionBeforeMouseMove.horizontal, oPositionBeforeMouseMove.vertical, nTapX, nTapY)) {
+        return;
+    }
     const oZoomControlCenterPoint = oTapPoint;
     const bIsTapInZoomInButton = Zoomer.isPointInZoomInButton(nTapX, nTapY, bZoomerDisplayedRecto, oZoomControlCenterPoint);
     const bIsTapInZoomOutButton = Zoomer.isPointInZoomOutButton(nTapX, nTapY, bZoomerDisplayedRecto, oZoomControlCenterPoint);
@@ -108,8 +115,11 @@ const handleStartMove = function (nMouseX, nMouseY) {
 };
 
 const handleEndMove = function (nMouseX, nMouseY, oCurrentTransform) {
-    oCurrentTransform.pan.horizontal = oPositionBeforeMouseMove.horizontal - nMouseX;
-    oCurrentTransform.pan.vertical = oPositionBeforeMouseMove.vertical - nMouseY;
+    if (!isDrag(oPositionBeforeMouseMove.horizontal, oPositionBeforeMouseMove.vertical, nMouseX, nMouseY)) {
+        return;
+    }
+    oCurrentTransform.pan.horizontal = oPositionBeforeMouseMove.horizontal + nMouseX / oCurrentTransform.zoom;
+    oCurrentTransform.pan.vertical = oPositionBeforeMouseMove.vertical + nMouseY / oCurrentTransform.zoom;
     cancelRefreshDrawing();
     drawGraphics(oCurrentTransform, nPixelSize);
 };
