@@ -61,7 +61,7 @@ class Mandelbrot {
         return setTimeout(() => this.drawMandelbrotTile(oTile, oTransform, nPrecision, oGraphicContext, nHue, THEME, nPixelWidth, nPixelHeight), nMilliseconds);
     }
 
-    static drawMandelbrotSet (oTransform, nPrecision, oGraphicCanvas, nHue, THEME, nPixelWidth, nPixelHeight) {
+    static drawMandelbrotSet (oTransform, nPrecision, oGraphicCanvas, nHue, THEME, nPixelWidth = 1, nPixelHeight = 1) {
         let aTiles = TileCanvas.getTiles(3, 3, oGraphicCanvas.width, oGraphicCanvas.height);
         const oGraphicContext = oGraphicCanvas.getContext('2d');
         let nRefreshTimeoutId = -1;

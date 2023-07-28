@@ -5,7 +5,6 @@ import { palette } from './palette.mjs';
 
 const THEME = 0;
 const STROKE_COLOR_NORMAL = palette[THEME].fgColors[1];
-const MANDELBROT_PIXEL_SIZE = 1;
 
 const MEDIA_QUERY_MOBILE_MAX_WIDTH = 480;
 
@@ -99,7 +98,7 @@ const handleTap = function (nTapX, nTapY, bAltKeyPressed, oCurrentTransform) {
         oCurrentTransform.pan.horizontal = -(oCurrentTransform.zoom * c.real - oCanvasCenter.x);
         oCurrentTransform.pan.vertical = -(oCurrentTransform.zoom * c.imaginary - oCanvasCenter.y);
         cancelRefreshDrawing();
-        drawGraphics(oCurrentTransform, nPixelSize);
+        drawGraphics(oCurrentTransform);
         sControlState = CONTROL_STATE.VIEW;
 
         oPreviousTapPoint.x = nTapX;
@@ -121,7 +120,7 @@ const handleEndMove = function (nMouseX, nMouseY, oCurrentTransform) {
     oCurrentTransform.pan.horizontal = oCurrentTransform.pan.horizontal - (oPositionBeforeMouseMove.horizontal - nMouseX);
     oCurrentTransform.pan.vertical = oCurrentTransform.pan.vertical - (oPositionBeforeMouseMove.vertical - nMouseY);
     cancelRefreshDrawing();
-    drawGraphics(oCurrentTransform, nPixelSize);
+    drawGraphics(oCurrentTransform);
 };
 
 const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton) {
@@ -149,10 +148,10 @@ const cancelRefreshDrawing = function () {
     aRefreshTimeoutIds.length = 0;
 };
 
-const drawGraphics = function (oTransform, nPixelSize) {
+const drawGraphics = function (oTransform) {
     const oGraphicContext = oGraphicCanvas.getContext('2d');
     oGraphicContext.clearRect(0, 0, oGraphicCanvas.width, oGraphicCanvas.height);
-    let nRefreshTimeoutId = Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, nHue, THEME, nPixelSize, nPixelSize);
+    let nRefreshTimeoutId = Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, nHue, THEME);
     if (nRefreshTimeoutId > -1) {
         aRefreshTimeoutIds.push(nRefreshTimeoutId);
     }
@@ -168,7 +167,7 @@ const createControls = function (oTransform) {
     oPrecisionSlider.onchange = () => {
         nPrecision = oPrecisionSlider.value;
         cancelRefreshDrawing();
-        drawGraphics(oTransform, nPixelSize);
+        drawGraphics(oTransform);
     };
 
     const oHueSlider = createSlider('hue', '0', '359', nHue, 'Hue', null, oControlBar);
@@ -176,20 +175,7 @@ const createControls = function (oTransform) {
     oHueSlider.onchange = () => {
         nHue = oHueSlider.value;
         cancelRefreshDrawing();
-        drawGraphics(oTransform, nPixelSize);
-    };
-
-    const oPixelSizeSlider = createSlider('pixelSize', '1', '4', nPixelSize, 'Pixel Size', null, oControlBar);
-
-    oPixelSizeSlider.onchange = () => {
-        const parsed = parseInt(oPixelSizeSlider.value, 10);
-        if (isNaN(parsed)) {
-            nPixelSize = 1;
-        } else {
-            nPixelSize = parsed;
-        }
-        cancelRefreshDrawing();
-        drawGraphics(oTransform, nPixelSize);
+        drawGraphics(oTransform);
     };
 
     const oScreenshotButton = createButton('screenshot', 'screenshot', oControlBar);
@@ -274,7 +260,6 @@ const oCanvasCenter = {
 let nPrecision = 85;
 const aHues = [34, 192, 322];
 let nHue = aHues[Math.floor(Math.random() * aHues.length)];
-let nPixelSize = MANDELBROT_PIXEL_SIZE;
 let oPositionBeforeMouseMove = {
     horizontal: oCanvasCenter.x,
     vertical: oCanvasCenter.y
@@ -300,7 +285,7 @@ let aRefreshTimeoutIds = [];
 
 const main = function () {
     createControls(oCurrentTransform);
-    drawGraphics(oCurrentTransform, nPixelSize);
+    drawGraphics(oCurrentTransform);
 };
 
 main();
