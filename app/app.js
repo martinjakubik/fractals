@@ -151,7 +151,12 @@ const cancelRefreshDrawing = function () {
 const drawGraphics = function (oTransform) {
     const oGraphicContext = oGraphicCanvas.getContext('2d');
     oGraphicContext.clearRect(0, 0, oGraphicCanvas.width, oGraphicCanvas.height);
-    let nRefreshTimeoutId = Mandelbrot.drawMandelbrotSet(oTransform, nPrecision, oGraphicCanvas, nHue, THEME);
+    const oDrawingOptions = {
+        precision: nPrecision,
+        hue: nHue,
+        theme: THEME
+    };
+    let nRefreshTimeoutId = Mandelbrot.drawMandelbrotSet(oTransform, oGraphicCanvas, oDrawingOptions);
     if (nRefreshTimeoutId > -1) {
         aRefreshTimeoutIds.push(nRefreshTimeoutId);
     }
