@@ -300,7 +300,6 @@ let aRefreshTimeoutIds = [];
 
 const main = function () {
     createControls(oCurrentTransform);
-
     drawGraphics(oCurrentTransform, nPixelSize);
 };
 
