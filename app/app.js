@@ -52,18 +52,18 @@ const onTapCanvas = function (oEvent) {
     handleTap(nTapX, nTapY, bAltKeyPressed, oCurrentTransform);
 };
 
-const onMouseDown = function (oEvent) {
-    const nMouseX = oEvent.offsetX;
-    const nMouseY = oEvent.offsetY;
+const onDragStart = function (oEvent) {
+    const nDragStartX = oEvent.offsetX;
+    const nDragStartY = oEvent.offsetY;
 
-    handleStartMove(nMouseX, nMouseY);
+    handleDragStart(nDragStartX, nDragStartY);
 };
 
-const onMouseUp = function (oEvent) {
-    const nMouseX = oEvent.offsetX;
-    const nMouseY = oEvent.offsetY;
+const onDragEnd = function (oEvent) {
+    const nDragEndX = oEvent.offsetX;
+    const nDragEndY = oEvent.offsetY;
 
-    handleEndMove(nMouseX, nMouseY, oCurrentTransform);
+    handleDragEnd(nDragEndX, nDragEndY, oCurrentTransform);
 };
 
 const handleTap = function (nTapX, nTapY, bAltKeyPressed, oCurrentTransform) {
@@ -106,21 +106,34 @@ const handleTap = function (nTapX, nTapY, bAltKeyPressed, oCurrentTransform) {
     }
 };
 
-const handleStartMove = function (nMouseX, nMouseY) {
-    oPositionBeforeMouseMove = {
-        horizontal: nMouseX,
-        vertical: nMouseY
+const handleDragStart = function (nDragStartX, nDragStartY) {
+    oTapPoint = {
+        x: nDragStartX,
+        y: nDragStartY
     };
 };
 
-const handleEndMove = function (nMouseX, nMouseY, oCurrentTransform) {
-    if (!isDrag(oPositionBeforeMouseMove.horizontal, oPositionBeforeMouseMove.vertical, nMouseX, nMouseY)) {
-        return;
-    }
-    oCurrentTransform.pan.horizontal = oCurrentTransform.pan.horizontal - (oPositionBeforeMouseMove.horizontal - nMouseX);
-    oCurrentTransform.pan.vertical = oCurrentTransform.pan.vertical - (oPositionBeforeMouseMove.vertical - nMouseY);
-    cancelRefreshDrawing();
-    drawGraphics(oCurrentTransform);
+const handleDragEnd = function (nDragEndX, nDragEndY, oCurrentTransform) {
+    const cDragStartFromXY = Mandelbrot.getComplexNumberFromPoint(oTapPoint, oCurrentTransform);
+    const cDragStart = {
+        real: cDragStartFromXY.real,
+        imaginary: cDragStartFromXY.imaginary
+    };
+
+    const oDragEndPoint = {
+        x: nDragEndX,
+        y: nDragEndY
+    };
+    const cDragEndFromXY = Mandelbrot.getComplexNumberFromPoint(oDragEndPoint, oCurrentTransform);
+    const cDragEnd = {
+        real: cDragEndFromXY.real,
+        imaginary: cDragEndFromXY.imaginary
+    };
+
+    oCurrentTransform.pan.horizontal = -(oCurrentTransform.zoom * cDragEnd.real - cDragStart.real);
+    oCurrentTransform.pan.vertical = -(oCurrentTransform.zoom * cDragEnd.imaginary - cDragEnd.imaginary);
+
+    drawGraphics(oCurrentTransform, nPixelSize);
 };
 
 const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton) {
@@ -253,9 +266,10 @@ const oPage = createPage(appBox);
 const oGraphicCanvas = createCanvas('graphicCanvas', '', 0, oPage);
 
 const oControlCanvas = createCanvas('controlCanvas', '', 3, oPage);
+oControlCanvas.draggable = true;
 oControlCanvas.addEventListener('click', onTapCanvas);
-oControlCanvas.addEventListener('mousedown', onMouseDown);
-oControlCanvas.addEventListener('mouseup', onMouseUp);
+oControlCanvas.addEventListener('dragstart', onDragStart);
+oControlCanvas.addEventListener('dragend', onDragEnd);
 
 const oCanvasCenter = {
     x: oGraphicCanvas.width / 2,
