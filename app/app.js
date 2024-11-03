@@ -66,6 +66,37 @@ const onDragEnd = function (oEvent) {
     handleDragEnd(nDragEndX, nDragEndY, oCurrentTransform);
 };
 
+const onMouseDown = function (oEvent) {
+    const nMouseX = oEvent.offsetX;
+    const nMouseY = oEvent.offsetY;
+
+    handleStartMove(nMouseX, nMouseY);
+};
+
+const onMouseUp = function (oEvent) {
+    const nMouseX = oEvent.offsetX;
+    const nMouseY = oEvent.offsetY;
+
+    handleEndMove(nMouseX, nMouseY, oCurrentTransform);
+};
+
+const handleStartMove = function (nMouseX, nMouseY) {
+    oPositionBeforeMouseMove = {
+        horizontal: nMouseX,
+        vertical: nMouseY
+    };
+};
+
+const handleEndMove = function (nMouseX, nMouseY, oCurrentTransform) {
+    if (!isDrag(oPositionBeforeMouseMove.horizontal, oPositionBeforeMouseMove.vertical, nMouseX, nMouseY)) {
+        return;
+    }
+    oCurrentTransform.pan.horizontal = oCurrentTransform.pan.horizontal - (oPositionBeforeMouseMove.horizontal - nMouseX);
+    oCurrentTransform.pan.vertical = oCurrentTransform.pan.vertical - (oPositionBeforeMouseMove.vertical - nMouseY);
+    cancelRefreshDrawing();
+    drawGraphics(oCurrentTransform);
+};
+
 const handleTap = function (nTapX, nTapY, bAltKeyPressed, oCurrentTransform) {
     if (isDrag(oPositionBeforeMouseMove.horizontal, oPositionBeforeMouseMove.vertical, nTapX, nTapY)) {
         return;
@@ -138,19 +169,19 @@ const handleDragEnd = function (nDragEndX, nDragEndY, oCurrentTransform) {
 
 const updateControlState = function (bIsTapInZoomInButton, bIsTapInZoomOutButton) {
     switch (sControlState) {
-    case CONTROL_STATE.VIEW:
-        sControlState = CONTROL_STATE.CHOOSE_ZOOM;
-        return;
-    case CONTROL_STATE.ZOOMED_IN:
-    case CONTROL_STATE.CHOOSE_ZOOM:
-        if (bIsTapInZoomInButton) {
-            sControlState = CONTROL_STATE.ZOOMED_IN;
-        } else if (bIsTapInZoomOutButton) {
-            sControlState = CONTROL_STATE.ZOOMED_OUT;
-        } else {
-            sControlState = CONTROL_STATE.VIEW;
-        }
-        return;
+        case CONTROL_STATE.VIEW:
+            sControlState = CONTROL_STATE.CHOOSE_ZOOM;
+            return;
+        case CONTROL_STATE.ZOOMED_IN:
+        case CONTROL_STATE.CHOOSE_ZOOM:
+            if (bIsTapInZoomInButton) {
+                sControlState = CONTROL_STATE.ZOOMED_IN;
+            } else if (bIsTapInZoomOutButton) {
+                sControlState = CONTROL_STATE.ZOOMED_OUT;
+            } else {
+                sControlState = CONTROL_STATE.VIEW;
+            }
+            return;
     }
 };
 
@@ -268,8 +299,8 @@ const oGraphicCanvas = createCanvas('graphicCanvas', '', 0, oPage);
 const oControlCanvas = createCanvas('controlCanvas', '', 3, oPage);
 oControlCanvas.draggable = true;
 oControlCanvas.addEventListener('click', onTapCanvas);
-oControlCanvas.addEventListener('dragstart', onDragStart);
-oControlCanvas.addEventListener('dragend', onDragEnd);
+oControlCanvas.addEventListener('mousedown', onMouseDown);
+oControlCanvas.addEventListener('mouseup', onMouseUp);
 
 const oCanvasCenter = {
     x: oGraphicCanvas.width / 2,
