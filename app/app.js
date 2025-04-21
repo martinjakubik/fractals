@@ -245,10 +245,8 @@ const createPage = function (oParent) {
     const nParentHeight = oPage.parentNode.clientHeight;
 
     oPage.style.width = nParentWidth + 'px';
-    let nMarginTop = VERTICAL_MARGIN;
     if (isMobile()) {
         oPage.style.height = (nParentHeight - 4 * VERTICAL_MARGIN) + 'px';
-        nMarginTop = 0;
     } else {
         oPage.style.height = (nParentHeight - 2 * VERTICAL_MARGIN) + 'px';
     }
@@ -256,11 +254,10 @@ const createPage = function (oParent) {
     const nMarginSide = Math.floor((nParentWidth - oPage.style.width) / 2);
     const sMarginSide = nMarginSide + 'px';
     const sMarginVertical = VERTICAL_MARGIN + 'px';
-    const sMarginTop = nMarginTop + 'px';
 
     oPage.style.marginLeft = sMarginSide;
     oPage.style.marginRight = sMarginSide;
-    oPage.style.marginTop = sMarginTop;
+    oPage.style.marginTop = '0px';
     oPage.style.marginBottom = sMarginVertical;
 
     return oPage;
@@ -280,10 +277,13 @@ const makeAppBox = function () {
         const nParentWidth = appBox.parentNode.clientWidth;
         const nParentHeight = document.documentElement.clientHeight;
 
-        appBox.style.width = nParentWidth + 'px';
+        const nAppBoxWidth = nParentWidth;
+        const sAppBoxWidth = nAppBoxWidth + 'px';
+
+        appBox.style.width = sAppBoxWidth;
         appBox.style.height = (nParentHeight - 2 * VERTICAL_MARGIN) + 'px';
 
-        const nMarginSide = Math.floor((nParentWidth - appBox.width) / 2);
+        const nMarginSide = Math.floor((nParentWidth - nAppBoxWidth) / 2);
         const sMarginSide = nMarginSide + 'px';
 
         appBox.style.marginLeft = sMarginSide;
