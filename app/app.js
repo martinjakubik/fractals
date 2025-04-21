@@ -284,7 +284,7 @@ const makeAppBox = function () {
         appBox.style.height = (nParentHeight - 2 * VERTICAL_MARGIN) + 'px';
 
         const nMarginSide = Math.floor((nParentWidth - appBox.width) / 2);
-        const sMarginSide = nMarginSide + "px";
+        const sMarginSide = nMarginSide + 'px';
 
         appBox.style.marginLeft = sMarginSide;
         appBox.style.marginRight = sMarginSide;
