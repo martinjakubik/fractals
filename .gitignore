@@ -1,12 +1,11 @@
-dev/server.js
-
 node_modules
 
 .DS_Store
 
-package.sh
-
 lib
 
-app/logo.png
-resources/logo.png
+app
+
+dev/server.js
+
+resources/*.png

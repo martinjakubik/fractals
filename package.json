@@ -5,9 +5,9 @@
   "main": "js/app.js",
   "type": "module",
   "scripts": {
-    "postinstall": "node postinstall.js",
     "test": "qunit",
-    "start": "node dev/server.js"
+    "start": "node dev/server.js",
+    "build": "node build.js"
   },
   "repository": {
     "type": "git",
