@@ -6,6 +6,7 @@ const sApplicationSourcePath = './src';
 const sApplicationResourceSourcePath = './resources';
 const sApplicationDistributionPath = './app';
 const sLibPath = './app';
+const sAppName = 'fractals';
 
 const oMkDirOptions = {
     recursive: true,
@@ -98,22 +99,100 @@ oFs.mkdir(sLibPath, oMkDirOptions)
         console.log(`  [error] details: ${oError}`);
     });
 
-const execFile = oPromisify(oChildProcess.execFile);
-execFile('scripts/build-images.sh').then((oResult) => {
-    console.log('generated images with the following result');
-    console.log(oResult);
-    // moves resources/*.png to app directory
-    oFs.cp(
-        sApplicationResourceSourcePath,
-        sApplicationDistributionPath,
-        oResourceToDistMoveOptions,
+const renameFile = function(sCurrentName, sNewName) {
+    return oFs.stat(sCurrentName).then((oStat) => {
+        if (oStat.isFile()) {
+            console.log(`[success] renamed file named ${sCurrentName} to ${sNewName}`);
+            oFs.cp(sCurrentName, sNewName).then((oResult) => {
+                oFs.rm(sCurrentName);
+            });
+        } else {
+            console.log(`  [error] no file named ${sCurrentName}`);
+        }
+    });
+}
+
+const aFilesToRename = [{
+        currentName: 'fractals-icon.png',
+        newName: 'icon.png'
+    }, {
+        currentName: 'fractals-logo.png',
+        newName: 'logo.png'
+    }, {
+        currentName: 'fractals-settings.png',
+        newName: 'settings.png'
+}];
+
+function renameImages(aFilesToRename) {
+    const aPromises = [];
+    aFilesToRename.forEach((oFileToRename) => {
+        const sCurrentFilename = `${sApplicationResourceSourcePath}/${oFileToRename.filename}`;
+        const sNewFilename = sCurrentFilename.replace(`${sAppName}-`, '')
+        aPromises.push(
+            new Promise((resolve) => {
+                return oFs.stat(sCurrentFilename).then((oStat) => {
+                    if (oStat.isFile()) {
+                        oFs.cp(sCurrentFilename, sNewFilename).then((oResult) => {
+                            console.log(`[success] renamed file named ${sCurrentFilename} to ${sNewFilename}`);
+                            oFs.rm(sCurrentFilename);
+                            resolve();
+                        });
+                    } else {
+                        console.log(`  [error] no file named ${sCurrentFilename}`);
+                    }
+                });
+            })
+        )
+    })
+    return Promise.all(aPromises);
+}
+
+function copyImages(aFilesToCopy) {
+    const aPromises = [];
+    aFilesToCopy.forEach((oFileToCopy) => {
+        const sCurrentFilename = `${sApplicationResourceSourcePath}/${oFileToCopy.filename}`;
+        const sNewPath = `${sApplicationDistributionPath}/${oFileToCopy.filename}`;
+        aPromises.push(
+            new Promise((resolve) => {
+                return oFs.cp(
+                    sCurrentFilename,
+                    sNewPath,
     )
         .then((oResult) => {
-            console.log(`[success] moved dir ${sApplicationResourceSourcePath}`);
+                        console.log(`[success] copied files ${sCurrentFilename}`);
+                        resolve();
         })
         .catch((oError) => {
-            console.log(`  [error] details: ${oError}`);
+                        console.log(`  [error] error while copying renamed files; details: ${oError}`);
         });
-}).catch((oError) => {
-    console.log(oError);
-})
+            })
+        )
+    })
+}
+
+const aResourceFilesToRename = [{
+        filename: 'fractals-icon.png',
+    }, {
+        filename: 'fractals-logo.png'
+    }];
+
+const aFilesToCopy = [{
+        filename: 'icon.png',
+    }, {
+        filename: 'logo.png',
+    }, {
+        filename: 'redstars.png',
+    }, {
+        filename: 'flower.png'
+}];
+
+const buildImages = oPromisify(oChildProcess.execFile);
+buildImages('scripts/build-images.sh')
+    .then((oResult) => {
+        console.log(`[success] building images finished with result ${oResult.stdout}`)
+        renameImages(aResourceFilesToRename)
+    })
+    .then((oResult) => copyImages(aFilesToCopy))
+    .catch((oError) => {
+        console.log(`  [error] error while building images; details: ${JSON.stringify(oError)}`)
+    });
