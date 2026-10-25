@@ -28,6 +28,15 @@ button.screenshot:active {
     border-color: var(--text-1-inverted-fg-color);
 }
 
+@media (width <= 480px), screen and (orientation: portrait) {
+    button#navigateHome {
+        height: 3em;
+        width: 100%;
+        font-size: 2em;
+        color: var(--bg-0-inverted-color);
+    }
+}
+
 :root {
     --bg-0-color: rgb(255, 255, 255);
     --bg-0-inverted-color: rgb(255, 255, 255);
