@@ -36,27 +36,6 @@ const oSrcToDistCopyOptions = {
     filter: filterFiles,
 };
 
-// filters the content to copy
-const filterResourceFiles = function (sPathToFile) {
-    if (sPathToFile == './resources') {
-      console.log(`checking file: ✔︎     copying '${sPathToFile}'`);
-      return true;
-    }
-    const nIndexOfParentDirInPath = sPathToFile.indexOf('resources/');
-    const sFileToCheck = nIndexOfParentDirInPath > -1 ? sPathToFile.substring(nIndexOfParentDirInPath + 10) : '';
-    if (sFileToCheck.toLowerCase().includes('.png')) {
-        console.log(`checking file: ✔︎     copying '${sFileToCheck}'`);
-        return true;
-    }
-    console.log(`checking file: ✗ not copying '${sFileToCheck}'`);
-    return false;
-};
-
-const oResourceToDistMoveOptions = {
-    recursive: true,
-    filter: filterResourceFiles
-}
-
 oFs.mkdir(sApplicationDistributionPath, oMkDirOptions)
     .then((oResult) => {
         console.log(`[success] mkdir ${sApplicationDistributionPath}`);
@@ -99,75 +78,39 @@ oFs.mkdir(sLibPath, oMkDirOptions)
         console.log(`  [error] details: ${oError}`);
     });
 
-const renameFile = function(sCurrentName, sNewName) {
-    return oFs.stat(sCurrentName).then((oStat) => {
-        if (oStat.isFile()) {
-            console.log(`[success] renamed file named ${sCurrentName} to ${sNewName}`);
-            oFs.cp(sCurrentName, sNewName).then((oResult) => {
-                oFs.rm(sCurrentName);
-            });
-        } else {
-            console.log(`  [error] no file named ${sCurrentName}`);
-        }
-    });
+async function renameFile(oFileToRename) {
+    let sCurrentFilename, sNewFilename;
+    if (oFileToRename.filename) {
+        sCurrentFilename = `${sApplicationResourceSourcePath}/${oFileToRename.filename}`;
+        sNewFilename = `${sApplicationResourceSourcePath}/${oFileToRename.filename.replace(`${sAppName}-`, '')}`;
+    } else if (oFileToRename.currentFilename && oFileToRename.newFilename) {
+        sCurrentFilename = `${sApplicationResourceSourcePath}/${oFileToRename.currentFilename}`;
+        sNewFilename = `${sApplicationResourceSourcePath}/${oFileToRename.newFilename}`;
+    } else {
+        return;
+    }
+
+    const oStat = await oFs.stat(sCurrentFilename);
+    if (!oStat.isFile) {
+        throw new Error(`${sCurrentFilename} is not a file`);
+    }
+    await oFs.rename(sCurrentFilename, sNewFilename);
+    console.log(`[success] renamed file named ${sCurrentFilename} to ${sNewFilename}`);
 }
 
-const aFilesToRename = [{
-        currentName: 'fractals-icon.png',
-        newName: 'icon.png'
-    }, {
-        currentName: 'fractals-logo.png',
-        newName: 'logo.png'
-    }, {
-        currentName: 'fractals-settings.png',
-        newName: 'settings.png'
-}];
-
-function renameImages(aFilesToRename) {
-    const aPromises = [];
-    aFilesToRename.forEach((oFileToRename) => {
-        const sCurrentFilename = `${sApplicationResourceSourcePath}/${oFileToRename.filename}`;
-        const sNewFilename = sCurrentFilename.replace(`${sAppName}-`, '')
-        aPromises.push(
-            new Promise((resolve) => {
-                return oFs.stat(sCurrentFilename).then((oStat) => {
-                    if (oStat.isFile()) {
-                        oFs.cp(sCurrentFilename, sNewFilename).then((oResult) => {
-                            console.log(`[success] renamed file named ${sCurrentFilename} to ${sNewFilename}`);
-                            oFs.rm(sCurrentFilename);
-                            resolve();
-                        });
-                    } else {
-                        console.log(`  [error] no file named ${sCurrentFilename}`);
-                    }
-                });
-            })
-        )
-    })
-    return Promise.all(aPromises);
-}
-
-function copyImages(aFilesToCopy) {
-    const aPromises = [];
-    aFilesToCopy.forEach((oFileToCopy) => {
-        const sCurrentFilename = `${sApplicationResourceSourcePath}/${oFileToCopy.filename}`;
-        const sNewPath = `${sApplicationDistributionPath}/${oFileToCopy.filename}`;
-        aPromises.push(
-            new Promise((resolve) => {
-                return oFs.cp(
-                    sCurrentFilename,
-                    sNewPath,
-    )
-        .then((oResult) => {
-                        console.log(`[success] copied files ${sCurrentFilename}`);
-                        resolve();
-        })
-        .catch((oError) => {
-                        console.log(`  [error] error while copying renamed files; details: ${oError}`);
-        });
-            })
-        )
-    })
+async function copyFile(oFileToCopy) {
+    let sCurrentFilename, sNewFilename;
+    if (oFileToCopy.filename) {
+        sCurrentFilename = oFileToCopy.filename;
+        sNewFilename = oFileToCopy.filename;
+    } else if (oFileToCopy.currentFilename && oFileToCopy.newFilename) {
+        sCurrentFilename = oFileToCopy.currentFilename;
+        sNewFilename = oFileToCopy.newFilename;
+    } else {
+        return;
+    }
+    await oFs.cp(`${sApplicationResourceSourcePath}/${sCurrentFilename}`, `${sApplicationDistributionPath}/${sNewFilename}`);
+    console.log(`[success] copied ${sApplicationResourceSourcePath}/${sCurrentFilename} to ${sApplicationDistributionPath}/${sNewFilename}`);
 }
 
 const aResourceFilesToRename = [{
@@ -176,7 +119,7 @@ const aResourceFilesToRename = [{
         filename: 'fractals-logo.png'
     }];
 
-const aFilesToCopy = [{
+const aResourceFilesToCopy = [{
         filename: 'icon.png',
     }, {
         filename: 'logo.png',
@@ -186,13 +129,20 @@ const aFilesToCopy = [{
         filename: 'flower.png'
 }];
 
+const renameImages = (aFilesToRename) => Promise.all(aFilesToRename.map(renameFile));
+const copyImages = (aFilesToCopy) => Promise.all(aFilesToCopy.map(copyFile));
+
 const buildImages = oPromisify(oChildProcess.execFile);
-buildImages('scripts/build-images.sh')
-    .then((oResult) => {
-        console.log(`[success] building images finished with result ${oResult.stdout}`)
-        renameImages(aResourceFilesToRename)
-    })
-    .then((oResult) => copyImages(aFilesToCopy))
-    .catch((oError) => {
-        console.log(`  [error] error while building images; details: ${JSON.stringify(oError)}`)
-    });
+try {
+    const oBuildResult = await buildImages('scripts/build-images.sh');
+    console.log(`[success] built images finished with result ${oBuildResult.stdout}`);
+
+    const oRenameResult = await renameImages(aResourceFilesToRename);
+    console.log(`[success] renamed images finished with result ${oRenameResult.stdout}`);
+
+    const oCopyResult = await copyImages(aResourceFilesToCopy);
+    console.log(`[success] copies images finished with result ${oCopyResult.stdout}`);
+} catch (oError) {
+    console.log(`  [error] error while building images; ${oError}`);
+    process.exitCode = 1;
+}
