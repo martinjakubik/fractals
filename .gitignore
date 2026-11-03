@@ -6,6 +6,5 @@ lib
 
 app
 
-dev/server.js
 
 resources/*.png
